@@ -359,6 +359,71 @@ table.brand-table { width:100%; border-collapse:collapse; font-size:13px; min-wi
 .sync-bar .sync-btn-sm { border:1px solid #e2e8f0; background:#fff; border-radius:8px; padding:4px 12px; font-size:11px; cursor:pointer; color:var(--accent); transition:var(--transition); font-family:inherit; }
 .sync-bar .sync-btn-sm:hover { background:var(--accent-light); }
 #sync-status { color:var(--text-muted); }
+
+/* ============ 户型图与效果图栏目 ============ */
+.fp-layout { display:grid; grid-template-columns:1.2fr 1fr; gap:16px; align-items:start; }
+.fp-editor-wrap { position:relative; }
+.fp-canvas-box { position:relative; background:rgba(255,255,255,0.9); border:1px solid rgba(255,255,255,0.6); border-radius:var(--radius-md); overflow:hidden; box-shadow:0 4px 16px rgba(0,0,0,0.06); }
+.fp-canvas-box svg { display:block; width:100%; height:auto; touch-action:none; }
+.fp-canvas-box img.fp-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; pointer-events:none; }
+.fp-toolbar { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px; align-items:center; }
+.fp-toolbar .fp-tip { font-size:11px; color:var(--text-muted); }
+.fp-tool-btn { border:1px solid #e2e8f0; background:#fff; border-radius:9px; padding:6px 12px; font-size:12px; cursor:pointer; color:var(--text-secondary); transition:var(--transition); font-family:inherit; }
+.fp-tool-btn:hover { background:var(--accent-light); border-color:var(--accent); }
+.fp-tool-btn.active { background:var(--accent-grad); color:#fff; border-color:transparent; box-shadow:0 3px 10px rgba(99,102,241,0.3); }
+.fp-wall { stroke:#1e293b; stroke-width:4; stroke-linecap:round; cursor:pointer; }
+.fp-wall-new { stroke:#3b82f6; stroke-width:4; stroke-linecap:round; stroke-dasharray:7 4; cursor:pointer; }
+.fp-wall-del { stroke:#ef4444; stroke-width:4; stroke-linecap:round; stroke-dasharray:9 5; cursor:pointer; }
+.fp-wall:hover { filter:drop-shadow(0 0 4px rgba(99,102,241,0.6)); }
+.fp-wall-selected { filter:drop-shadow(0 0 5px rgba(245,158,11,0.9)); }
+.fp-marker { cursor:pointer; }
+.fp-marker circle { fill:#fff; stroke:#6366f1; stroke-width:2.5; }
+.fp-marker:hover circle { fill:#e0e7ff; }
+.fp-marker.selected circle { fill:#f59e0b; stroke:#f59e0b; }
+.fp-marker-tag { font-size:11px; font-weight:700; fill:#4f46e5; }
+.fp-marker.selected .fp-marker-tag { fill:#b45309; }
+.fp-legend { display:flex; gap:14px; font-size:11px; color:var(--text-secondary); margin-top:8px; flex-wrap:wrap; }
+.fp-legend span { display:inline-flex; align-items:center; gap:5px; }
+.fp-legend i { display:inline-block; width:22px; height:0; border-top:3px solid; }
+.fp-legend i.red { border-color:#ef4444; border-top-style:dashed; }
+.fp-legend i.blue { border-color:#3b82f6; border-top-style:dashed; }
+.fp-tip { font-size:11px; color:var(--text-muted); margin-top:6px; }
+.fp-list { display:flex; flex-direction:column; gap:10px; }
+.fp-item { background:rgba(255,255,255,0.88); border:1px solid rgba(255,255,255,0.6); border-radius:var(--radius-md); padding:14px 16px; transition:var(--transition); }
+.fp-item:hover { box-shadow:0 6px 20px rgba(0,0,0,0.08); }
+.fp-item-head { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+.fp-item-head img.fp-thumb { width:56px; height:42px; object-fit:cover; border-radius:8px; border:1px solid #e2e8f0; flex-shrink:0; }
+.fp-item-head .fp-title { flex:1; font-weight:700; font-size:13.5px; }
+.fp-item .fp-note { font-size:12px; color:var(--text-secondary); line-height:1.6; }
+.fp-item .fp-meta { font-size:11px; color:var(--text-muted); margin-top:6px; display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+.fp-tag { display:inline-block; font-size:10.5px; padding:2px 8px; border-radius:20px; background:var(--accent-light); color:var(--accent-dark); }
+.fp-tag.red { background:#fee2e2; color:#dc2626; }
+.fp-tag.green { background:#dcfce7; color:#16a34a; }
+.fp-empty { padding:40px 20px; text-align:center; color:var(--text-muted); font-size:13px; }
+.fp-action-row { display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
+.fp-input { border:1px solid #e2e8f0; border-radius:9px; padding:8px 12px; font-size:13px; outline:none; transition:var(--transition); background:#fff; color:var(--text-primary); font-family:inherit; width:100%; box-sizing:border-box; }
+.fp-input:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(99,102,241,0.15); }
+.fp-upload-btn { display:inline-flex; align-items:center; gap:6px; border:1.5px dashed var(--accent); color:var(--accent); background:rgba(99,102,241,0.06); border-radius:10px; padding:9px 16px; font-size:13px; cursor:pointer; transition:var(--transition); font-family:inherit; }
+.fp-upload-btn:hover { background:rgba(99,102,241,0.12); }
+.fp-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px; }
+.fp-card { background:rgba(255,255,255,0.88); border:1px solid rgba(255,255,255,0.6); border-radius:var(--radius-md); overflow:hidden; transition:var(--transition); box-shadow:0 2px 8px rgba(0,0,0,0.04); }
+.fp-card:hover { box-shadow:0 8px 24px rgba(0,0,0,0.1); transform:translateY(-2px); }
+.fp-card img { width:100%; height:110px; object-fit:cover; display:block; cursor:pointer; }
+.fp-card-body { padding:10px 12px; }
+.fp-card-note { font-size:12px; color:var(--text-secondary); line-height:1.5; max-height:38px; overflow:hidden; }
+.fp-card-meta { font-size:11px; color:var(--text-muted); margin-top:6px; }
+.fp-card-actions { display:flex; gap:6px; margin-top:8px; }
+.fp-card-actions button { flex:1; font-size:11px; padding:5px 0; }
+.fp-modal-mask { position:fixed; inset:0; background:rgba(15,23,42,0.55); z-index:9998; display:flex; align-items:center; justify-content:center; padding:20px; }
+.fp-modal { background:#fff; border-radius:16px; padding:22px; width:420px; max-width:94vw; max-height:84vh; overflow-y:auto; box-shadow:0 24px 80px rgba(0,0,0,0.3); }
+.fp-modal h4 { font-size:16px; font-weight:700; margin-bottom:14px; }
+.fp-modal .fp-field { margin-bottom:12px; }
+.fp-modal .fp-field label { display:block; font-size:12px; font-weight:600; color:var(--text-secondary); margin-bottom:5px; }
+.fp-modal .fp-modal-actions { display:flex; gap:8px; justify-content:flex-end; margin-top:16px; }
+.fp-preview-img { width:100%; max-height:180px; object-fit:contain; border-radius:10px; border:1px solid #e2e8f0; background:#f8fafc; }
+.fp-badge { display:inline-flex; align-items:center; gap:4px; font-size:11px; padding:3px 10px; border-radius:20px; background:var(--accent-light); color:var(--accent-dark); font-weight:600; }
+.fp-badge.green { background:#dcfce7; color:#16a34a; }
+.fp-badge.orange { background:#ffedd5; color:#ea580c; }
 </style>
 </head>
 <body>
@@ -400,6 +465,9 @@ table.brand-table { width:100%; border-collapse:collapse; font-size:13px; min-wi
   <div class="nav-list">
     <div class="nav-item active" data-tab="overview" onclick="switchTab('overview')">
       <span class="nav-icon">🏠</span><span class="nav-label">总览进度</span>
+    </div>
+    <div class="nav-item" data-tab="floorplan" onclick="switchTab('floorplan')">
+      <span class="nav-icon">🗺️</span><span class="nav-label">户型图</span>
     </div>
     <div class="nav-divider"></div>
     <div class="nav-item" data-tab="stage1" onclick="switchTab('stage1')">
@@ -622,7 +690,8 @@ function pullFromGist(){
           var data = JSON.parse(content);
           if(data && typeof data==='object'){
             progress = data.progress || data;
-            saveProgress();
+            /* 只写本地，不触发 push，避免拉取动作反向覆盖云端 */
+            try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); }catch(e){}
             renderContent();
             updateSyncStatus('☁️ 云端数据已同步', true);
           }
@@ -854,7 +923,7 @@ function switchTab(tab){
     if(items[i].getAttribute('data-tab')===tab) items[i].classList.add('active');
     else items[i].classList.remove('active');
   }
-  var titles = {overview:'装修进度总览', stage1:'① 准备阶段', 'stage1.5':'② 设计阶段', stage2:'③ 拆改封窗', stage3:'④ 水电改造', stage4:'⑤ 瓦工阶段', stage5:'⑥ 木工阶段', stage6:'⑦ 油工阶段', stage7:'⑧ 安装阶段', stage8:'⑨ 软装收尾', purchase:'采购时间表', terms:'专业术语', solutions:'解决路径', advice:'工作建议', checklist:'验收检查表', shops:'上海采购地图', brands:'品牌推荐', recap:'采购统计'};
+  var titles = {overview:'装修进度总览', floorplan:'户型图 · 效果图', stage1:'① 准备阶段', 'stage1.5':'② 设计阶段', stage2:'③ 拆改封窗', stage3:'④ 水电改造', stage4:'⑤ 瓦工阶段', stage5:'⑥ 木工阶段', stage6:'⑦ 油工阶段', stage7:'⑧ 安装阶段', stage8:'⑨ 软装收尾', purchase:'采购时间表', terms:'专业术语', solutions:'解决路径', advice:'工作建议', checklist:'验收检查表', shops:'上海采购地图', brands:'品牌推荐', recap:'采购统计'};
   document.getElementById('main-title').textContent = titles[tab];
   renderContent();
 }
@@ -863,6 +932,7 @@ function renderContent(){
   var area = document.getElementById('content-area');
   area.innerHTML = '';
   if(currentTab==='overview') renderOverview(area);
+  else if(currentTab==='floorplan') renderFloorplan(area);
   else if(currentTab.indexOf('stage')===0) renderStage(area, currentTab);
   else if(currentTab==='purchase') renderPurchase(area);
   else if(currentTab==='terms') renderTerms(area);
@@ -1652,6 +1722,452 @@ function renderRecap(area){
     html += '</div>';
   }
   area.innerHTML = html;
+}
+
+/* ============ 户型图 · 效果图栏目 ============ */
+/* 数据模型：
+ * progress['fp_plan']   = {img, imgName, walls:[{id,x1,y1,x2,y2,type:1原墙|2新墙|3拆墙}], markers:[{id,x,y,effId,room}]}
+ * progress['fp_effs']   = [{id,name,note,url,roomId,linked:bool}]
+ * progress['fp_rooms']  = [{id,name}] 房间/区域
+ * progress['fp_markers']= 兼容字段（旧）
+ */
+function getFpData(){
+  return {
+    plan: progress['fp_plan'] || {walls:[],markers:[],rooms:[]},
+    effs: progress['fp_effs'] || [],
+    rooms: (progress['fp_plan'] && progress['fp_plan'].rooms) || []
+  };
+}
+function saveFp(){
+  saveProgress(); /* 复用云端同步 */
+}
+
+/* ============ 户型图编辑器状态 ============ */
+var fpState = {mode:'view', wallType:'new', markers:[]};
+
+/* 渲染户型图栏目 */
+function renderFloorplan(area){
+  if(!area) area = document.getElementById('content-area');
+  var fp = getFpData();
+  var plan = fp.plan || {};
+  var effs = fp.effs || [];
+  var rooms = fp.rooms || [];
+
+  var html = '';
+
+  /* 左侧：户型图编辑器 */
+  html += '<div class="bento-card">';
+  html += '<div class="card-title"><span class="card-icon">🗺️</span>户型图<span class="card-subtitle">上传原户型图 · 在线标注改造</span></div>';
+
+  if(!plan.url){
+    html += '<div class="fp-empty">';
+    html += '<div style="font-size:40px;margin-bottom:10px;">📐</div>';
+    html += '<div>还没有上传户型图</div>';
+    html += '<div style="font-size:12px;margin-top:4px;">支持 JPG / PNG，上传后可在图上标注要拆/新建的墙</div>';
+    html += '<div style="margin-top:14px;"><label class="fp-upload-btn">📤 上传户型图<input type="file" accept="image/*" style="display:none" onchange="uploadFpImage(this)"></label></div>';
+    html += '</div>';
+  } else {
+    html += '<div class="fp-toolbar">';
+    html += '<button class="fp-tool-btn'+(fpState.mode==='select'?' active':'')+'" id="fp-tool-select" onclick="fpSetMode(\'select\')">🖱 选择/移动</button>';
+    html += '<button class="fp-tool-btn'+(fpState.mode==='wall'?' active':'')+'" id="fp-tool-wall" onclick="fpSetMode(\'wall\')">🧱 画墙</button>';
+    html += '<button class="fp-tool-btn'+(fpState.mode==='delwall'?' active':'')+'" id="fp-tool-delwall" onclick="fpSetMode(\'delwall\')">✂️ 拆墙</button>';
+    html += '<button class="fp-tool-btn'+(fpState.mode==='marker'?' active':'')+'" id="fp-tool-marker" onclick="fpSetMode(\'marker\')">📍 标效果图</button>';
+    html += '<span class="fp-tip" style="margin-left:auto">拖动端点调整 · 点线删除</span>';
+    html += '</div>';
+    html += '<div class="fp-canvas-box">';
+    html += '<img class="fp-bg" src="'+esc(plan.url)+'" id="fp-bg-img">';
+    html += '<svg id="fp-svg" viewBox="0 0 800 560" xmlns="http://www.w3.org/2000/svg">';
+    /* 墙体 */
+    var walls = plan.walls||[];
+    for(var i=0;i<walls.length;i++){
+      var w = walls[i];
+      var cls = w.type==='new'?'fp-wall-new':(w.type==='del'?'fp-wall-del':'fp-wall');
+      html += '<line class="'+cls+'" id="fp-wall-'+w.id+'" x1="'+w.x1+'" y1="'+w.y1+'" x2="'+w.x2+'" y2="'+w.y2+'" data-id="'+w.id+'" onclick="fpSelectWall(\''+w.id+'\')"></line>';
+    }
+    /* 标记点 */
+    var markers = plan.markers||[];
+    for(var j=0;j<markers.length;j++){
+      var mk = markers[j];
+      var eff = null;
+      for(var k=0;k<effs.length;k++){ if(effs[k].id===mk.effId) eff=effs[k]; }
+      var lbl = eff ? (eff.name||'效果图') : '效果图';
+      html += '<g class="fp-marker" id="fp-marker-'+mk.id+'" transform="translate('+mk.x+','+mk.y+')" onclick="fpSelectMarker(\''+mk.id+'\')">';
+      html += '<circle r="8"></circle><text class="fp-marker-tag" y="-12" text-anchor="middle">📍</text></g>';
+    }
+    html += '</svg>';
+    html += '</div>';
+    html += '<div class="fp-legend"><span><i style="border-color:#1e293b"></i> 原墙</span><span><i class="blue"></i> 新建墙</span><span><i class="red"></i> 拆除墙</span><span><i style="border:none;width:10px;height:10px;border-radius:50%;background:#6366f1"></i> 效果图位置</span></div>';
+    html += '<div class="fp-tip">💡 选择「画墙」后在图上点击起点和终点即可画线；选择「拆墙」同样操作，会用红色虚线标出要拆的墙；删除墙：选墙后按 Delete。</div>';
+    html += '<div class="fp-action-row">';
+    html += '<button class="btn" onclick="fpSaveWalls()">💾 保存标注</button>';
+    html += '<button class="btn btn-ghost" onclick="fpClearWalls()">🧹 清空标注</button>';
+    html += '<button class="btn btn-ghost" onclick="fpReplaceImage()">🔄 更换户型图</button>';
+    html += '</div>';
+  }
+
+  html += '</div>';
+
+  /* 右侧：效果图库 */
+  html += '<div class="bento-card">';
+  html += '<div class="card-title"><span class="card-icon">🖼️</span>效果图库<span class="card-subtitle">收藏网上看到的效果图</span></div>';
+  html += '<div class="fp-toolbar" style="margin-bottom:12px;">';
+  html += '<label class="fp-upload-btn">📤 上传效果图<input type="file" accept="image/*" style="display:none" onchange="uploadFpEff(this)"></label>';
+  html += '<span class="fp-tip">上传时可备注，也可关联到户型图位置</span>';
+  html += '</div>';
+  if(effs.length===0){
+    html += '<div class="fp-empty">还没有效果图，点上方按钮上传第一张吧</div>';
+  } else {
+    html += '<div class="fp-grid">';
+    for(var i=0;i<effs.length;i++){
+      var e = effs[i];
+      html += '<div class="fp-card">';
+      html += '<img src="'+esc(e.url)+'" onclick="fpViewEff(\''+e.id+'\')" title="'+esc(e.name||'')+'">';
+      html += '<div class="fp-card-body">';
+      if(e.name) html += '<div class="fp-card-note"><b>'+esc(e.name)+'</b></div>';
+      if(e.note) html += '<div class="fp-card-note">'+esc(e.note)+'</div>';
+      html += '<div class="fp-card-meta">'+(e.room?('🏷 '+esc(e.room)):'')+(e.linkedTo?' · 📍 已关联':'')+'</div>';
+      html += '<div class="fp-card-actions">';
+      html += '<button class="btn btn-ghost" style="font-size:11px;padding:4px 0;" onclick="fpEditEff(\''+e.id+'\')">✏️ 编辑</button>';
+      html += '<button class="btn btn-ghost" style="font-size:11px;padding:4px 0;color:#dc2626;" onclick="fpDelEff(\''+e.id+'\')">🗑️ 删除</button>';
+      html += '</div></div></div>';
+    }
+    html += '</div>';
+  }
+  html += '</div>';
+
+  area.innerHTML = html;
+  /* 保持当前编辑模式（wall/delwall/marker），仅首次进入时默认 select */
+  if(fpState.mode!=='wall' && fpState.mode!=='delwall' && fpState.mode!=='marker') fpState.mode = 'select';
+  /* 绑定 SVG 交互 */
+  if(plan.url){
+    var svg = document.getElementById('fp-svg');
+    if(svg){
+      svg.addEventListener('mousedown', fpSvgDown);
+      svg.addEventListener('mousemove', fpSvgMove);
+      svg.addEventListener('mouseup', fpSvgUp);
+      svg.addEventListener('click', fpSvgClick);
+    }
+  }
+}
+
+/* 上传户型图 */
+function uploadFpImage(input){
+  var file = input.files[0];
+  if(!file) return;
+  uploadFpToRepo(file, function(url, err){
+    if(err){ alert('上传失败：'+err); return; }
+    if(!progress['fp_plan']) progress['fp_plan'] = {walls:[],markers:[],rooms:[]};
+    progress['fp_plan'].url = url;
+    progress['fp_plan'].imgName = file.name;
+    saveProgress();
+    renderContent();
+  });
+}
+
+/* 上传效果图 */
+function uploadFpEff(input){
+  var file = input.files[0];
+  if(!file) return;
+  uploadFpToRepo(file, function(url, err){
+    if(err){ alert('上传失败：'+err); return; }
+    var eff = {id:'eff_'+Date.now(), name:'', note:'', url:url, room:'', linkedTo:null};
+    if(!progress['fp_effs']) progress['fp_effs'] = [];
+    progress['fp_effs'].push(eff);
+    saveProgress();
+    fpEditEff(eff.id);
+  });
+}
+
+/* 通用上传到 GitHub */
+function uploadFpToRepo(file, cb){
+  var cfg = getGistCfg();
+  if(!cfg || !cfg.token){ cb(null,'未配置云同步 Token'); return; }
+  var reader = new FileReader();
+  reader.onload = function(e){
+    var b64 = e.target.result.split(',')[1];
+    var ext = (file.name.split('.').pop()||'jpg').toLowerCase();
+    if(ext==='jpeg') ext='jpg';
+    var path = 'img/'+Date.now()+'_'+file.name.replace(/[^\w.\u4e00-\u9fa5-]/g,'_');
+    var repo = 'ZK02727/renovation-guide';
+    fetch('https://api.github.com/repos/'+repo+'/contents/'+encodeURIComponent(path), {
+      method:'PUT',
+      headers:{'Authorization':'Bearer '+cfg.token,'Content-Type':'application/json'},
+      body: JSON.stringify({message:'upload image', content:b64})
+    }).then(function(r){
+      if(!r.ok) return r.json().then(function(j){ throw new Error(j.message||'上传失败'); });
+      return r.json();
+    }).then(function(j){
+      var url = 'https://cdn.jsdelivr.net/gh/ZK02727/renovation-guide@main/'+path;
+      cb(url, null);
+    }).catch(function(err){ cb(null, err.message||'网络错误'); });
+  };
+  reader.readAsDataURL(file);
+}
+
+/* SVG 编辑交互 */
+var fpDraw = {wallStart:null, svgWidth:800, svgHeight:560};
+function fpSvgPos(evt){
+  var svg = document.getElementById('fp-svg');
+  if(!svg) return {x:0,y:0};
+  var rect = svg.getBoundingClientRect();
+  var x = (evt.clientX - rect.left) / rect.width * 800;
+  var y = (evt.clientY - rect.top) / rect.height * 560;
+  return {x:Math.round(x), y:Math.round(y)};
+}
+function fpSvgDown(evt){
+  if(fpState.mode==='wall' || fpState.mode==='delwall'){
+    var p = fpSvgPos(evt);
+    fpDraw = {start:p, line:null, type: fpState.mode==='delwall'?'del':'new'};
+    var svg = document.getElementById('fp-svg');
+    fpDraw.line = document.createElementNS('http://www.w3.org/2000/svg','line');
+    fpDraw.line.setAttribute('x1',p.x); fpDraw.line.setAttribute('y1',p.y);
+    fpDraw.line.setAttribute('x2',p.x); fpDraw.line.setAttribute('y2',p.y);
+    fpDraw.line.setAttribute('stroke', fpState.mode==='delwall'?'#ef4444':'#3b82f6');
+    fpDraw.line.setAttribute('stroke-width','4');
+    fpDraw.line.setAttribute('stroke-dasharray', fpState.mode==='delwall'?'9 5':'7 4');
+    svg.appendChild(fpDraw.line);
+  }
+}
+function fpSvgMove(evt){
+  if(!fpDraw || !fpDraw.line) return;
+  var p = fpSvgPos(evt);
+  fpDraw.line.setAttribute('x2',p.x); fpDraw.line.setAttribute('y2',p.y);
+}
+function fpSvgUp(evt){
+  if(!fpDraw) return;
+  var p = fpSvgPos(evt);
+  var len = Math.sqrt(Math.pow(p.x-fpDraw.start.x,2)+Math.pow(p.y-fpDraw.start.y,2));
+  if(len>8){
+    var plan = progress['fp_plan'] || (progress['fp_plan']={walls:[],markers:[]});
+    if(!plan.walls) plan.walls=[];
+    plan.walls.push({id:'w_'+Date.now()+'_'+Math.floor(Math.random()*999), x1:fpDraw.start.x, y1:fpDraw.start.y, x2:p.x, y2:p.y, type:fpDraw.type==='del'?'del':'new'});
+    fpDraw.line.setAttribute('class', fpDraw.type==='del'?'fp-wall-del':'fp-wall-new');
+  } else {
+    if(fpDraw.line) fpDraw.line.remove();
+  }
+  fpDraw = null;
+}
+function fpSvgClick(evt){
+  if(fpState.mode==='marker'){
+    var p = fpSvgPos(evt);
+    var plan = progress['fp_plan'] || (progress['fp_plan']={walls:[],markers:[],rooms:[]});
+    if(!plan.markers) plan.markers=[];
+    var mid = 'm'+Date.now();
+    plan.markers.push({id:mid, x:p.x, y:p.y, effId:null, room:''});
+    saveProgress();
+    renderFloorplan();
+    /* 创建后直接弹出关联效果图选择 */
+    fpLinkEffToMarker(mid);
+  }
+}
+
+/* 工具栏切换 */
+function fpSetMode(mode){
+  fpState.mode = mode;
+  renderFloorplan();
+}
+
+/* 删除选中的墙：选墙后按 Delete 或点击删除按钮 */
+function fpSelectWall(wid){
+  var plan = progress['fp_plan']||{};
+  var walls = plan.walls||[];
+  var sel = document.querySelectorAll('.fp-wall-selected');
+  for(var i=0;i<sel.length;i++) sel[i].classList.remove('fp-wall-selected');
+  var el = document.getElementById('fp-wall-'+wid);
+  if(el) el.classList.add('fp-wall-selected');
+  fpState.selectedWall = wid;
+  /* 弹出操作菜单 */
+  var mask = document.createElement('div');
+  mask.className='fp-modal-mask';
+  mask.innerHTML = '<div class="fp-modal" style="width:320px;">'+
+    '<h4>🧱 墙体操作</h4>'+
+    '<div class="fp-action-row" style="flex-direction:column;gap:8px;">'+
+    '<button class="btn" style="width:100%;" onclick="fpDelWall(\''+wid+'\')">🗑️ 删除这面墙</button>'+
+    '<button class="btn btn-ghost" style="width:100%;" onclick="this.closest(\'.fp-modal-mask\').remove()">关闭</button>'+
+    '</div></div>';
+  mask.addEventListener('click', function(ev){ if(ev.target===mask) mask.remove(); });
+  document.body.appendChild(mask);
+}
+function fpDelWall(wid){
+  var plan = progress['fp_plan']||{};
+  plan.walls = (plan.walls||[]).filter(function(w){ return w.id!==wid; });
+  saveProgress();
+  var mask = document.querySelector('.fp-modal-mask');
+  if(mask) mask.remove();
+  renderFloorplan();
+}
+/* 选择标记 */
+function fpSelectMarker(mid){
+  var plan = progress['fp_plan']||{};
+  var markers = plan.markers||[];
+  var mk = null;
+  for(var i=0;i<markers.length;i++){ if(markers[i].id===mid) mk=markers[i]; }
+  if(!mk) return;
+  var effs = progress['fp_effs']||[];
+  /* 找关联的效果图 */
+  var eff = null;
+  for(var j=0;j<effs.length;j++){ if(effs[j].id===mk.effId) eff=effs[j]; }
+  var mask = document.createElement('div');
+  mask.className='fp-modal-mask';
+  mask.innerHTML = '<div class="fp-modal" style="width:340px;">'+
+    '<h4>📍 效果图标记</h4>'+
+    '<div style="font-size:13px;color:var(--text-secondary);margin-bottom:10px;">'+(eff?('已关联：<b>'+esc(eff.name||'效果图')+'</b>'):'此标记未关联效果图')+'</div>'+
+    '<div class="fp-action-row" style="flex-direction:column;gap:8px;">'+
+    '<button class="btn" style="width:100%;" onclick="this.closest(\'.fp-modal-mask\').remove(); fpLinkEffToMarker(\''+mid+'\')">🔗 关联效果图</button>'+
+    (eff?'<button class="btn btn-ghost" style="width:100%;" onclick="this.closest(\'.fp-modal-mask\').remove(); fpUnlinkMarker(\''+mid+'\')">🔓 取消关联</button>':'')+
+    '<button class="btn btn-ghost" style="width:100%;color:#dc2626;" onclick="fpDelMarker(\''+mid+'\')">🗑️ 删除标记</button>'+
+    '<button class="btn btn-ghost" style="width:100%;" onclick="this.closest(\'.fp-modal-mask\').remove()">关闭</button>'+
+    '</div></div>';
+  mask.addEventListener('click', function(ev){ if(ev.target===mask) mask.remove(); });
+  document.body.appendChild(mask);
+}
+function fpDelMarker(mid){
+  var plan = progress['fp_plan']||{};
+  plan.markers = (plan.markers||[]).filter(function(m){ return m.id!==mid; });
+  saveProgress();
+  var mask = document.querySelector('.fp-modal-mask');
+  if(mask) mask.remove();
+  renderFloorplan();
+}
+function fpUnlinkMarker(mid){
+  var plan = progress['fp_plan']||{};
+  var markers = plan.markers||[];
+  for(var i=0;i<markers.length;i++){ if(markers[i].id===mid){ markers[i].effId=null; break; } }
+  saveProgress();
+  renderFloorplan();
+}
+
+/* 保存标注 */
+function fpSaveWalls(){
+  saveProgress();
+  alert('标注已保存 ☁️ 已自动同步到云端');
+}
+function fpClearWalls(){
+  if(!confirm('确定清空所有墙体标注和标记点吗？')) return;
+  var plan = progress['fp_plan'];
+  if(plan){ plan.walls=[]; plan.markers=[]; }
+  saveProgress();
+  renderFloorplan();
+}
+function fpReplaceImage(){
+  var input = document.createElement('input');
+  input.type='file'; input.accept='image/*';
+  input.onchange = function(e){
+    var file = e.target.files[0];
+    if(!file) return;
+    uploadFpToRepo(file, function(url, err){
+      if(err){ alert('上传失败：'+err); return; }
+      var plan = progress['fp_plan'];
+      if(plan){ plan.url=url; plan.imgName=file.name; }
+      saveProgress();
+      renderFloorplan();
+    });
+  };
+  input.click();
+}
+
+/* ============ 效果图管理 ============ */
+function fpViewEff(id){
+  var effs = progress['fp_effs']||[];
+  var e = null;
+  for(var i=0;i<effs.length;i++){ if(effs[i].id===id) e=effs[i]; }
+  if(!e) return;
+  var mask = document.createElement('div');
+  mask.className='fp-modal-mask';
+  mask.innerHTML = '<div class="fp-modal" style="width:520px;text-align:center;">' +
+    '<h4 style="text-align:left">🖼️ '+esc(e.name||'效果图')+'</h4>' +
+    '<img class="fp-preview-img" src="'+esc(e.url)+'">' +
+    (e.note?'<div style="font-size:13px;color:var(--text-secondary);margin-top:10px;text-align:left;">📝 '+esc(e.note)+'</div>':'') +
+    (e.room?'<div style="font-size:12px;color:var(--text-muted);margin-top:6px;text-align:left;">🏷 区域：'+esc(e.room)+'</div>':'') +
+    (e.linkedTo?'<div style="font-size:12px;color:var(--text-muted);margin-top:4px;text-align:left;">📍 已关联到户型图</div>':'') +
+    '<div class="fp-modal-actions"><button class="btn btn-ghost" onclick="this.closest(\'.fp-modal-mask\').remove()">关闭</button></div>' +
+    '</div>';
+  mask.addEventListener('click', function(ev){ if(ev.target===mask) mask.remove(); });
+  document.body.appendChild(mask);
+}
+function fpEditEff(id){
+  var effs = progress['fp_effs']||[];
+  var e = null;
+  for(var i=0;i<effs.length;i++){ if(effs[i].id===id) e=effs[i]; }
+  if(!e) return;
+  var rooms = (progress['fp_plan']&&progress['fp_plan'].rooms)||[];
+  var roomOpts = '<option value="">不指定区域</option>';
+  for(var j=0;j<rooms.length;j++){ roomOpts += '<option value="'+esc(rooms[j].id)+'"'+(e.roomId===rooms[j].id?' selected':'')+'>'+esc(rooms[j].name)+'</option>'; }
+  var mask = document.createElement('div');
+  mask.className='fp-modal-mask';
+  mask.id='fp-edit-mask';
+  mask.innerHTML = '<div class="fp-modal">'+
+    '<h4>✏️ 编辑效果图</h4>'+
+    '<div class="fp-field"><label>名称（可选）</label><input class="fp-input" id="fp-edit-name" value="'+esc(e.name||'')+'" placeholder="如：客厅奶油风"></div>'+
+    '<div class="fp-field"><label>备注</label><textarea class="fp-input" id="fp-edit-note" rows="3" placeholder="写下这张图的灵感、品牌、预算参考…">'+esc(e.note||'')+'</textarea></div>'+
+    '<div class="fp-field"><label>关联区域</label><select class="fp-input" id="fp-edit-room">'+roomOpts+'</select></div>'+
+    '<div style="font-size:11px;color:var(--text-muted);">关联到户型图：在户型图中切换到「📍 标效果图」模式，点击图上位置即可关联。</div>'+
+    '<div class="fp-modal-actions">'+
+    '<button class="btn btn-ghost" onclick="document.getElementById(\'fp-edit-mask\').remove()">取消</button>'+
+    '<button class="btn" onclick="fpSaveEff(\''+id+'\')">💾 保存</button>'+
+    '</div></div>';
+  mask.addEventListener('click', function(ev){ if(ev.target===mask) mask.remove(); });
+  document.body.appendChild(mask);
+}
+function fpSaveEff(id){
+  var effs = progress['fp_effs']||[];
+  var e = null;
+  for(var i=0;i<effs.length;i++){ if(effs[i].id===id) e=effs[i]; }
+  if(!e) return;
+  e.name = document.getElementById('fp-edit-name').value.trim();
+  e.note = document.getElementById('fp-edit-note').value.trim();
+  e.roomId = document.getElementById('fp-edit-room').value;
+  /* 映射 roomId -> room 名 */
+  var rooms = (progress['fp_plan']&&progress['fp_plan'].rooms)||[];
+  for(var j=0;j<rooms.length;j++){ if(rooms[j].id===e.roomId) e.room = rooms[j].name; }
+  saveProgress();
+  var mask = document.getElementById('fp-edit-mask');
+  if(mask) mask.remove();
+  renderFloorplan();
+}
+function fpDelEff(id){
+  if(!confirm('确定删除这张效果图？')) return;
+  progress['fp_effs'] = (progress['fp_effs']||[]).filter(function(e){ return e.id!==id; });
+  saveProgress();
+  renderFloorplan();
+}
+
+/* 关联效果图到户型图：点击户型图某处时弹出选择 */
+function fpLinkEffToMarker(markerId){
+  var plan = progress['fp_plan']||{};
+  var markers = plan.markers||[];
+  var effs = progress['fp_effs']||[];
+  var mk = null;
+  for(var i=0;i<markers.length;i++){ if(markers[i].id===markerId) mk=markers[i]; }
+  if(!mk) return;
+  var opts = '<option value="">— 不关联 —</option>';
+  for(var j=0;j<effs.length;j++){ opts += '<option value="'+esc(effs[j].id)+'"'+(mk.effId===effs[j].id?' selected':'')+'>'+esc(effs[j].name||('效果图 '+(j+1)))+'</option>'; }
+  var mask = document.createElement('div');
+  mask.className='fp-modal-mask';
+  mask.innerHTML = '<div class="fp-modal">'+
+    '<h4>📍 关联效果图</h4>'+
+    '<div class="fp-field"><label>选择要关联的效果图</label><select class="fp-input" id="fp-link-select">'+opts+'</select></div>'+
+    '<div class="fp-modal-actions">'+
+    '<button class="btn btn-ghost" onclick="this.closest(\'.fp-modal-mask\').remove()">取消</button>'+
+    '<button class="btn" onclick="fpLinkSave(\''+markerId+'\')">关联</button>'+
+    '</div></div>';
+  document.body.appendChild(mask);
+}
+function fpLinkSave(markerId){
+  var plan = progress['fp_plan']||{};
+  var markers = plan.markers||[];
+  var sel = document.getElementById('fp-link-select').value;
+  var mk = null;
+  for(var i=0;i<markers.length;i++){ if(markers[i].id===markerId) mk=markers[i]; }
+  if(!mk) return;
+  mk.effId = sel || null;
+  /* 反写效果图的 linkedTo */
+  var effs = progress['fp_effs']||[];
+  for(var j=0;j<effs.length;j++){ effs[j].linkedTo = (effs[j].linkedTo && effs[j].linkedTo===markerId) ? (sel?markerId:null) : (effs[j].id===sel?markerId:(effs[j].linkedTo||null)); }
+  saveProgress();
+  var mask = document.querySelector('.fp-modal-mask');
+  if(mask) mask.remove();
+  renderFloorplan();
 }
 
 function renderStats(){
