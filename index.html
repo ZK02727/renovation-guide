@@ -44,10 +44,21 @@ body {
 }
 
 /* ===== 左侧导航栏（毛玻璃） ===== */
-.sidebar { width:240px; min-width:240px; background:rgba(255,255,255,0.55); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); border-right:1px solid var(--glass-border); display:flex; flex-direction:column; height:100vh; z-index:10; position:relative; }
+.sidebar { width:240px; min-width:240px; background:rgba(255,255,255,0.55); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); border-right:1px solid var(--glass-border); display:flex; flex-direction:column; height:100vh; z-index:10; position:relative; transition:width .3s ease, min-width .3s ease; overflow:hidden; }
 .sidebar::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background:var(--accent-grad); z-index:1; }
-.sidebar-title { padding:30px 20px 4px; font-size:21px; font-weight:800; letter-spacing:0.5px; background:var(--accent-grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-.sidebar-subtitle { padding:0 20px 20px; font-size:10px; color:var(--text-muted); letter-spacing:2.5px; font-weight:600; }
+.sidebar-title { padding:30px 20px 4px; font-size:21px; font-weight:800; letter-spacing:0.5px; background:var(--accent-grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; white-space:nowrap; transition:opacity .2s ease; }
+.sidebar-subtitle { padding:0 20px 20px; font-size:10px; color:var(--text-muted); letter-spacing:2.5px; font-weight:600; white-space:nowrap; transition:opacity .2s ease; }
+.sidebar-toggle { position:absolute; top:22px; right:-13px; width:26px; height:26px; border-radius:50%; background:var(--accent-grad); color:#fff; border:none; cursor:pointer; font-size:12px; line-height:1; display:flex; align-items:center; justify-content:center; box-shadow:0 3px 10px rgba(99,102,241,0.4); z-index:20; transition:transform .3s ease; }
+.sidebar-toggle:hover { transform:scale(1.1); }
+.sidebar.collapsed .sidebar-toggle { right:-13px; transform:rotate(180deg); }
+.sidebar.collapsed { width:64px; min-width:64px; }
+.sidebar.collapsed .sidebar-title, .sidebar.collapsed .sidebar-subtitle { opacity:0; padding-left:0; padding-right:0; }
+.sidebar.collapsed .nav-label, .sidebar.collapsed .nav-badge, .sidebar.collapsed .sidebar-footer { display:none; }
+.sidebar.collapsed .nav-divider { margin:8px 16px; }
+.sidebar.collapsed .nav-item { justify-content:center; padding:11px 0; }
+.sidebar.collapsed .nav-icon { margin-right:0; }
+.sidebar.collapsed .nav-list { padding:4px 6px; }
+.sidebar.collapsed .sidebar-title { padding-top:34px; }
 .nav-list { flex:1; padding:4px 12px; overflow-y:auto; }
 .nav-list::-webkit-scrollbar { width:4px; }
 .nav-list::-webkit-scrollbar-thumb { background:rgba(148,163,184,0.3); border-radius:2px; }
@@ -459,7 +470,8 @@ table.brand-table { width:100%; border-collapse:collapse; font-size:13px; min-wi
 </div>
 
 <!-- 左侧导航 -->
-<div class="sidebar">
+<div class="sidebar" id="sidebar">
+  <button class="sidebar-toggle" id="sidebar-toggle" onclick="toggleSidebar()" title="收缩/展开导航">◀</button>
   <div class="sidebar-title">装修全流程指南</div>
   <div class="sidebar-subtitle">RENOVATION GUIDE</div>
   <div class="nav-list">
@@ -573,6 +585,25 @@ table.brand-table { width:100%; border-collapse:collapse; font-size:13px; min-wi
  * ========================================================== */
 var STORAGE_KEY = 'zx_guide_progress_v1';
 var currentTab = 'overview';
+var SIDEBAR_KEY = 'zx_guide_sidebar_collapsed';
+
+/* ===== 左侧导航栏折叠/展开 ===== */
+function toggleSidebar(){
+  var sb = document.getElementById('sidebar');
+  var collapsed = sb.classList.toggle('collapsed');
+  try{ localStorage.setItem(SIDEBAR_KEY, collapsed?'1':'0'); }catch(e){}
+  var btn = document.getElementById('sidebar-toggle');
+  if(btn) btn.textContent = collapsed ? '▶' : '◀';
+}
+function initSidebar(){
+  var sb = document.getElementById('sidebar');
+  if(!sb) return;
+  var collapsed = false;
+  try{ collapsed = localStorage.getItem(SIDEBAR_KEY)==='1'; }catch(e){}
+  if(collapsed) sb.classList.add('collapsed');
+  var btn = document.getElementById('sidebar-toggle');
+  if(btn) btn.textContent = collapsed ? '▶' : '◀';
+}
 
 /* ===== 在线版：登录与云同步 ===== */
 var AUTH_KEY = 'zx_guide_auth_v1';
@@ -725,6 +756,7 @@ function pushToGist(){
 
 /* 初始化：登录态检查 */
 (function(){
+  initSidebar();
   var s = getSession();
   if(s){
     document.getElementById('login-overlay').classList.add('hidden');
