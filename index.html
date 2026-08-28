@@ -610,7 +610,7 @@ function getSession(){ try{ var r=sessionStorage.getItem(SESSION_KEY); return r?
 function setSession(v){ sessionStorage.setItem(SESSION_KEY, JSON.stringify(v)); }
 
 /* 预设固定密码校验（不存储哈希，每次直接比对） */
-var FIXED_PASS = '0728';
+var FIXED_PASS = '0726';
 
 /* 固定密码校验：不再引导用户设置密码 */
 function doLogin(){
