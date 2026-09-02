@@ -269,7 +269,7 @@ table.purchase-table { width:100%; border-collapse:collapse; font-size:13px; min
 .tip-success { background:#dcfce7; border:1px solid #bbf7d0; color:#166534; }
 .tip-danger { background:#fee2e2; border:1px solid #fecaca; color:#991b1b; }
 
-/* ============ 装修监理指南（合并板块） ============ */
+/* ============ 装修监理指南（攻略式步骤） ============ */
 .guide-stage { background:rgba(255,255,255,0.88); border:1px solid rgba(255,255,255,0.6); border-radius:var(--radius-md); padding:16px 20px; margin-bottom:8px; box-shadow:0 2px 8px rgba(0,0,0,0.04); transition:box-shadow .3s ease; }
 .guide-stage:hover { box-shadow:0 4px 16px rgba(0,0,0,0.07); }
 .guide-stage-head { display:flex; align-items:center; gap:10px; cursor:pointer; }
@@ -279,47 +279,31 @@ table.purchase-table { width:100%; border-collapse:collapse; font-size:13px; min
 .guide-stage.collapsed .guide-stage-toggle { transform:rotate(-90deg); }
 .guide-stage-body { transition:all .3s ease; padding-top:12px; border-top:1px dashed #e2e8f0; margin-top:8px; }
 .guide-stage.collapsed .guide-stage-body { display:none; }
-.guide-sec { margin-bottom:10px; }
-.guide-sec-title { font-size:13px; font-weight:700; margin-bottom:6px; display:flex; align-items:center; gap:6px; }
-.guide-sec-content { font-size:13px; line-height:1.7; color:var(--text-secondary); }
-.guide-sec-content ul { list-style:none; padding:0; margin:0; }
-.guide-sec-content ul li { padding:3px 0 3px 16px; position:relative; }
-.guide-sec-content ul li::before { content:"▸"; position:absolute; left:0; color:var(--accent); font-size:11px; top:4px; }
-/* 做什么+为什么重要 双列 */
-.guide-dual { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:10px; }
-@media(max-width:700px){ .guide-dual { grid-template-columns:1fr; } }
-.guide-dual-item { background:rgba(255,255,255,0.6); border-radius:var(--radius-sm); padding:10px 14px; }
-.guide-dual-label { font-size:13px; font-weight:700; margin-bottom:4px; display:flex; align-items:center; gap:5px; }
-/* 合格/不合格/补救 对比表 */
-.guide-compare { width:100%; border-collapse:separate; border-spacing:0; margin-bottom:10px; border-radius:var(--radius-sm); overflow:hidden; }
-.guide-compare th { padding:8px 12px; font-size:13px; font-weight:700; text-align:left; }
-.guide-compare th.col-pass { background:#dcfce7; color:#166534; }
-.guide-compare th.col-fail { background:#fee2e2; color:#991b1b; }
-.guide-compare th.col-fix { background:#fef3c7; color:#92400e; }
-.guide-compare td { padding:8px 12px; font-size:13px; line-height:1.6; color:var(--text-secondary); border-bottom:1px solid #f1f5f9; vertical-align:top; }
-.guide-compare tr:last-child td { border-bottom:none; }
-.guide-compare td.td-pass { background:rgba(220,252,231,0.35); }
-.guide-compare td.td-fail { background:rgba(254,226,226,0.35); }
-.guide-compare td.td-fix { background:rgba(254,243,199,0.35); }
-/* 术语 */
-.guide-term { background:rgba(255,255,255,0.85); border:1px solid rgba(255,255,255,0.5); border-radius:var(--radius-sm); padding:10px 14px; margin-bottom:6px; cursor:pointer; transition:var(--transition); }
-.guide-term:hover { box-shadow:0 3px 12px rgba(0,0,0,0.06); transform:translateX(2px); }
-.guide-term-head { display:flex; align-items:center; gap:8px; }
-.guide-term-name { font-size:13px; font-weight:700; }
-.guide-term-cat { font-size:10px; color:var(--accent); background:var(--accent-light); padding:2px 8px; border-radius:10px; }
-.guide-term-expand { font-size:12px; color:var(--text-muted); margin-left:auto; transition:transform .3s ease; }
-.guide-term.open .guide-term-expand { transform:rotate(180deg); }
-.guide-term-desc { display:none; font-size:13px; line-height:1.7; color:var(--text-secondary); margin-top:8px; padding-top:8px; border-top:1px dashed #e2e8f0; }
-.guide-term.open .guide-term-desc { display:block; }
-/* 解决路径 */
-.guide-sol-card { background:rgba(255,255,255,0.85); border:1px solid rgba(255,255,255,0.5); border-radius:var(--radius-sm); padding:12px 14px; margin-bottom:8px; }
-.guide-sol-issue { font-size:13px; font-weight:700; margin-bottom:8px; }
-/* 建议卡片 */
-.guide-advice-card { background:rgba(255,255,255,0.85); border:1px solid rgba(255,255,255,0.5); border-radius:var(--radius-sm); padding:14px 16px; margin-bottom:8px; }
-.guide-advice-card h4 { font-size:14px; font-weight:700; margin-bottom:8px; display:flex; align-items:center; gap:6px; }
-.guide-advice-card ul { list-style:none; padding:0; margin:0; }
-.guide-advice-card ul li { font-size:13px; line-height:1.65; color:var(--text-secondary); padding:3px 0 3px 16px; position:relative; }
-.guide-advice-card ul li::before { content:"▸"; position:absolute; left:0; color:var(--accent); font-size:11px; top:4px; }
+.guide-stage-intro { font-size:13px; line-height:1.7; color:var(--text-secondary); margin-bottom:14px; padding:10px 14px; background:rgba(99,102,241,0.06); border-radius:var(--radius-sm); }
+/* 攻略步骤 */
+.guide-step { display:flex; gap:12px; margin-bottom:14px; }
+.guide-step-num { width:32px; height:32px; min-width:32px; border-radius:50%; background:linear-gradient(135deg,#6366f1,#8b5cf6); color:#fff; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; margin-top:2px; box-shadow:0 2px 6px rgba(99,102,241,0.3); }
+.guide-step-body { flex:1; }
+.guide-step-title { font-size:14px; font-weight:700; margin-bottom:4px; }
+.guide-step-desc { font-size:13px; line-height:1.7; color:var(--text-secondary); margin-bottom:6px; }
+/* 内联标注块 */
+.guide-inline { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:6px; }
+@media(max-width:700px){ .guide-inline { grid-template-columns:1fr; } }
+.guide-inline-item { padding:8px 12px; border-radius:var(--radius-sm); font-size:13px; line-height:1.6; }
+.guide-inline-term { background:rgba(99,102,241,0.08); border-left:3px solid #6366f1; }
+.guide-inline-term b { color:#4f46e5; }
+.guide-inline-warn { background:rgba(254,226,226,0.4); border-left:3px solid #ef4444; }
+.guide-inline-warn b { color:#991b1b; }
+.guide-inline-pass { background:rgba(220,252,231,0.4); border-left:3px solid #22c55e; }
+.guide-inline-pass b { color:#166534; }
+.guide-inline-fix { background:rgba(254,243,199,0.4); border-left:3px solid #f59e0b; }
+.guide-inline-fix b { color:#92400e; }
+/* 单列标注（占满宽度） */
+.guide-inline-full { grid-column:1/-1; }
+/* 阶段贴士 */
+.guide-stage-tip { margin-top:10px; }
+/* 旧样式兼容（术语折叠不再使用，但保留以防其他地方引用） */
+.guide-term { display:none; }
 
 /* 采购清单（阶段页内） */
 .purchase-mini { background:rgba(255,255,255,0.88); border:1px solid rgba(255,255,255,0.6); border-radius:var(--radius-sm); padding:12px 14px; margin-bottom:8px; transition:box-shadow .3s; }
@@ -1289,65 +1273,251 @@ var ADVICE = [
   {title:'装修中最省不得的心', icon:'🧠', items:['水电点位图一定要拍照留底（后期挂画打孔）','每一批材料进场对一下品牌型号','主材色差大，全场同批次购买']}
 ];
 
-/* ============ 装修监理指南数据（合并术语+解决路径+建议，按阶段映射） ============ */
-/* terms: 该阶段相关术语索引（对应 TERMS 数组下标）        */
-/* solutions: 该阶段相关解决路径索引（对应 SOLUTIONS 数组下标） */
-/* advice: 该阶段相关建议索引（对应 ADVICE 数组下标）         */
-/* pass: 怎么算做好了 | fail: 怎么算没做好 | fix: 没做好怎么弥补 */
-var STAGE_GUIDE = {
+/* ============ 装修监理指南（攻略式步骤数据） ============ */
+/* 每个阶段 = intro + steps数组 + tip                                        */
+/* 每个 step = title(做什么) desc(详细说明)                                   */
+/*   term: 术语解释（内联）  warn: 常见坑（内联）                              */
+/*   pass: 验收标准（内联）   fix: 补救措施（内联）                            */
+var GUIDE_STEPS = {
   stage1: {
-    terms:[0,12], solutions:[0,1,2,8,9,10], advice:[0,1],
-    pass:['预算清单已写进合同附件，每项都有品牌型号','装修方式已确定（全包/半包/清包/全案），签约前对比了2-3家','全屋定制、中央空调、新风等设备商家已谈妥','留有10%-15%机动预算','合同明确工期、增项规则、验收标准、质保年限'],
-    fail:['只有口头报价没有书面清单','没对比就匆忙签约','定制类商家一个都没定','预算卡死没有机动空间','合同里增项规则不清晰、质保没写'],
-    fix:['签约前补签明细报价附件','增项上限写进补充协议','立刻开始联系定制类商家','挤出10%作为安全垫','请懂行的朋友或第三方审合同']
+    intro:'装修是"决策密集型"项目，开工前把目标和钱定得越清楚，后期越省心。这个阶段不敲一锤子，但决定了整个装修的走向。',
+    tip:'预算清单要写进合同附件；全屋定制尽早定（定制周期长）；中央空调/新风等设备先选商家；留 10%-15% 机动预算。',
+    steps:[
+      { title:'看户型图，确定居住需求', desc:'拿到户型图后，先把家里几口人、生活习惯、收纳需求、未来5-10年可能的变化全部列出来。比如：要不要书房、要不要二胎房、厨房要不要开放式、阳台要不要封。',
+        term:'这一步决定后面所有设计的方向，想清楚比改图便宜一百倍。',
+        warn:'千万别直接找装修公司就说"你帮我设计吧"，自己没想法会被设计师牵着走，出来的方案不是你想要的家。',
+        pass:'列出一份详细的需求清单，包含每个房间的用途、必备功能、收纳量预估。',
+        fix:'如果已经稀里糊涂签了约，赶紧补一份需求清单给设计师，要求重新调整方案。'},
+      { title:'确定预算上限，拆解到四个板块', desc:'根据房屋面积和当地行情，定一个总预算上限，然后拆解：硬装基础+辅材约35%、主材约25%、软装约15%、家电家具约20%、机动5%。每项都要有上限，超了就从别的项扣。',
+        term:'<b>全包/半包/清包</b> — 全包：装修公司包工包料，最省心但单价高；半包：包工+辅材，主材自买，性价比最高最主流；清包：只包人工，所有材料自己买，最省钱但最操心。',
+        warn:'预算卡死没有机动空间是最常见的坑。装修中途一定有想不到的增项，没有10%安全垫就会被追加报价搞得很被动。',
+        pass:'预算拆到每个子项，每项有金额上限，留有10%-15%机动预算，全部写进合同附件。',
+        fix:'如果已经签约但没留机动预算，立刻挤出一笔安全垫，后续增项必须先签字再施工。'},
+      { title:'选装修方式：全包/半包/清包/全案', desc:'根据自己时间和精力选择。上班族推荐半包或全案；时间充裕且懂行可选清包。全案公司（设计+施工+主材一站式）质价比最高，但要选对公司。',
+        warn:'不要只看总价低就选。低价全包往往在辅材上偷工减料，后期增项不断。一定要对比2-3家的报价明细。',
+        pass:'装修方式已确定，已对比2-3家装修公司或独立设计师的方案报价。',
+        fix:'如果已匆忙签约，请懂行的朋友或第三方审合同，增项上限写进补充协议。'},
+      { title:'签合同：把所有细节钉死', desc:'合同必须明确：工期、材料品牌型号（不能只写"某某品牌或同档次"）、增项规则（增项上限写死）、验收标准、质保年限（正规公司保5年）、付款节点（签约30%→水电后30%→泥木后30%→尾款10%）。',
+        warn:'合同里只写"增项按实际计算"是最危险的条款，等于空白支票。必须约定增项上限（一般不超过总价5%），任何增项先签字再施工。',
+        pass:'合同明确工期、材料品牌型号、增项规则（有上限）、验收标准、质保年限（5年），付款分4个节点。',
+        fix:'合同已签但条款不清的，补签补充协议锁定增项上限和材料明细。'},
+      { title:'开工前把所有定制类商家谈妥', desc:'橱柜、衣柜等全屋定制、中央空调、新风系统、窗户、木门——这些都有较长生产周期（20-30天甚至更长），必须在开工前就选定商家、完成初测，否则到了该安装的时候还没生产出来，工期一拖再拖。',
+        term:'<b>全屋定制</b>：按你家尺寸量身定做的柜子，工厂生产现场安装。注意板材环保等级（ENF>E0）、封边工艺、五金品牌、投影/展开面积报价方式。',
+        warn:'定制类商家一个都没定就开工，是最常见的工期延误原因。全屋定制周期30天+，等到木工阶段才定根本来不及。',
+        pass:'全屋定制、中央空调/新风、窗户、木门等设备商家已全部谈妥，已预约初测时间。',
+        fix:'立刻开始联系定制类商家，能抢一天是一天。同时和施工方沟通调整工序顺序，先做不依赖定制的部分。'}
+    ]
   },
   'stage1.5': {
-    terms:[], solutions:[], advice:[],
-    pass:['平面布局方案已定稿（2版以上对比后选定）','全屋水电点位图定稿并留档','主材已定样（瓷砖、地板、乳胶漆花色）','灯光设计方案确认（主灯/筒灯/射灯位置数量）','全屋定制柜体方案确认'],
-    fail:['只有一张平面图，没有水电点位图','主材花色还没定就开始施工','灯光设计没做，到安装阶段才想起','柜体方案模糊，尺寸没确认','设计频繁变更未定稿'],
-    fix:['立刻让设计师补出水电点位图','停工定主材再继续','紧急联系灯具商家做灯光方案','定制商家现场复尺','冻结设计变更，签字确认后继续']
+    intro:'设计师是装修的"总导演"，图纸定稿后施工才有据可依。这个阶段把坑填平，施工阶段才不返工、不加钱。',
+    tip:'设计费花小钱省大钱；水电点位图务必留档；装修公司设计师和独立设计师各有优势，签合同前看落地案例。',
+    steps:[
+      { title:'与设计师沟通需求，出2版以上平面方案', desc:'把上一阶段整理的需求清单交给设计师，要求出至少2版平面布局方案对比。重点关注：动线是否顺畅、收纳是否够用、采光通风是否优化、空间利用率。',
+        warn:'只有一张平面图就开始施工是最大隐患。没有对比就没有选择，至少要2版方案才能看出哪个更合理。',
+        pass:'平面布局方案已定稿（2版以上对比后选定），动线、收纳、采光都满足需求。',
+        fix:'如果已在施工但方案不满意，立刻停工让设计师出调整方案，签字确认后再继续。结构性的改动越早越好。'},
+      { title:'敲定拆改方案与封窗范围', desc:'确认哪些非承重墙要拆、哪些要新建。封窗范围和规格要定下来（断桥铝双层中空是主流）。',
+        term:'<b>承重墙/非承重墙</b>：承重墙是房屋主要受力结构，严禁拆除；非承重墙起分隔作用，可拆。判断方法：看图纸（黑色墙体）、厚度（≥24cm一般是承重）、敲击声（沉闷=承重）。拆改前必须物业报备。<br><b>断桥铝</b>：铝合金窗户中间用隔热条把内外铝隔开，断掉热量传导的"桥"，隔音隔热更好。双层中空玻璃隔音更佳。',
+        warn:'承重墙绝对不能碰，一旦拆了可能引起整栋楼安全隐患，物业罚款+恢复原状+赔偿。',
+        pass:'承重墙位置已确认（物业盖章），拆改方案定稿，封窗规格已定。',
+        fix:'如果承重墙已被破坏，立即停止施工，请结构工程师评估加固方案，向物业报备。'},
+      { title:'全屋水电点位图定稿', desc:'这是设计阶段最重要的产出。每个房间的插座、开关、灯位、水位、下水口都要在图纸上标明位置和高度。建议按生活动线走一遍：想象自己从进门到睡觉，每个场景需要什么电源。',
+        term:'<b>水电交底</b>：装修开工前，业主、设计师、水电工、橱柜设计师、设备商家等聚在现场，把每个点位在墙地面上定好位置。决定后期插座够不够用，一定要亲自过一遍生活动线。',
+        warn:'水电点位定错后期改动非常麻烦——封墙后要改插座位置得砸砖砸墙。点位宁多勿少，插座多留30%。',
+        pass:'全屋水电点位图定稿并留档（电子版+纸质版），每个房间点位数量满足需求且有富余。',
+        fix:'如果已开槽但点位没定好，暂停施工，重新弹线确认点位后再继续。改动成本远小于封墙后的返工。'},
+      { title:'全屋定制柜体方案确认', desc:'厨房橱柜、衣柜、书柜、鞋柜、阳台柜——所有定制柜体的方案要在这阶段确认。包括位置、尺寸、内部格局、开门方式。定制商家需要到场初测，给出初步方案和报价。',
+        term:'<b>投影面积/展开面积</b>：投影面积=柜子长×高（好算但单价高）；展开面积=所有板子展开总面积（准但要自己算）。对比多家报价时必须统一板材、统一算法。',
+        warn:'柜体方案模糊、尺寸没确认就下单，到安装时必然出问题——缝隙大、尺寸不对、格局不合理。',
+        pass:'所有定制柜体方案确认，位置尺寸明确，内部格局合理，报价方式统一。',
+        fix:'如果已下单但方案不满意，赶紧联系定制商家修改方案。生产前改方案免费，生产后改要加钱甚至重做。'},
+      { title:'主材定样与灯光设计', desc:'瓷砖花色规格、地板颜色材质、乳胶漆色号、卫浴花色——全部要在这阶段选定样品并拍照留档。同时做灯光设计：主灯/筒灯/射灯的位置数量、色温选择。',
+        warn:'主材花色还没定就开始施工，到了该贴砖的时候才去选，不仅工期延误，还容易因为匆忙选错。乳胶漆色号一定要去门店看色卡，不要只看手机图。',
+        pass:'主材已定样（瓷砖、地板、乳胶漆、卫浴），灯光设计方案确认，色号留档。',
+        fix:'如果施工已开始但主材没定，紧急去建材市场选样，优先定马上要用的（如防水阶段的瓷砖），其余边施工边定。'}
+    ]
   },
   stage2: {
-    terms:[2,10], solutions:[], advice:[],
-    pass:['承重墙位置已确认，无破坏','非承重墙按设计拆除到位','封窗已完成（断桥铝双层中空）','垃圾清运完毕','更换防盗门（瓦工前完成）'],
-    fail:['承重墙被破坏','封窗没做就先进场瓦工','垃圾堆满影响后续施工','门洞尺寸不符合设计','拆除范围不对'],
-    fix:['承重墙立即加固、请结构工程师评估','赶紧安排封窗、延迟瓦工进场','加急清运垃圾','重新测量修正门洞','按图纸修正拆除范围']
+    intro:'拆改是把户型优化到适合居住的第一步，封窗保障后续施工环境。这个阶段灰尘噪音大，但工期短（3-7天）。',
+    tip:'承重墙位置必须确认；封窗/门要贴砖前完成；垃圾清运费提前问清楚。',
+    steps:[
+      { title:'物业报备，确认承重墙位置', desc:'开工前必须到物业办理装修许可证，缴纳押金。同时确认承重墙位置——一般物业有结构图纸，黑色墙体为承重墙，严禁拆除。',
+        warn:'不报备就开工，物业有权停工罚款，押金不退。承重墙拆错可能被要求恢复原状并赔偿。',
+        pass:'已办理装修许可证，承重墙位置已确认并标注在现场墙上。',
+        fix:'如果承重墙已被误拆，立即停工，请结构工程师出加固方案，向物业报备并接受处理。'},
+      { title:'拆除非承重墙、铲墙皮', desc:'按设计图拆除需要动的非承重墙。同时铲除原墙皮（开发商刮的腻子质量差，必须铲掉重新做）。拆除时注意保护不拆的部分。',
+        warn:'拆除范围一定要按图纸来，别多拆也别少拆。多拆了要补墙，少拆了影响后续工序。',
+        pass:'非承重墙按设计拆除到位，墙皮铲除干净，现场清理基本完成。',
+        fix:'拆除范围不对的，按图纸修正——多拆的补回去，少拆的补拆。'},
+      { title:'清理垃圾', desc:'拆除产生的建筑垃圾要及时清运。提前和物业确认垃圾堆放点、清运方式和费用。有些小区物业指定清运队伍，费用包含在装修押金里。',
+        warn:'垃圾堆满现场会影响后续施工，尤其是瓦工进场时地面要干净。',
+        pass:'垃圾清运完毕，现场干净，不影响后续施工。',
+        fix:'加急安排清运，不能让垃圾堵着影响下一道工序。'},
+      { title:'封窗换窗', desc:'断桥铝双层中空窗户在瓦工贴砖前完成安装。封窗后室内不受风雨影响，后续施工更有保障。窗户规格和开方式在设计阶段已定，这步直接安装。',
+        warn:'封窗没做就进入瓦工阶段，一旦下雨雨水直接进屋，泡坏防水层和瓷砖。',
+        pass:'封窗已完成（断桥铝双层中空），密封良好，开关顺畅。',
+        fix:'赶紧安排封窗，延迟瓦工进场。封窗一般1-2天可完成。'},
+      { title:'更换防盗门（如有需要）', desc:'如果防盗门也要换，必须在瓦工贴砖前完成。因为门框尺寸可能影响贴砖收口，先装门后贴砖更严丝合缝。',
+        warn:'门和瓦工的顺序搞反了，贴完砖再换门，门框和瓷砖交接处会有缝隙，收口难看。',
+        pass:'防盗门已更换（如需），门洞尺寸符合设计，不影响后续贴砖。',
+        fix:'如果已贴砖但门没换，要么接受现有门，要么拆除门口瓷砖重新换门后补贴——成本高。'}
+    ]
   },
   stage3: {
-    terms:[1,3,15], solutions:[3], advice:[4,5],
-    pass:['水电交底各方到场（设计师、水电工、橱柜师傅、设备商家）','所有点位在墙面弹线确认','强弱电分离、线径达标','水管打压0.8MPa 30分钟以上合格','闭水试验48小时无渗漏','线路拍照留底'],
-    fail:['没做水电交底就开工','点位没确认就开槽','强弱电同管、线径不够','没做打压测试','闭水试验没做或时间不够','没有留线路图'],
-    fix:['暂停施工补做交底','重新弹线确认点位','返工重走不合格线路','补做打压测试','补做闭水试验（48小时以上）','全屋拍照、绘制线路图留档']
+    intro:'水电是"隐蔽工程"，一旦封墙就改不了。这个阶段的每一个点位、每一根管线都直接影响你以后每天的居住体验，必须亲力亲为盯到位。',
+    tip:'点位只多不少（插座多留30%）；闭水试验必须做；留好线路图。',
+    steps:[
+      { title:'水电交底：各方到场逐个确认点位', desc:'开工前把设计师、水电工、橱柜师傅、暖通/空调商家全部叫到现场，逐个房间、逐个点位确认。在墙地面上弹线标注每个插座、开关、水龙头、下水口的位置。一定要自己走一遍生活动线，想象每个场景需要什么电源。',
+        term:'<b>水电交底</b>：业主+设计师+水电工+橱柜设计师+设备商家齐聚现场，把每个水电点位在墙地面定好位置。这一步决定后期插座够不够用，是水电阶段最重要的环节。',
+        warn:'没做水电交底就让水电工自己看着干，是最致命的错误。水电工不知道你的生活动线，点位必然不对，等发现时已封墙。',
+        pass:'水电交底各方到场，所有点位在墙面弹线确认，自己已走一遍动线检查。',
+        fix:'如果已开工但没做交底，暂停施工，立刻组织各方到场补做交底，重新弹线确认点位。'},
+      { title:'弹线开槽，线管走向横平竖直', desc:'水电工按确认的点位弹线开槽。线管走向必须横平竖直，不能斜着走（后期打孔容易打到线管）。强弱电分管走线，间距至少30cm，避免信号干扰。',
+        warn:'强弱电同管或间距不够，网络信号会被电力线干扰，WiFi和有线网络都不稳。',
+        pass:'线管走向横平竖直，强弱电分管分离（间距≥30cm），线径达标（照明1.5平方、插座2.5平方、空调4平方）。',
+        fix:'已开槽但强弱电同管的，返工重走不合格线路。这一步返工成本不高，封墙后返工成本极高。'},
+      { title:'水电材料进场验收', desc:'水管、线管、电线、网线等材料进场时，对照合同逐项检查品牌、规格、型号。水管一般用PPR（热熔连接不漏水），电线看铜芯粗细和绝缘层质量。',
+        warn:'材料进场不验收，水电工可能用便宜货替换合同约定品牌，以次充好。后期漏水漏电查都查不到。',
+        pass:'材料品牌规格与合同一致，水管打钢印可追溯，电线有3C认证标识。',
+        fix:'发现材料不对的，立刻要求施工方更换为合同约定品牌，否则不付材料款。'},
+      { title:'水管打压测试（0.8MPa保压30分钟以上）', desc:'水管焊接完成后，必须做打压测试：把水管封堵后加压到0.8MPa，保压30分钟以上，压力下降不超过0.05MPa为合格。这是检测水管焊接质量的唯一方法。',
+        warn:'不做打压测试就封墙，后期管接头渗水，水沿着墙缝流到楼下，赔偿楼下装修费+自己砸砖修管，损失几万起步。',
+        pass:'水管打压0.8MPa保压30分钟以上，压力下降≤0.05MPa，测试报告签字留底。',
+        fix:'打压不合格的，找出漏水接头重新焊接，再测一次直到合格。绝不能带着隐患封墙。'},
+      { title:'闭水试验（48小时蓄水）', desc:'卫生间、厨房、阳台防水做完后，做闭水试验：放满水（深度≥3cm），观察48小时，到楼下看天花板有没有渗漏。这是防水是否合格的唯一标准。',
+        term:'<b>闭水试验</b>：防水做完后48小时蓄水试验，放满水观察楼下有没有渗漏。绝对不能跳过，渗漏一旦发生损失惨重。',
+        warn:'闭水试验没做或时间不够（不到48小时）就贴砖，后期漏水要砸砖重做防水，整个卫生间返工。',
+        pass:'闭水试验48小时无渗漏，楼下天花板干燥，有照片/视频留底。',
+        fix:'闭水试验不合格的，铲除防水层重做，再闭水48小时直到合格。宁可多花钱也不能带漏贴砖。'},
+      { title:'拍照留底，标注线路走向', desc:'封墙前，全屋拍照/录像，记录所有管线走向。最好用尺子量好管线距墙距离，标注在图纸上。后期挂画打孔、维修检修全靠这份"线路地图"。',
+        warn:'不留线路图，后期打孔装窗帘杆打到电线，轻则跳闸重则触电。维修时不知道管在哪，只能大面积砸墙。',
+        pass:'全屋线路拍照留底，管线走向标注在图纸上，电子版备份。',
+        fix:'如果已封墙没留图，后期维修只能用管线探测仪扫描，费时费钱。建议现在就补拍还能看到的部分。'}
+    ]
   },
   stage4: {
-    terms:[4,7,8,19,20], solutions:[4,5], advice:[],
-    pass:['防水至少两遍+闭水试验48小时合格','瓷砖无空鼓（地砖全检无空鼓、墙砖≤5%）','地面坡度正确（泼水测试流向地漏）','美缝在水泥干透后施工','过门石/窗台石已安装'],
-    fail:['防水只做一遍或闭水试验没做','瓷砖空鼓率超标','地面坡度不对导致积水','美缝在水泥没干透就做','过门石没装'],
-    fix:['重做防水+补做闭水试验','空鼓砖返工重贴','返工修正坡度','铲除美缝重做','补装过门石']
+    intro:'瓦工是"硬装里的硬装"，决定防水质量、地面平整度、瓷砖耐用。工期最长（3-4周），但一旦做完很难返工，验收必须仔细。',
+    tip:'买砖算好数量多买10%（同一批次色差）；全瓷砖上墙必用瓷砖胶；美缝在水泥干透后做。',
+    steps:[
+      { title:'防水施工（卫生间厨房阳台至少两遍）', desc:'防水涂料至少刷两遍，每遍干透再刷下一遍。卫生间墙面防水高度≥1.8米（淋浴区），厨房阳台≥0.3米。管根、地漏、阴阳角等薄弱环节要重点处理，多刷一遍。',
+        warn:'防水只做一遍是最常见的偷工。一遍防水涂层太薄，半年后必渗漏。一定要亲眼看到刷了两遍。',
+        pass:'防水至少两遍，墙面高度达标（卫生间≥1.8m），管根地漏重点处理，涂层均匀无漏刷。',
+        fix:'防水不合格的铲除重做。如果已贴砖才发现漏水，只能砸砖重做防水——成本是当初做好的5-10倍。'},
+      { title:'闭水试验（48小时）', desc:'防水干透后做闭水试验：放满水深度≥3cm，观察48小时，到楼下看天花板有无渗漏。这一步和水电阶段的闭水试验不同——水电阶段是测水管，这步是测防水层。',
+        warn:'闭水试验没做就贴砖，等于赌运气。万一防水层有漏洞，贴砖后漏水，要全部砸掉重来。',
+        pass:'闭水试验48小时无渗漏，楼下天花板干燥，有照片/视频留底。',
+        fix:'闭水不合格的，铲除防水层重做，再闭水48小时直到合格。'},
+      { title:'铺砖（先墙后地，大砖薄贴用瓷砖胶）', desc:'一般先铺墙砖再铺地砖。全瓷砖/大砖上墙必须用瓷砖胶薄贴（传统水泥砂浆粘不住全瓷砖，空鼓率极高）。铺贴前墙面要找平，瓷砖要泡水（釉面砖需要，全瓷砖不需要泡水但要涂背胶）。',
+        term:'<b>瓷砖薄贴/背胶</b>：瓷砖胶代替传统水泥砂浆上墙，粘结力更强空鼓更少，适合全瓷砖/大砖上墙。薄贴需墙面平整，也要涂背胶。<br><b>空鼓</b>：瓷砖和墙面之间没贴实出现空心，用空鼓锤敲击听声音。空鼓率规范要求地砖全检无空鼓、墙砖≤5%。',
+        warn:'全瓷砖用水泥砂浆上墙不涂背胶，三个月后空鼓率超50%，砖可能整片脱落砸人。',
+        pass:'瓷砖无空鼓（地砖全检无空鼓、墙砖≤5%），铺贴平整，缝隙均匀，阴阳角方正。',
+        fix:'空鼓砖必须返工重贴。空鼓率超标的，让师傅逐块检查返工。施工时就监督背胶和基层处理。'},
+      { title:'地面坡度测试', desc:'卫生间地面必须向地漏方向找坡，坡度≥1%。铺完砖后泼一盆水，看水流是否迅速流向地漏、不积水。这是检验瓦工水平的关键指标。',
+        warn:'坡度不够导致积水，洗澡时脚泡在水里，长期积水还会渗入防水层以下的砂浆层。',
+        pass:'泼水测试水流迅速流向地漏，无积水区域，地漏处为最低点。',
+        fix:'坡度不对的返工修正。如果已做完美缝，只能局部砸掉重铺坡度不对的区域。'},
+      { title:'贴完后停一周再做美缝', desc:'瓷砖贴完后水泥砂浆需要时间干透（一般7天），干透后才能做美缝。美缝剂有亮面和环氧彩砂两种，环氧彩砂哑光更有质感、更耐磨。',
+        term:'<b>美缝/环氧彩砂</b>：瓷砖铺完后用填缝剂填充砖缝。美缝剂亮面，环氧彩砂哑光更有质感更耐磨。必须在贴砖后水泥干透再做。<br><b>过门石/门槛石</b>：铺在门口两空间交接处的小块石材，起防水挡水、过渡收口作用。卫生间门口必须用。',
+        warn:'水泥没干透就做美缝，水汽被封在缝里，美缝剂会起泡脱落。',
+        pass:'美缝在水泥干透后施工，密实无缺口，颜色均匀，过门石/窗台石已安装。',
+        fix:'美缝起泡脱落的，铲除重做。等水泥彻底干透后再施工。'}
+    ]
   },
   stage5: {
-    terms:[9,11,13,14,21], solutions:[], advice:[],
-    pass:['吊顶平整无开裂','全屋定制柜体尺寸精准、与墙面严丝合缝','板材环保等级达标（ENF/E0）','封边工艺合格（无溢胶、缝隙细）','五金品牌确认（铰链、滑轨）'],
-    fail:['吊顶不平、有裂缝','柜体与墙面有大缝','板材环保不达标、有刺鼻气味','封边溢胶、缝隙大','五金杂牌、开关不顺'],
-    fix:['吊顶裂缝处挂网重新批刮','定制商家调校或返工','要求更换达标板材','返工重封边','更换品牌五金']
+    intro:'木工决定家的"线条感"——吊顶是否平整、柜体是否严丝合缝、木门隔音是否好。这个阶段定制周期长，提前下单是关键。',
+    tip:'铝扣板选烤漆0.6mm；吊柜先装吊顶再装吊柜更严丝合缝；定制柜到场先验板材环保等级。',
+    steps:[
+      { title:'吊顶施工', desc:'木工进场先做吊顶。客厅卧室一般用石膏板吊顶（平整一体感强），卫生间厨房用铝扣板（可拆卸检修、防水防潮）。嵌入式灯具（射灯筒灯）位置在吊顶时提前定位开孔。',
+        term:'<b>铝扣板/石膏板吊顶</b>：铝扣板可拆卸检修、防水防潮好打理，厨卫首选；石膏板平整一体感强更好看，但检修麻烦。',
+        warn:'吊顶不平整、转角处不开缝直接刮石膏，后期必开裂。转角处要用整板套割，不能拼接。',
+        pass:'吊顶平整无开裂，转角处理规范，灯具开孔位置准确，铝扣板规格≥0.6mm。',
+        fix:'吊顶裂缝处挂网重新批刮。裂缝严重的需求拆掉重做。转角处理不到位的补缝加固。'},
+      { title:'全屋定制复尺下单', desc:'木工吊顶完成后，定制商家到场精确复尺（吊顶后尺寸可能有微调），确认最终方案后下单生产。生产周期一般30天左右，所以要尽早。',
+        warn:'不复尺直接按初测尺寸下单，到安装时可能差几毫米，柜体和墙面/吊顶之间出现缝隙，既不美观又积灰。',
+        pass:'定制商家已完成复尺，方案确认签字，下单生产，预计到货时间明确。',
+        fix:'如果已按初测尺寸下单，赶紧联系商家看能否改单。已生产的只能到安装时用收边条弥补缝隙。'},
+      { title:'柜体安装', desc:'定制柜体到货后安装。衣柜、橱柜、书柜等逐个安装，检查：与墙面/吊顶是否严丝合缝、门板是否平整、抽屉是否顺滑、铰链阻尼是否正常。',
+        term:'<b>EVA封边/PUR/激光封边</b>：板材切边用胶带封住防潮防甲醛。激光封边最环保缝隙最细；PUR次之；EVA最普通但够用。看封边是否平整无溢胶。<br><b>颗粒板/欧松板/多层板</b>：颗粒板稳定性好性价比高（大牌环保达标）；欧松板更稳更高颜值；多层板防潮好。柜体首选颗粒板+ENF级，卫生间/阳台用多层板。',
+        warn:'板材环保不达标是最严重的问题——甲醛超标影响全家健康。到场先闻有没有刺鼻气味，检查板材上的环保等级标识（ENF>E0）。',
+        pass:'柜体尺寸精准与墙面严丝合缝，板材环保等级达标（ENF/E0），封边无溢胶，五金品牌确认（铰链滑轨）。',
+        fix:'柜体有大缝的要求定制商家调校或返工。板材环保不达标的必须更换。封边溢胶的返工重封。五金杂牌的更换品牌五金。'},
+      { title:'木门/移门安装', desc:'木门在前两遍腻子完成后安装（太早装门可能被后续施工磕碰刮花）。安装后检查：门框是否垂直、开关是否顺畅、门缝是否均匀、锁具是否灵活。',
+        term:'<b>踢脚线</b>：墙脚处一圈装饰线，保护墙面底部、掩盖地板/瓷砖与墙面的伸缩缝。材质有实木、铝合金、瓷砖，颜色选与门套同色最协调。',
+        warn:'门装歪了不垂直，开关门会自动滑动，门缝不均匀漏光漏音。',
+        pass:'门框垂直，开关顺畅无异响，门缝均匀（2-4mm），锁具灵活，门套与墙面收口美观。',
+        fix:'门不垂直的调整合页位置。门缝不均匀的调整门框。严重歪斜的拆了重装。'}
+    ]
   },
   stage6: {
-    terms:[5,6], solutions:[6], advice:[],
-    pass:['墙面平整（2米靠尺误差≤3mm）','阴阳角垂直','腻子2-3遍每遍晾干','乳胶漆无色差、无流坠','底漆1遍+面漆2遍完成'],
-    fail:['墙面不平整、波浪纹','阴阳角不直','腻子没干就刷漆导致开裂','有色差或流坠','只刷面漆没刷底漆'],
-    fix:['冲筋找平返工','阴阳角返工做直','铲除后重新刮腻子','补漆修正色差和流坠','补刷底漆']
+    intro:'油工是你每天看到的"面子工程"，墙面不平、开裂、色差最影响颜值。效果依赖基层处理，急不得。',
+    tip:'乳胶漆色号要去门店看色卡，不要只看手机图；颜色越浅越保险；做艺术漆前要冲筋找平。',
+    steps:[
+      { title:'墙面基层处理', desc:'先检查墙面：空鼓的敲掉重做，裂缝的挂网补缝， old腻子铲除干净。新老墙交界处挂钢丝网，开槽处挂网格布，防止后期开裂。',
+        warn:'基层不处理好，刷再贵的漆也会开裂。新老墙交界处不挂网，3个月内必裂。',
+        pass:'基层处理到位：空鼓修补、裂缝挂网、新老墙交界处挂钢丝网、开槽处挂网格布。',
+        fix:'墙面已开裂的，裂缝处挂网重新批刮。大面积开裂的铲掉重来。'},
+      { title:'冲筋找平（要求高时）', desc:'普通找平用石膏刮平即可。如果要做艺术漆、极简风格、或者射灯照墙（灯光会放大不平整），需要冲筋找平——先在墙上做几条"筋"作为水平基准，再大面积找平，平整度极高。',
+        term:'<b>找平/冲筋找平</b>：用石膏或砂浆把墙面找平到允许误差（2米靠尺误差≤3mm）。冲筋找平更高级，平整度极高但工费更贵。做艺术漆/背景墙/极简柜体时必须冲筋找平。',
+        warn:'做艺术漆不做冲筋找平，上灯光后墙面波浪纹明显，效果惨不忍睹。',
+        pass:'墙面平整（2米靠尺误差≤3mm），做艺术漆区域冲筋找平，灯光照射无波浪纹。',
+        fix:'墙面不平整的，冲筋找平返工。已刷漆但波浪纹明显的，只能铲掉重新找平刷新。'},
+      { title:'刮腻子2-3遍，每遍晾干', desc:'腻子一般刮2-3遍，每遍要等上一遍完全干透才能刮下一遍。每遍厚薄均匀，最后一遍干透后用砂纸打磨平整。腻子没干透就刷漆，后期必然开裂起皮。',
+        warn:'赶工期腻子没干就刷下一遍或刷漆，是最常见的油工质量问题。后期开裂起皮，修起来要铲掉重来。',
+        pass:'腻子2-3遍每遍晾干，打磨后墙面平整光滑无明显的刮痕。',
+        fix:'腻子没干就刷漆导致开裂的，铲除开裂区域重新刮腻子，干透后再刷漆。'},
+      { title:'刷乳胶漆：底漆1遍+面漆2遍', desc:'先刷底漆（封闭基层、增加附着力），再刷面漆2遍。面漆色号要在门店看色卡选，不要只看手机图片（屏幕色差大）。浅色最保险，深色对基层平整度要求极高。',
+        term:'<b>阴阳角</b>：凸出的角叫阳角（如柱角），凹陷的角叫阴角。阴阳角要直（用角尺检测），阳角要做护角条防止磕碰掉漆。',
+        warn:'只刷面漆不刷底漆，后期墙面容易返碱发花。色差和流坠（漆挂痕）是面漆施工最常见的质量问题。',
+        pass:'底漆1遍+面漆2遍完成，无色差、无流坠、阴阳角垂直、开关插座周围修补细致。乳胶漆色号留档。',
+        fix:'色差或流坠的补漆修正。只刷了面漆没刷底漆的，补刷底漆再刷一遍面漆。大面积返碱的铲掉重做。'}
+    ]
   },
   stage7: {
-    terms:[16,18], solutions:[6,10], advice:[2],
-    pass:['安装顺序正确（先大后小、先里后外）','所有洁具、灯具、开关、家电安装到位','止逆阀已安装','下水通畅、电路通电','每个安装师傅完工后现场验收'],
-    fail:['安装顺序混乱导致返工','止逆阀没装（卫生间反味）','下水堵塞或电路不通','安装完没有验收就放师傅走','尺寸不对装不上'],
-    fix:['调整安装顺序、协调交叉作业','补装止逆阀','疏通下水、排查电路','抓紧验收、有问题当场要求整改','联系商家换货或定制']
+    intro:'硬装完工后，所有"看得见摸得着"的物品集中进场。安装队伍多容易交叉出错，关键是协调好顺序、逐个验收。',
+    tip:'安装顺序：先大后小、先里后外；每个师傅进场前说明完工标准；有问题当场解决再付尾款。',
+    steps:[
+      { title:'先装大件：地板、门、柜体', desc:'安装顺序遵循"先大后小、先里后外"。先铺地板（或先装门再铺地板，看地板材质决定），再装门，最后装柜体。大件先定位，小件后补位。',
+        warn:'安装顺序混乱是最常见的问题。先装柜再铺地板，地板塞不进柜脚；先装灯具再刷墙，灯具被污染。',
+        pass:'安装顺序正确（先大后小、先里后外），大件安装到位，无交叉冲突。',
+        fix:'安装顺序搞错的，协调各安装队伍重新安排时间。已造成冲突的局部返工修正。'},
+      { title:'安装电器：烟机灶具、热水器', desc:'厨房电器（烟机、灶具、洗碗机）和热水器安装。注意烟机要装止逆阀，热水器如果卫生间距离远考虑零冷水方案。',
+        term:'<b>止逆阀</b>：装在烟道口的单向阀门，防止公共烟道油烟倒灌（邻居炒菜你家闻到味）。务必安装，选镀锌钢、潜水艇等大牌。<br><b>零冷水</b>：热水器到水龙头之间的冷水管循环加热，打开龙头即热水。改造时多走一套回水管，成本+1-2千。热水器到卫生间超5米推荐。',
+        warn:'止逆阀没装，以后邻居家做饭你家满屋油烟味。烟机安装高度不对，吸力大打折扣。',
+        pass:'止逆阀已安装，烟机高度正确（侧吸35-40cm/顶吸65-75cm），热水器通电通气测试正常。',
+        fix:'没装止逆阀的补装。烟机高度不对的调整挂架。热水器问题联系商家上门调试。'},
+      { title:'装灯具开关、卫浴洁具', desc:'安装灯具（主灯、筒灯、射灯）、开关插座面板、花洒、马桶、浴室柜。每个安装师傅完工后立即现场验收——开关是否通电、灯具是否亮、花洒出水是否正常、马桶是否冲水顺畅。',
+        warn:'安装完不验收就放师傅走，事后发现问题再叫人来就很被动。特别是下水堵塞、电路不通这种，当场发现当场解决。',
+        pass:'所有洁具灯具开关安装到位，下水通畅、电路通电、花洒出水正常、马桶冲水顺畅，每个项目现场验收。',
+        fix:'下水堵塞的疏通或排查管道。电路不通的排查线路。有问题当场要求整改，不解决不付尾款。'},
+      { title:'逐项验收，有问题当场解决', desc:'安装阶段结束后，对照合同和验收清单逐项检查。竣工验收时建议请第三方监理或懂行的朋友陪同，发现的问题列出整改清单，整改完成后再付尾款。',
+        term:'<b>竣工验收</b>：全部施工结束后，对照合同、图纸、清单逐项验收（项目齐全、做工达标、功能正常），确认后才付尾款。建议请第三方监理或懂行的朋友陪同。',
+        warn:'不验收就付全款，发现问题时钱已付清，施工方没有动力整改。尾款（10%）是最后的筹码。',
+        pass:'竣工验收合格，所有问题整改完毕，质保卡和合同归档，尾款付清。',
+        fix:'发现问题列整改清单，限期整改。超期不整改的扣尾款。严重问题可向消费者协会投诉。'}
+    ]
   },
   stage8: {
-    terms:[17], solutions:[11], advice:[3],
-    pass:['家具尺寸确认能进电梯/楼梯','硬装结束通风3个月以上','甲醛检测合格','软装比例协调','质保卡和合同归档'],
-    fail:['家具买来进不了门','没有通风就入住','甲醛超标','软装和硬装风格不搭','质保资料丢失'],
-    fix:['家具拆窗吊装或退货换小尺寸','立即开窗通风+空气净化器','治理甲醛（活性炭/光触媒）后再检测','逐步调整软装','联系装修公司和商家补质保卡']
+    intro:'硬装是骨架，软装才是真正让家"像家"的部分。预算灵活、可后期不断调整，不用一步到位。',
+    tip:'家具尺寸先量（电梯/楼梯能不能进）；床垫选品牌；软装可以入住后慢慢添。',
+    steps:[
+      { title:'先进场大件家具', desc:'沙发、床、餐桌等大件家具先进场。但买之前一定要量好尺寸——不仅量房间空间，还要量电梯和楼梯的尺寸，确认家具能搬进家门。',
+        term:'<b>软装</b>：除硬装（水电瓦木油等不可移动的工程）之外的所有装饰——家具、窗帘、地毯、挂画、绿植、灯艺、床品等。硬装是"骨架"，软装是"皮肤"。',
+        warn:'家具买来进不了电梯和门，是最尴尬的浪费。要么拆窗吊装（费用高），要么退货换小尺寸（运费+折损）。',
+        pass:'家具尺寸确认能进电梯/楼梯，进场摆放合适，与硬装风格协调。',
+        fix:'家具进不了门的，要么拆窗吊装（费用高但能进），要么联系商家换小尺寸。'},
+      { title:'窗帘、地毯、挂画、绿植', desc:'大件就位后添加软装细节。窗帘选遮光率合适的（卧室≥90%，客厅可透光），地毯和挂画根据整体风格搭配，绿植选好打理的品种。',
+        warn:'软装和硬装风格不搭，花了钱反而显得乱。建议先定整体风格再买单品，不要看到什么买什么。',
+        pass:'软装比例协调，风格统一，整体观感舒适。',
+        fix:'风格不搭的逐步调整替换——软装可以慢慢添，不用一步到位。先换影响最大的大件。'},
+      { title:'全面通风，甲醛检测', desc:'硬装软装全部到位后，开窗通风至少3个月。活性炭包、空气净化器辅助。入住前做甲醛检测（CMA资质机构），合格后再入住。硬装材料环保等级优先：乳胶漆ENF/E0、板材ENF。',
+        warn:'没有通风就入住，甲醛超标影响全家健康，尤其对儿童危害更大。入住后才发现超标，治理成本高且效果不确定。',
+        pass:'通风3个月以上，甲醛检测合格（CMA报告），活性炭/净化器辅助到位。',
+        fix:'甲醛超标的继续通风+活性炭/光触媒治理，复检合格后再入住。严重超标的排查污染源更换材料。'},
+      { title:'质保归档，入住后复诊', desc:'把所有合同、质保卡、材料清单、线路图整理归档。正规公司质保5年，主材找商家质保。入住1年后建议复检——墙面有无开裂、柜体有无变形、水电有无问题，在质保期内及时报修。',
+        warn:'质保资料丢失，入住后发现问题无法报修。所有质保卡和合同必须妥善保管。',
+        pass:'质保卡和合同归档保存，入住1年后复检无问题或已报修解决。',
+        fix:'质保卡丢失的联系装修公司/商家补办。入住后发现问题的在质保期内及时报修。'}
+    ]
   }
 };
 
@@ -1743,25 +1913,18 @@ function toggleGuideStage(stageKey){
   var el = document.getElementById('guide-stage-'+stageKey);
   if(el) el.classList.toggle('collapsed');
 }
-function toggleGuideTerm(idx){
-  var items = document.querySelectorAll('.guide-term');
-  if(items[idx]) items[idx].classList.toggle('open');
-}
 function renderGuide(area){
   var stageOrder = ['stage1','stage1.5','stage2','stage3','stage4','stage5','stage6','stage7','stage8'];
   var stageIcons = {'stage1':'📋','stage1.5':'📐','stage2':'🔨','stage3':'⚡','stage4':'🧱','stage5':'🪵','stage6':'🎨','stage7':'🔧','stage8':'🛋️'};
   var html = '';
   html += '<div class="bento-card">';
-  html += '<div class="card-title"><span class="card-icon">📋</span>装修监理指南<span class="card-subtitle">从准备到软装 · 让外行达到监理水平 · 共9个阶段</span></div>';
-  html += '<div class="tip-box tip-info"><span class="tip-ic">💡</span><div>本指南按施工阶段组织，每个阶段包含<b>做什么、怎么做、涉及术语、关注点、合格/不合格/补救对照、经验建议</b>。点击阶段标题可折叠/展开。</div></div>';
-
-  /* 收集所有阶段用到的术语（用于全局编号） */
-  var termGlobalIdx = 0;
+  html += '<div class="card-title"><span class="card-icon">📋</span>装修监理指南<span class="card-subtitle">从准备到软装 · 攻略式逐步引导 · 共9个阶段</span></div>';
+  html += '<div class="tip-box tip-info"><span class="tip-ic">💡</span><div>本指南像游戏攻略一样，按施工顺序一步步引导你完成每个阶段。每个步骤都包含<b>做什么、术语解释、常见坑、验收标准、补救措施</b>。点击阶段标题可折叠/展开。</div></div>';
 
   for(var si=0; si<stageOrder.length; si++){
     var sk = stageOrder[si];
     var sd = STAGE_DETAILS[sk];
-    var sg = STAGE_GUIDE[sk] || {terms:[],solutions:[],advice:[],pass:[],fail:[],fix:[]};
+    var gs = GUIDE_STEPS[sk];
     var icon = stageIcons[sk] || '📌';
 
     html += '<div class="guide-stage collapsed" id="guide-stage-'+sk+'">';
@@ -1773,84 +1936,48 @@ function renderGuide(area){
     html += '</div>';
     html += '<div class="guide-stage-body">';
 
-    /* 1+2. 做什么 & 为什么重要（双列并排） */
-    html += '<div class="guide-dual">';
-    html += '<div class="guide-dual-item"><div class="guide-dual-label">📌 做什么</div><div class="guide-sec-content">'+sd.what+'</div></div>';
-    html += '<div class="guide-dual-item"><div class="guide-dual-label">💡 为什么重要</div><div class="guide-sec-content">'+sd.why+'</div></div>';
-    html += '</div>';
-
-    /* 3. 怎么做 */
-    html += '<div class="guide-sec"><div class="guide-sec-title">🔨 怎么做</div><div class="guide-sec-content"><ul>';
-    for(var k=0; k<sd.how.length; k++){ html += '<li>'+sd.how[k]+'</li>'; }
-    html += '</ul></div></div>';
-
-    /* 4. 涉及专业术语 */
-    if(sg.terms.length > 0){
-      html += '<div class="guide-sec"><div class="guide-sec-title">📖 涉及专业术语</div>';
-      for(var ti=0; ti<sg.terms.length; ti++){
-        var t = TERMS[sg.terms[ti]];
-        html += '<div class="guide-term" onclick="toggleGuideTerm('+termGlobalIdx+')">';
-        html += '<div class="guide-term-head"><span class="guide-term-name">'+t.name+'</span><span class="guide-term-cat">'+t.cat+'</span><span class="guide-term-expand">▼</span></div>';
-        html += '<div class="guide-term-desc">'+t.desc+'</div>';
-        html += '</div>';
-        termGlobalIdx++;
-      }
-      html += '</div>';
+    /* 阶段简介 */
+    if(gs && gs.intro){
+      html += '<div class="guide-stage-intro">'+gs.intro+'</div>';
     }
 
-    /* 5. 关注点 */
-    html += '<div class="guide-sec"><div class="guide-sec-title">🎯 关注点</div><div class="guide-sec-content">'+sd.focus+'</div></div>';
+    /* 攻略步骤 */
+    if(gs && gs.steps){
+      for(var sti=0; sti<gs.steps.length; sti++){
+        var step = gs.steps[sti];
+        html += '<div class="guide-step">';
+        html += '<div class="guide-step-num">'+(sti+1)+'</div>';
+        html += '<div class="guide-step-body">';
+        html += '<div class="guide-step-title">'+step.title+'</div>';
+        html += '<div class="guide-step-desc">'+step.desc+'</div>';
 
-    /* 6+7+8. 合格 / 不合格 / 补救 对比表 */
-    if(sg.pass.length > 0){
-      html += '<div class="guide-sec"><div class="guide-sec-title">⚖️ 合格 / 不合格 / 补救对照</div>';
-      html += '<table class="guide-compare">';
-      html += '<tr><th class="col-pass">✅ 合格标准</th><th class="col-fail">❌ 不合格标准</th><th class="col-fix">🔧 补救措施</th></tr>';
-      for(var ci=0; ci<sg.pass.length; ci++){
-        html += '<tr>';
-        html += '<td class="td-pass">'+(sg.pass[ci]||'')+'</td>';
-        html += '<td class="td-fail">'+(sg.fail[ci]||'')+'</td>';
-        html += '<td class="td-fix">'+(sg.fix[ci]||'')+'</td>';
-        html += '</tr>';
-      }
-      html += '</table></div>';
-    }
+        /* 内联标注：术语/坑 双列 + 验收/补救 双列 */
+        var hasTerm = step.term && step.term.length>0;
+        var hasWarn = step.warn && step.warn.length>0;
+        var hasPass = step.pass && step.pass.length>0;
+        var hasFix = step.fix && step.fix.length>0;
 
-    /* 9. 常见问题与解决路径 */
-    if(sg.solutions.length > 0){
-      html += '<div class="guide-sec"><div class="guide-sec-title">🧭 常见问题与解决路径</div>';
-      for(var soli=0; soli<sg.solutions.length; soli++){
-        var s = SOLUTIONS[sg.solutions[soli]];
-        html += '<div class="guide-sol-card">';
-        html += '<div class="guide-sol-issue">❓ '+s.issue+'</div>';
-        html += '<div class="path-steps">';
-        for(var sj=0; sj<s.steps.length; sj++){
-          html += '<span class="path-step">'+s.steps[sj]+'</span>';
-          if(sj<s.steps.length-1) html += '<span class="path-arrow">→</span>';
+        if(hasTerm || hasWarn){
+          html += '<div class="guide-inline">';
+          if(hasTerm) html += '<div class="guide-inline-item guide-inline-term"><b>📖 术语</b><br>'+step.term+'</div>';
+          if(hasWarn) html += '<div class="guide-inline-item guide-inline-warn"><b>⚠️ 常见坑</b><br>'+step.warn+'</div>';
+          html += '</div>';
         }
-        html += '</div>';
-        html += '<div style="margin-top:8px;" class="path-solution">✅ '+s.solution+'</div>';
-        html += '</div>';
+        if(hasPass || hasFix){
+          html += '<div class="guide-inline">';
+          if(hasPass) html += '<div class="guide-inline-item guide-inline-pass"><b>✅ 验收标准</b><br>'+step.pass+'</div>';
+          if(hasFix) html += '<div class="guide-inline-item guide-inline-fix"><b>🔧 补救措施</b><br>'+step.fix+'</div>';
+          html += '</div>';
+        }
+
+        html += '</div>'; /* guide-step-body */
+        html += '</div>'; /* guide-step */
       }
-      html += '</div>';
     }
 
-    /* 10. 经验建议 */
-    if(sg.advice.length > 0){
-      html += '<div class="guide-sec"><div class="guide-sec-title">💡 经验建议</div>';
-      for(var ai=0; ai<sg.advice.length; ai++){
-        var a = ADVICE[sg.advice[ai]];
-        html += '<div class="guide-advice-card">';
-        html += '<h4>'+a.icon+' '+a.title+'</h4><ul>';
-        for(var aj=0; aj<a.items.length; aj++){ html += '<li>'+a.items[aj]+'</li>'; }
-        html += '</ul></div>';
-      }
-      html += '</div>';
-    }
-
-    /* 11. 阶段贴士 */
-    if(sd.tip){
-      html += '<div class="tip-box tip-warn" style="margin-top:10px;"><span class="tip-ic">⚠️</span><div>'+sd.tip+'</div></div>';
+    /* 阶段贴士 */
+    if(gs && gs.tip){
+      html += '<div class="guide-stage-tip"><div class="tip-box tip-warn"><span class="tip-ic">⚠️</span><div>'+gs.tip+'</div></div></div>';
     }
 
     html += '</div>'; /* guide-stage-body */
