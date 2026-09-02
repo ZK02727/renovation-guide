@@ -205,6 +205,8 @@ table.purchase-table { width:100%; border-collapse:collapse; font-size:13px; min
 .pf-btn.pf-elec.active { background:linear-gradient(135deg,#f59e0b,#d97706); }
 .pf-select { border:1px solid #e2e8f0; border-radius:10px; padding:7px 10px; font-size:12.5px; color:var(--text-secondary); background:#fff; font-family:inherit; outline:none; cursor:pointer; }
 .pf-select:focus { border-color:var(--accent); }
+.pf-label { font-size:12px; font-weight:700; color:var(--text-muted); white-space:nowrap; margin-right:2px; }
+.pf-btn.pf-stage.active { background:linear-gradient(135deg,#10b981,#059669); }
 
 .space-card { border:1px solid #eef0f6; border-radius:14px; margin-bottom:14px; overflow:hidden; background:#fff; box-shadow:0 2px 10px rgba(0,0,0,0.03); }
 .space-head { display:flex; align-items:center; gap:10px; padding:12px 16px; cursor:pointer; background:linear-gradient(135deg,rgba(99,102,241,0.06),rgba(118,75,162,0.06)); border-bottom:1px solid #f1f5f9; user-select:none; }
@@ -1458,6 +1460,15 @@ function getStagePurchases(stageId){
 /* ============ 采购时间表（空间维度） ============ */
 var PURCHASE_FILTER = 'all';   /* all | hard | soft | elec */
 var PURCHASE_SPACE = 'all';    /* all | 具体空间 */
+var PURCHASE_STAGE = 'all';    /* all | 开工前 | 水电 | 瓦工 | 木工 | 油工 | 安装 */
+var STAGE_DEFS = [
+  {key:'开工前', icon:'📋', label:'开工前'},
+  {key:'水电',   icon:'⚡', label:'水电阶段'},
+  {key:'瓦工',   icon:'🧱', label:'瓦工阶段'},
+  {key:'木工',   icon:'🛠️', label:'木工阶段'},
+  {key:'油工',   icon:'🎨', label:'油工阶段'},
+  {key:'安装',   icon:'🔧', label:'安装阶段'}
+];
 
 function purchaseTotal(rec){
   if(!rec) return 0;
@@ -1491,8 +1502,9 @@ function renderPurchase(area){
   html += '<div class="card-title"><span class="card-icon">🛒</span>装修采购清单 · 按空间 <span class="card-subtitle">从空间角度确认要买什么，点击「✎ 填报」记录品牌/价格</span></div>';
   html += '<div class="tip-box tip-info"><span class="tip-ic">💡</span><div><b>使用说明：</b>按「空间」逐项核对要买的东西，时间顺序已写在每项里（📏 下单时间 / 📅 使用时间）。每项都可填报<b>品牌、型号、价格、数量、购买地点、日期、备注</b>，填写后自动计入顶部总额并同步云端。</div></div>';
 
-  /* 筛选栏 */
+  /* 筛选栏 - 第一行：分类 + 空间下拉 */
   html += '<div class="purchase-filter-bar">';
+  html += '<span class="pf-label">类型</span>';
   html += '<button class="pf-btn'+(PURCHASE_FILTER==='all'?' active':'')+'" onclick="setPurchaseFilter(\'all\')">全部</button>';
   html += '<button class="pf-btn pf-hard'+(PURCHASE_FILTER==='hard'?' active':'')+'" onclick="setPurchaseFilter(\'hard\')">🔧 硬装</button>';
   html += '<button class="pf-btn pf-soft'+(PURCHASE_FILTER==='soft'?' active':'')+'" onclick="setPurchaseFilter(\'soft\')">🛋️ 软装</button>';
@@ -1505,6 +1517,15 @@ function renderPurchase(area){
   }
   html += '</select>';
   html += '</div>';
+  /* 筛选栏 - 第二行：时间维度（按施工阶段） */
+  html += '<div class="purchase-filter-bar">';
+  html += '<span class="pf-label">时间</span>';
+  html += '<button class="pf-btn'+(PURCHASE_STAGE==='all'?' active':'')+'" onclick="setPurchaseStage(\'all\')">全部</button>';
+  for(var sdi=0;sdi<STAGE_DEFS.length;sdi++){
+    var sd = STAGE_DEFS[sdi];
+    html += '<button class="pf-btn pf-stage'+(PURCHASE_STAGE===sd.key?' active':'')+'" onclick="setPurchaseStage(\''+sd.key+'\')">'+sd.icon+' '+sd.label+'</button>';
+  }
+  html += '</div>';
 
   /* 按空间分组渲染 */
   var catLabels = {hard:'硬装', soft:'软装', elec:'电器'};
@@ -1513,6 +1534,7 @@ function renderPurchase(area){
     if(PURCHASE_SPACE!=='all' && PURCHASE_SPACE!==sp.key) continue;
     var spaceItems = PURCHASES.filter(function(p){ return p.space===sp.key; });
     if(PURCHASE_FILTER!=='all') spaceItems = spaceItems.filter(function(p){ return p.cat===PURCHASE_FILTER; });
+    if(PURCHASE_STAGE!=='all') spaceItems = spaceItems.filter(function(p){ return p.stage===PURCHASE_STAGE; });
     if(!spaceItems.length) continue;
     var spaceTotal = 0, spaceFilled = 0;
     for(var i=0;i<spaceItems.length;i++){ var r=getPurRec(spaceItems[i]); if(r){ spaceTotal+=purchaseTotal(r); spaceFilled++; } }
@@ -1569,6 +1591,10 @@ function setPurchaseFilter(f){
 }
 function setPurchaseSpace(v){
   PURCHASE_SPACE = v;
+  renderContent();
+}
+function setPurchaseStage(s){
+  PURCHASE_STAGE = s;
   renderContent();
 }
 function toggleSpace(key){
