@@ -270,43 +270,43 @@ table.purchase-table { width:100%; border-collapse:collapse; font-size:13px; min
 .tip-danger { background:#fee2e2; border:1px solid #fecaca; color:#991b1b; }
 
 /* ============ 装修监理指南（合并板块） ============ */
-.guide-stage { background:rgba(255,255,255,0.88); border:1px solid rgba(255,255,255,0.6); border-radius:var(--radius-md); padding:20px 22px; margin-bottom:16px; box-shadow:0 2px 8px rgba(0,0,0,0.04); transition:box-shadow .3s ease; }
-.guide-stage:hover { box-shadow:0 6px 20px rgba(0,0,0,0.08); }
-.guide-stage-head { display:flex; align-items:center; gap:10px; margin-bottom:14px; cursor:pointer; }
-.guide-stage-num { width:32px; height:32px; min-width:32px; border-radius:50%; background:var(--accent-grad); color:#fff; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; }
-.guide-stage-title { font-size:18px; font-weight:700; flex:1; }
-.guide-stage-toggle { font-size:14px; color:var(--text-muted); transition:transform .3s ease; }
+.guide-stage { background:rgba(255,255,255,0.88); border:1px solid rgba(255,255,255,0.6); border-radius:var(--radius-sm); padding:10px 14px; margin-bottom:6px; box-shadow:0 1px 4px rgba(0,0,0,0.03); transition:box-shadow .3s ease; }
+.guide-stage:hover { box-shadow:0 3px 12px rgba(0,0,0,0.06); }
+.guide-stage-head { display:flex; align-items:center; gap:8px; cursor:pointer; }
+.guide-stage-num { width:24px; height:24px; min-width:24px; border-radius:50%; background:var(--accent-grad); color:#fff; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; }
+.guide-stage-title { font-size:14px; font-weight:700; flex:1; }
+.guide-stage-toggle { font-size:12px; color:var(--text-muted); transition:transform .3s ease; }
 .guide-stage.collapsed .guide-stage-toggle { transform:rotate(-90deg); }
-.guide-stage-body { transition:all .3s ease; }
+.guide-stage-body { transition:all .3s ease; padding-top:10px; border-top:1px dashed #e2e8f0; margin-top:8px; }
 .guide-stage.collapsed .guide-stage-body { display:none; }
-.guide-sec { margin-bottom:14px; }
-.guide-sec-title { font-size:13px; font-weight:700; margin-bottom:8px; display:flex; align-items:center; gap:6px; }
-.guide-sec-content { font-size:13px; line-height:1.7; color:var(--text-secondary); }
+.guide-sec { margin-bottom:8px; }
+.guide-sec-title { font-size:12px; font-weight:700; margin-bottom:4px; display:flex; align-items:center; gap:5px; }
+.guide-sec-content { font-size:12px; line-height:1.6; color:var(--text-secondary); }
 .guide-sec-content ul { list-style:none; padding:0; margin:0; }
-.guide-sec-content ul li { padding:3px 0 3px 16px; position:relative; }
-.guide-sec-content ul li::before { content:"▸"; position:absolute; left:0; color:var(--accent); font-size:11px; top:4px; }
-.guide-term { background:rgba(255,255,255,0.85); border:1px solid rgba(255,255,255,0.5); border-radius:var(--radius-sm); padding:10px 14px; margin-bottom:6px; cursor:pointer; transition:var(--transition); }
-.guide-term:hover { box-shadow:0 3px 12px rgba(0,0,0,0.06); transform:translateX(2px); }
-.guide-term-head { display:flex; align-items:center; gap:8px; }
-.guide-term-name { font-size:13px; font-weight:700; }
-.guide-term-cat { font-size:10px; color:var(--accent); background:var(--accent-light); padding:2px 8px; border-radius:10px; }
-.guide-term-expand { font-size:12px; color:var(--text-muted); margin-left:auto; transition:transform .3s ease; }
+.guide-sec-content ul li { padding:2px 0 2px 14px; position:relative; }
+.guide-sec-content ul li::before { content:"▸"; position:absolute; left:0; color:var(--accent); font-size:10px; top:3px; }
+.guide-term { background:rgba(255,255,255,0.85); border:1px solid rgba(255,255,255,0.5); border-radius:var(--radius-sm); padding:7px 10px; margin-bottom:4px; cursor:pointer; transition:var(--transition); }
+.guide-term:hover { box-shadow:0 2px 8px rgba(0,0,0,0.05); transform:translateX(2px); }
+.guide-term-head { display:flex; align-items:center; gap:6px; }
+.guide-term-name { font-size:12px; font-weight:700; }
+.guide-term-cat { font-size:9px; color:var(--accent); background:var(--accent-light); padding:1px 6px; border-radius:8px; }
+.guide-term-expand { font-size:10px; color:var(--text-muted); margin-left:auto; transition:transform .3s ease; }
 .guide-term.open .guide-term-expand { transform:rotate(180deg); }
-.guide-term-desc { display:none; font-size:12.5px; line-height:1.7; color:var(--text-secondary); margin-top:8px; padding-top:8px; border-top:1px dashed #e2e8f0; }
+.guide-term-desc { display:none; font-size:11.5px; line-height:1.6; color:var(--text-secondary); margin-top:6px; padding-top:6px; border-top:1px dashed #e2e8f0; }
 .guide-term.open .guide-term-desc { display:block; }
-.guide-pass { background:#dcfce7; border:1px solid #bbf7d0; border-radius:var(--radius-sm); padding:10px 14px; margin-bottom:6px; }
-.guide-pass-title { font-size:12.5px; font-weight:700; color:#166534; margin-bottom:4px; display:flex; align-items:center; gap:6px; }
-.guide-fail { background:#fee2e2; border:1px solid #fecaca; border-radius:var(--radius-sm); padding:10px 14px; margin-bottom:6px; }
-.guide-fail-title { font-size:12.5px; font-weight:700; color:#991b1b; margin-bottom:4px; display:flex; align-items:center; gap:6px; }
-.guide-fix { background:#fef3c7; border:1px solid #fde68a; border-radius:var(--radius-sm); padding:10px 14px; margin-bottom:6px; }
-.guide-fix-title { font-size:12.5px; font-weight:700; color:#92400e; margin-bottom:4px; display:flex; align-items:center; gap:6px; }
-.guide-sol-card { background:rgba(255,255,255,0.85); border:1px solid rgba(255,255,255,0.5); border-radius:var(--radius-sm); padding:12px 14px; margin-bottom:8px; }
-.guide-sol-issue { font-size:13px; font-weight:700; margin-bottom:8px; }
-.guide-advice-card { background:rgba(255,255,255,0.85); border:1px solid rgba(255,255,255,0.5); border-radius:var(--radius-sm); padding:14px 16px; margin-bottom:8px; }
-.guide-advice-card h4 { font-size:13.5px; font-weight:700; margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+.guide-pass { background:#dcfce7; border:1px solid #bbf7d0; border-radius:var(--radius-sm); padding:6px 10px; margin-bottom:4px; }
+.guide-pass-title { font-size:11.5px; font-weight:700; color:#166534; margin-bottom:2px; display:flex; align-items:center; gap:4px; }
+.guide-fail { background:#fee2e2; border:1px solid #fecaca; border-radius:var(--radius-sm); padding:6px 10px; margin-bottom:4px; }
+.guide-fail-title { font-size:11.5px; font-weight:700; color:#991b1b; margin-bottom:2px; display:flex; align-items:center; gap:4px; }
+.guide-fix { background:#fef3c7; border:1px solid #fde68a; border-radius:var(--radius-sm); padding:6px 10px; margin-bottom:4px; }
+.guide-fix-title { font-size:11.5px; font-weight:700; color:#92400e; margin-bottom:2px; display:flex; align-items:center; gap:4px; }
+.guide-sol-card { background:rgba(255,255,255,0.85); border:1px solid rgba(255,255,255,0.5); border-radius:var(--radius-sm); padding:8px 10px; margin-bottom:5px; }
+.guide-sol-issue { font-size:12px; font-weight:700; margin-bottom:5px; }
+.guide-advice-card { background:rgba(255,255,255,0.85); border:1px solid rgba(255,255,255,0.5); border-radius:var(--radius-sm); padding:10px 12px; margin-bottom:5px; }
+.guide-advice-card h4 { font-size:12.5px; font-weight:700; margin-bottom:5px; display:flex; align-items:center; gap:5px; }
 .guide-advice-card ul { list-style:none; padding:0; margin:0; }
-.guide-advice-card ul li { font-size:12.5px; line-height:1.65; color:var(--text-secondary); padding:3px 0 3px 16px; position:relative; }
-.guide-advice-card ul li::before { content:"▸"; position:absolute; left:0; color:var(--accent); font-size:11px; top:4px; }
+.guide-advice-card ul li { font-size:11.5px; line-height:1.55; color:var(--text-secondary); padding:2px 0 2px 14px; position:relative; }
+.guide-advice-card ul li::before { content:"▸"; position:absolute; left:0; color:var(--accent); font-size:10px; top:3px; }
 
 /* 采购清单（阶段页内） */
 .purchase-mini { background:rgba(255,255,255,0.88); border:1px solid rgba(255,255,255,0.6); border-radius:var(--radius-sm); padding:12px 14px; margin-bottom:8px; transition:box-shadow .3s; }
@@ -1751,7 +1751,7 @@ function renderGuide(area){
     var sg = STAGE_GUIDE[sk] || {terms:[],solutions:[],advice:[],pass:[],fail:[],fix:[]};
     var icon = stageIcons[sk] || '📌';
 
-    html += '<div class="guide-stage" id="guide-stage-'+sk+'">';
+    html += '<div class="guide-stage collapsed" id="guide-stage-'+sk+'">';
     /* 阶段标题 */
     html += '<div class="guide-stage-head" onclick="toggleGuideStage(\''+sk+'\')">';
     html += '<div class="guide-stage-num">'+(si+1)+'</div>';
