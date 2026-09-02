@@ -195,6 +195,54 @@ table.purchase-table { width:100%; border-collapse:collapse; font-size:13px; min
 .purchase-table .measure-time { color:var(--text-muted); font-size:12px; white-space:nowrap; }
 .purchase-table .use-time { color:var(--text-secondary); font-size:12px; white-space:nowrap; }
 
+/* 采购时间表（空间维度） */
+.purchase-filter-bar { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin:10px 0 16px; }
+.pf-btn { border:1px solid #e2e8f0; background:#fff; color:var(--text-secondary); border-radius:20px; padding:6px 16px; font-size:12.5px; font-weight:600; cursor:pointer; transition:var(--transition); font-family:inherit; }
+.pf-btn:hover { border-color:var(--accent); color:var(--accent); }
+.pf-btn.active { background:var(--accent-grad); color:#fff; border-color:transparent; box-shadow:0 3px 10px rgba(99,102,241,0.3); }
+.pf-btn.pf-hard.active { background:linear-gradient(135deg,#6366f1,#4f46e5); }
+.pf-btn.pf-soft.active { background:linear-gradient(135deg,#ec4899,#db2777); }
+.pf-btn.pf-elec.active { background:linear-gradient(135deg,#f59e0b,#d97706); }
+.pf-select { border:1px solid #e2e8f0; border-radius:10px; padding:7px 10px; font-size:12.5px; color:var(--text-secondary); background:#fff; font-family:inherit; outline:none; cursor:pointer; }
+.pf-select:focus { border-color:var(--accent); }
+
+.space-card { border:1px solid #eef0f6; border-radius:14px; margin-bottom:14px; overflow:hidden; background:#fff; box-shadow:0 2px 10px rgba(0,0,0,0.03); }
+.space-head { display:flex; align-items:center; gap:10px; padding:12px 16px; cursor:pointer; background:linear-gradient(135deg,rgba(99,102,241,0.06),rgba(118,75,162,0.06)); border-bottom:1px solid #f1f5f9; user-select:none; }
+.space-head:hover { background:linear-gradient(135deg,rgba(99,102,241,0.1),rgba(118,75,162,0.1)); }
+.space-icon { font-size:20px; }
+.space-name { font-size:15px; font-weight:800; color:var(--text-primary); }
+.space-meta { font-size:12px; color:var(--text-muted); margin-left:auto; }
+.space-arrow { font-size:11px; color:var(--text-muted); margin-left:6px; transition:transform .3s; }
+.space-body { padding:4px 12px 12px; }
+.space-body.closed { display:none; }
+
+.sp-item { border-bottom:1px solid #f5f6fa; }
+.sp-item:last-child { border-bottom:none; }
+.sp-item.filled { background:rgba(22,163,74,0.03); }
+.sp-item-head { display:flex; align-items:center; gap:10px; padding:10px 8px; cursor:pointer; flex-wrap:wrap; }
+.sp-item-head:hover { background:rgba(99,102,241,0.03); }
+.sp-cat { font-size:10.5px; font-weight:700; padding:2px 8px; border-radius:9px; flex-shrink:0; }
+.sp-cat-hard { background:rgba(99,102,241,0.12); color:#4f46e5; }
+.sp-cat-soft { background:rgba(236,72,153,0.12); color:#db2777; }
+.sp-cat-elec { background:rgba(245,158,11,0.15); color:#d97706; }
+.sp-name { font-size:14px; font-weight:700; color:var(--text-primary); min-width:80px; }
+.sp-time { font-size:11.5px; color:var(--text-muted); flex:1; min-width:200px; line-height:1.5; }
+.sp-status { font-size:12px; font-weight:700; color:var(--text-muted); flex-shrink:0; }
+.sp-status.ok { color:#16a34a; }
+.sp-arrow { font-size:12px; color:var(--text-muted); flex-shrink:0; }
+
+.sp-form { display:none; padding:10px 12px 14px; background:rgba(99,102,241,0.03); border-radius:10px; margin:0 6px 10px; }
+.sp-form.open { display:block; }
+.sp-select-tip { font-size:12px; color:#92400e; background:#fef3c7; border:1px solid #fde68a; border-radius:8px; padding:8px 10px; margin-bottom:10px; line-height:1.6; }
+.sp-fields { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:8px; }
+.sp-field { display:flex; flex-direction:column; gap:3px; }
+.sp-field label { font-size:11px; color:var(--text-muted); font-weight:600; }
+.sp-field input { border:1px solid #e2e8f0; border-radius:7px; padding:6px 8px; font-size:12px; outline:none; transition:var(--transition); background:#fff; color:var(--text-primary); font-family:inherit; }
+.sp-field input:focus { border-color:var(--accent); box-shadow:0 0 0 2px rgba(99,102,241,0.12); }
+.sp-actions { display:flex; gap:8px; margin-top:10px; align-items:center; }
+.sp-actions .btn { padding:5px 14px; font-size:12px; }
+.sp-summary { font-size:12px; color:#16a34a; font-weight:600; margin-left:auto; }
+
 /* 阶段详情页 */
 .stage-hero { display:flex; gap:16px; align-items:center; margin-bottom:16px; flex-wrap:wrap; }
 .stage-hero .stage-badge { width:58px; height:58px; border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:28px; background:var(--accent-grad); box-shadow:0 6px 18px rgba(99,102,241,0.3); flex-shrink:0; transition:transform .3s; }
@@ -870,40 +918,112 @@ var CHECKLIST = {
 var STORAGE_KEY = 'zx_guide_progress_v1';
 var currentTab = 'overview';
 
-/* 采购时间表（来自 PDF《装修采购时间表》7页完整内容） */
+/* ============================================================
+ * 装修采购清单（空间维度）
+ * 以「空间」为主视角组织，每个物品带固定时间字段：
+ *   when  = 测量/下单时间   use = 使用/安装时间
+ * 分类：hard=硬装  soft=软装  elec=电器  other=五金辅材
+ * ============================================================ */
+var SPACE_DEFS = [
+  {key:'玄关', icon:'👞'},
+  {key:'客厅', icon:'🛋️'},
+  {key:'餐厅', icon:'🍽️'},
+  {key:'厨房', icon:'🍳'},
+  {key:'卫生间', icon:'🚿'},
+  {key:'卧室', icon:'🛏️'},
+  {key:'阳台', icon:'🌞'},
+  {key:'全屋/公共', icon:'🏠'}
+];
+
+/* 采购清单（来自 PDF《装修采购时间表》7页 + 按空间补充软装/电器） */
 var PURCHASES = [
-  {stage:'开工前', name:'中央空调', when:'开工前选商家', use:'水电阶段', select:'送风选双向；过滤选HEPA高效网+静电集尘盒；北方选显热交换HRV、南方选全热交换ERV（可调湿度）；风量=套内面积×层高×1，风量越大噪音越大需现场试听', install:'开工前选好商家，参与水电交底', brand:'大金'},
-  {stage:'开工前', name:'地暖', when:'水电交底前', use:'水电阶段', select:'选口碑好的暖通团队，分别考察锅炉、分集水器、管道、控制面板、保温材料', install:'结合方案和报价仔细考察，选择靠谱暖通团队', brand:''},
-  {stage:'开工前', name:'全屋定制', when:'水电改造前测量，水电结束后复尺，油工找平后二次复尺', use:'地板之前、吊顶之后', select:'环保ENF>E0（甲醛释放更低）；板材颗粒板/多层板/欧松板/密度板/生态板对比；封边EVA<PUR<激光；报价注意投影面积还是展开面积，同一板材对比；五金品牌谨慎升级', install:'同板材多对比，关注设计、安装，最好看实体项目', brand:''},
-  {stage:'开工前', name:'灶台', when:'', use:'和橱柜约同一天', select:'火力值≥4.2KW（爆炒）、热效率越高越好、炉头铜>铝合金>铁、火盖铜>不锈钢>铁、全进风优于上下进风、优选定时/防干烧', install:'与橱柜同一天安装', brand:'方太 JZT-02-HECBD(SH)-12T'},
-  {stage:'开工前', name:'抽油烟机', when:'', use:'和橱柜约同一天', select:'风量18-20m³/min、噪音≤55分贝、风压350PA以上（低楼层选大风压）、变频电机、油脂分离度≥90%、侧吸下沿距灶台40cm/顶吸70cm', install:'上柜和油烟机间留2cm缝隙，上柜用下挂门遮缝', brand:'方太 CXW-358-Z7T'},
-  {stage:'开工前', name:'洗碗机', when:'', use:'和橱柜约同一天', select:'容量≥13套、三层喷淋、热风烘干、必须有软水器、存储72h/48h、消毒和自清洁、变频省电、嵌入式', install:'', brand:'美的 S66'},
-  {stage:'开工前', name:'冰箱', when:'', use:'安装阶段', select:'双制冷循环防串味（冷藏冷冻各一个蒸发器）、变频、3人以上选500L+、一级能效、金属/钢化玻璃面板、风冷或混合制冷、精准控温保鲜', install:'左右上侧预留5-8cm散热缝隙', brand:'卡萨帝550'},
-  {stage:'开工前', name:'智能马桶', when:'', use:'', select:'虹吸式冲水、买有水箱的（水压要求低）、即热式加热、双水路（清洗冲厕分开）、抗菌自洁可拆卸喷头、带遥控、停电冲水、脚感翻盖、釉面', install:'卫浴洁具与水电改造息息相关，必须在水电改造前确定', brand:'瑞尔特C2'},
-  {stage:'开工前', name:'防盗门', when:'水电施工前；泥工进场前复尺', use:'瓦工铺地砖前', select:'甲级门、门框厚度≥2mm、门板厚度≥9cm、门板材质锌合金/镀锌钢板够用、C级锁芯、锁点闭合≥12个、填充物聚氨酯>岩棉、304不锈钢合页、不要猫眼', install:'大门一定要在贴地砖前更换，否则收口处瓷砖易破坏；先换门再贴砖可让师傅补平边缝', brand:'王力、步阳、日上、盼盼'},
-  {stage:'开工前', name:'窗户', when:'拆旧后', use:'瓦工阶段', select:'断桥铝（横切面80/90宽、壁厚1.4mm）、5楼以下60系列就够、PA66尼龙隔热条、玻璃认准3C、夹胶中空隔音、5mm以上、三元乙丙密封条、五金选好', install:'窗户建议瓦工贴砖前更换安装，边口水泥砂浆抹平再贴砖更美观', brand:''},
-  {stage:'开工前', name:'燃气热水器', when:'', use:'厨房吊顶之前', select:'常规13-14L、有浴缸选16L、燃气表G2.5才能带16L、零冷水按需（>5m推荐）、强排/平衡式不选直排、智能功能没必要', install:'贴砖之前打孔、先贴砖再安装最后吊顶、尽量放窗户附近省费用', brand:'能率S5'},
-  {stage:'水电', name:'强弱电箱', when:'水电中后期', use:'水电中后期', select:'按电工要求购买', install:'', brand:''},
-  {stage:'水电', name:'瓷砖', when:'拆旧后', use:'瓦工阶段', select:'广东砖（看生产地址）、优等品、版式多、常规尺寸（客厅800×800、卫生间300×300）、厚度大砖≥12mm小砖≥8mm、哑光/柔光不反光、摩擦系数>0.6、多买10%', install:'全瓷砖上墙用瓷砖胶+背胶、橱柜后用废砖省钱、小拼接砖赶家具底', brand:''},
-  {stage:'水电', name:'窗台石', when:'瓦工进场前', use:'安装窗套前', select:'建议安装防渗水发霉、L型/台面飞边/只铺台面三种、人造石/天然石、浅纯色与窗框同色、确定小耳朵尺寸', install:'玻璃胶自己买品质更好、与地板连接处必须胶封防变色', brand:''},
-  {stage:'水电', name:'淋浴房', when:'卫生间贴砖后复尺', use:'硬装结束后、花洒安装后', select:'钢化玻璃6-8mm带3C+防爆膜、超白玻璃通透、不锈钢框架、滑轮不锈钢、硅胶磁吸胶条、挡水条预埋、防霉玻璃胶', install:'挡水条美缝必须密实、贴砖阶段石基送货预埋、玻璃谈终身更换五金质保10年', brand:'本地团购'},
-  {stage:'水电', name:'地漏', when:'', use:'瓷砖铺贴时', select:'黄铜/304不锈钢磨砂面、滤芯不锈钢、淋浴区T型/U型深水封、干区T型/磁悬浮、洗衣机专用硅胶防臭、两层过滤网', install:'看下水口预留高度6-15cm、PVC无缝衔接、安装前和瓦工确认最大厚度', brand:'淋浴选侧翻板/深水封、干区磁悬浮'},
-  {stage:'水电', name:'木门/移门', when:'地砖铺好之后', use:'最后一遍腻子之前', select:'门板填充用木条不选蜂窝纸、门套和木门同材质不用密度板、静音磁吸锁、三个不锈钢合页、下单前问清配件安装费', install:'前两遍腻子找平、最后一遍腻子补缝隙、注意装静音锁', brand:''},
-  {stage:'水电', name:'收口条/过门石', when:'瓷砖铺贴时', use:'贴边', select:'颜色与瓷砖相近、长度按门框预留小耳朵、天然石材耐磨、中间开槽放钢条、防裂贴网格布', install:'卫生间过门石下面刷防水、木门套做耳朵防起鼓发霉', brand:''},
-  {stage:'瓦工', name:'止逆阀', when:'', use:'吊顶之前', select:'镀锌碳钢>不锈钢>ABS、提前自备不选施工队开盲盒、电工提前测烟道口直径', install:'', brand:'潜水艇'},
-  {stage:'瓦工', name:'美缝/环氧彩砂', when:'卫生间先做', use:'贴砖后一周、水泥干透', select:'油性、达到GB/T 36797-2018标准、VOC≤5%、颜色无限接近瓷砖', install:'瓷砖选定大面颜色、美缝商家先来配色比价、卫生间先做防潮气影响', brand:'德高、西卡、立邦'},
-  {stage:'瓦工', name:'木地板', when:'', use:'油工结束后', select:'强化复合性价比高耐磨保养少（选大品牌环保）、实木复合价格区间大、纯实木贵保养多、涂层三氧化二铝、厚度强化复合≥1.2cm', install:'先刷墙再铺地板、关注含辅材安装费', brand:'大自然、圣象、菲林格尔'},
-  {stage:'瓦工', name:'踢脚线', when:'地面找平后', use:'安装阶段', select:'实木/铝合金/瓷砖、与门套同色最和谐、厚度4-6cm', install:'提前交代师傅踢脚线/门套/柜子位置做平、墙体打玻璃胶最好自备', brand:'铝合金、白色'},
-  {stage:'瓦工', name:'浴室柜', when:'水电改造后', use:'安装阶段', select:'柜体实木>PVC>密度板、台面可丽耐>陶瓷>人造石>大理石、镜柜带收纳、抽屉多、白色防刮好打理、自备防霉密封胶', install:'台面高度85-90cm、深度50-60cm', brand:'定制'},
-  {stage:'木工', name:'铝扣板吊顶', when:'', use:'橱柜安装之后', select:'烤漆防污防潮不变黄（火烧检验）、厚度≥0.6mm、纯色哑光、30×30/60规格性价比高、龙骨≥0.8mm副龙骨≥0.5mm', install:'嵌入的射灯/筒灯/浴霸先到位、先装吊柜再装吊顶更严丝合缝', brand:''},
-  {stage:'木工', name:'浴霸', when:'', use:'集成吊顶之后', select:'风暖不买灯暖（伤眼）、CCC认证、集成式不买壁挂式、塑封电机不买裸露、双电机、3㎡1300W够用、功率按面积翻倍', install:'石膏板吊顶木工前要提前预埋浴霸排气管、油烟机排烟管、热水器燃气管', brand:''},
-  {stage:'木工', name:'乳胶漆', when:'', use:'', select:'环保要看检测报告VOC甲醛未检出、对比率高于0.93遮盖强、耐擦洗大于1500次、到门店看色卡不靠手机图', install:'艺术漆提前告知师傅（需冲筋找平、墙面裂纹挂网），材料工费都贵', brand:''},
-  {stage:'木工', name:'水槽', when:'全屋定制尺寸确定后', use:'橱柜进场', select:'3mm以上304不锈钢、深度20cm宽度60cm以上大单槽、内部手工角圆润不藏灰、底部消音垫+防冷凝涂层、拉丝哑光不选镜面', install:'', brand:'韩国巨杉、青菜家'},
-  {stage:'油工', name:'花洒', when:'', use:'', select:'龙头纯铜/不锈钢一体成型+电镀、颜色不锈钢/白色/枪灰不选黑、陶瓷阀芯、硅胶喷头不选塑料铁皮、增压花洒选空气增压、带喷枪可清理', install:'', brand:'九牧王、摩恩'},
-  {stage:'油工', name:'电热毛巾架', when:'', use:'安装阶段', select:'碳纤维干式加热/石墨烯（无漏液）、太空铝/不锈钢不生锈、功率200W以下、宽65cm高80cm、ipx4防水、定时功能', install:'', brand:'舒格尔908B'},
-  {stage:'油工', name:'玻璃胶', when:'', use:'瓦工阶段', select:'干区选弹性好、湿区选防霉、日晒区选耐候、中性脱醇型、美容胶用于乳胶漆衔接处（不防霉）', install:'白色接触处选白色其余透明、一瓶8-10米', brand:'瓦克GM/DA/CS、道康宁'},
-  {stage:'油工', name:'开关面板', when:'', use:'安装阶段', select:'按电工开单网购、开关插座空开漏保选品牌、厨房带开关控制、卫生间防溅盒、斜五孔', install:'', brand:''},
-  {stage:'油工', name:'前置过滤器', when:'', use:'水电打压之后', select:'精度40μm、流量3-4T（100㎡内3T）、316不锈钢滤网、无铅铜管口、高分子防爆滤瓶、高压反喷洗', install:'高楼层带稳压、位置不理想选万向安装', brand:'BSK、沁园、COLMO A25'}
+  /* ===== 玄关 ===== */
+  {space:'玄关', cat:'hard', stage:'开工前', name:'防盗门', when:'水电施工前；泥工进场前复尺', use:'瓦工铺地砖前', select:'甲级门、门框厚度≥2mm、门板厚度≥9cm、锌合金/镀锌钢板、C级锁芯、锁点≥12个、填充物聚氨酯>岩棉、304不锈钢合页、不要猫眼', install:'贴地砖前更换，否则收口处瓷砖易破坏；先换门再贴砖可让师傅补平边缝', brand:'王力、步阳、日上、盼盼'},
+  {space:'玄关', cat:'hard', stage:'开工前', name:'电子门锁', when:'', use:'木门安装阶段', select:'C级锁芯、半导体指纹、防猫眼开锁、应急机械钥匙、带门铃可选', install:'与防盗门同商家选配更省心', brand:'凯迪仕、德施曼'},
+  {space:'玄关', cat:'soft', stage:'安装', name:'鞋柜', when:'全屋定制时一起下单', use:'硬装结束', select:'翻斗鞋柜省空间、留换鞋凳位置、底部镂空15cm放常穿鞋、留插座（烘鞋机/氛围灯）', install:'深度35-40cm、层板可调', brand:'全屋定制'},
+  {space:'玄关', cat:'soft', stage:'安装', name:'换鞋凳', when:'', use:'软装阶段', select:'宽度≥80cm、带收纳、实木/软垫', install:'', brand:''},
+  {space:'玄关', cat:'elec', stage:'安装', name:'玄关感应灯', when:'', use:'安装阶段', select:'人体感应+光控、充电式免布线、色温3000K温馨', install:'', brand:'小米、几光'},
+
+  /* ===== 客厅 ===== */
+  {space:'客厅', cat:'elec', stage:'开工前', name:'中央空调', when:'开工前选商家', use:'水电阶段', select:'送风选双向；过滤选HEPA高效网+静电集尘盒；北方选显热交换HRV、南方选全热交换ERV（可调湿度）；风量=套内面积×层高×1，风量越大噪音越大需现场试听', brief:'开工前选好商家，参与水电交底', brand:'大金'},
+  {space:'客厅', cat:'elec', stage:'安装', name:'空调（挂机/风管机）', when:'', use:'水电阶段', select:'卧室可选风管机藏吊顶、客厅大功率、一级能效、变频', install:'风管机需木工前定好位置', brand:'格力、美的、大金'},
+  {space:'客厅', cat:'soft', stage:'安装', name:'沙发', when:'硬装中后期可下单', use:'软装阶段', select:'尺寸按开间留行走通道60cm+、三人位+贵妃位或直排、坐深50-60cm、面料看家人习惯（布艺/科技皮/真皮）、可拆洗、带电动调节可选', install:'进门预留家具搬运尺寸', brand:''},
+  {space:'客厅', cat:'soft', stage:'安装', name:'茶几/边几', when:'', use:'软装阶段', select:'与沙发比例协调、圆角防磕、底部易清洁', install:'', brand:''},
+  {space:'客厅', cat:'soft', stage:'安装', name:'电视柜', when:'', use:'软装阶段', select:'宽度≥电视尺寸1.2倍、悬空式方便扫地机、线路预留', install:'', brand:''},
+  {space:'客厅', cat:'elec', stage:'安装', name:'电视', when:'', use:'软装阶段', select:'尺寸按观看距离（3m选65-75吋）、分辨率4K起步、刷屏率120Hz（看球/游戏）、MEMC、HDMI2.1', install:'壁挂需确认承重墙、预埋50管', brand:'索尼、小米、海信'},
+  {space:'客厅', cat:'elec', stage:'油工', name:'客厅主灯/射灯', when:'', use:'油工完成后安装', select:'主灯3000-4000K、射灯筒灯见光不见灯、色温统一、无频闪', install:'吊顶前定好射灯点位', brand:'雷士、欧普'},
+  {space:'客厅', cat:'soft', stage:'安装', name:'窗帘', when:'硬装结束后测量', use:'软装阶段', select:'透光纱帘+遮光布双层、滑轨顺滑、窗帘盒宽度≥20cm', install:'轻纺市场可包安装', brand:'本地轻纺市场'},
+  {space:'客厅', cat:'soft', stage:'安装', name:'地毯', when:'', use:'软装阶段', select:'短绒好打理、尺寸比沙发大出30cm、防滑垫', install:'', brand:''},
+
+  /* ===== 餐厅 ===== */
+  {space:'餐厅', cat:'soft', stage:'安装', name:'餐桌椅', when:'硬装中后期', use:'软装阶段', select:'尺寸：4人桌140cm、6人桌160cm、餐桌圆角、椅背舒适、实木/岩板', install:'进门', brand:''},
+  {space:'餐厅', cat:'soft', stage:'安装', name:'餐边柜', when:'', use:'软装阶段', select:'带抽屉收纳餐具、台面放小家电、预留插座', install:'与全屋定制同材质', brand:'全屋定制'},
+  {space:'餐厅', cat:'elec', stage:'油工', name:'餐厅吊灯', when:'', use:'油工完成后', select:'离桌75-80cm、色温2700-3000K、可调光', install:'', brand:''},
+  {space:'餐厅', cat:'elec', stage:'安装', name:'管线机/净饮机', when:'', use:'安装阶段', select:'即热式、温度档多、换滤芯方便', install:'预留净水走管', brand:'碧然德、九阳'},
+
+  /* ===== 厨房 ===== */
+  {space:'厨房', cat:'hard', stage:'水电', name:'瓷砖', when:'拆旧后', use:'瓦工阶段', select:'广东砖（看生产地址）、优等品、规格：厨房墙砖300×600/400×800、防滑系数>0.6、多买10%', install:'橱柜后可用废砖省钱', brand:'东鹏、马可波罗、诺贝尔'},
+  {space:'厨房', cat:'hard', stage:'安装', name:'橱柜（定制）', when:'水电改造前测量、水电后复尺、油工找平后二次复尺', use:'地板之前、吊顶之后', select:'环保ENF>E0、板材颗粒板/多层板/欧松板/密度板/生态板对比、封边EVA<PUR<激光、报价注意投影面积还是展开面积', install:'同板材多对比、关注设计安装、看实体项目', brand:'欧派、索菲亚、尚品宅配'},
+  {space:'厨房', cat:'hard', stage:'水电', name:'水槽', when:'全屋定制尺寸确定后', use:'橱柜进场', select:'3mm以上304不锈钢、深度20cm宽度60cm以上大单槽、内部手工圆角、底部消音垫+防冷凝涂层、拉丝哑光', install:'', brand:'韩国巨杉、青菜家'},
+  {space:'厨房', cat:'hard', stage:'水电', name:'水龙头（厨房）', when:'', use:'橱柜进场', select:'抽拉式、304不锈钢、不锈钢折弯', install:'', brand:'九牧、箭牌'},
+  {space:'厨房', cat:'elec', stage:'开工前', name:'灶台', when:'', use:'和橱柜约同一天', select:'火力值≥4.2KW（爆炒）、热效率越高越好、炉头铜>铝合金>铁、火盖铜>不锈钢>铁、全进风优于上下进风、优选定时/防干烧', install:'与橱柜同一天安装', brand:'方太 JZT-02-HECBD(SH)-12T'},
+  {space:'厨房', cat:'elec', stage:'开工前', name:'抽油烟机', when:'', use:'和橱柜约同一天', select:'风量18-20m³/min、噪音≤55分贝、风压350PA以上（低楼层选大风压）、变频电机、油脂分离度≥90%、侧吸下沿距灶台40cm/顶吸70cm', install:'上柜和油烟机间留2cm缝隙，上柜用下挂门遮缝', brand:'方太 CXW-358-Z7T'},
+  {space:'厨房', cat:'elec', stage:'开工前', name:'洗碗机', when:'', use:'和橱柜约同一天', select:'容量≥13套、三层喷淋、热风烘干、必须有软水器、存储72h/48h、消毒和自清洁、变频省电、嵌入式', install:'预留进排水', brand:'美的 S66'},
+  {space:'厨房', cat:'elec', stage:'开工前', name:'冰箱', when:'', use:'安装阶段', select:'双制冷循环防串味（冷藏冷冻各一个蒸发器）、变频、3人以上选500L+、一级能效、金属/钢化玻璃面板、风冷或混合制冷、精准控温保鲜', install:'左右上侧预留5-8cm散热缝隙', brand:'卡萨帝550'},
+  {space:'厨房', cat:'elec', stage:'开工前', name:'燃气热水器', when:'', use:'厨房吊顶之前', select:'13-14L常规、有浴缸选16L、燃气表G2.5才能带16L、零冷水按需（>5m推荐）、强排/平衡式不选直排', install:'贴砖前打孔、先贴砖再安装最后吊顶', brand:'能率 S5'},
+  {space:'厨房', cat:'elec', stage:'开工前', name:'前置过滤器', when:'', use:'水电打压之后', select:'精度40μm、流量3-4T、316不锈钢滤网、无铅铜管口、高分子防爆滤瓶、高压反喷洗', install:'高楼层带稳压、选万向安装', brand:'BSK、沁园、COLMO A25'},
+  {space:'厨房', cat:'elec', stage:'安装', name:'净水器', when:'', use:'安装阶段', select:'RO反渗透、通量600-800G、换芯成本、废水比', install:'预留电源与软管', brand:'小米、AO史密斯、安吉尔'},
+  {space:'厨房', cat:'hard', stage:'瓦工', name:'止逆阀', when:'', use:'吊顶之前', select:'镀锌碳钢>不锈钢>ABS、提前自备、测烟道口直径', install:'', brand:'潜水艇'},
+  {space:'厨房', cat:'hard', stage:'木工', name:'铝扣板吊顶（厨房）', when:'', use:'橱柜安装后', select:'烤漆防污防潮不变黄、厚度≥0.6mm、纯色哑光、30×30/60规格、龙骨≥0.8mm', install:'嵌入的射灯/筒灯先到位', brand:''},
+  {space:'厨房', cat:'elec', stage:'木工', name:'厨房凉霸/风扇灯', when:'', use:'集成吊顶时', select:'带风量、防水、遥控', install:'', brand:'欧普、奥普'},
+
+  /* ===== 卫生间 ===== */
+  {space:'卫生间', cat:'hard', stage:'水电', name:'瓷砖（卫生间）', when:'拆旧后', use:'瓦工阶段', select:'地砖防滑系数≥0.6、墙砖亮光好打理、300×300/300×600、多买10%', install:'墙地通缝、地漏坡度', brand:'东鹏、马可波罗、箭牌'},
+  {space:'卫生间', cat:'hard', stage:'水电', name:'淋浴房', when:'卫生间贴砖后复尺', use:'硬装结束、花洒安装后', select:'钢化玻璃6-8mm带3C+防爆膜、超白玻璃、不锈钢框架、滑轮不锈钢、硅胶磁吸胶条、挡水条预埋、防霉玻璃胶', install:'挡水条美缝密实、贴砖阶段石基预埋、玻璃谈终身更换五金质保10年', brand:'本地团购'},
+  {space:'卫生间', cat:'hard', stage:'水电', name:'地漏', when:'', use:'瓷砖铺贴时', select:'黄铜/304不锈钢磨砂面、滤芯不锈钢、淋浴区T型/深水封、干区T型/磁悬浮、洗衣机专用硅胶防臭、两层过滤网', install:'看下水口预留高度6-15cm、PVC无缝衔接、安装前和瓦工确认最大厚度', brand:'淋浴选深水封、干区磁悬浮'},
+  {space:'卫生间', cat:'hard', stage:'水电', name:'浴室柜（台盆）', when:'水电改造后', use:'安装阶段', select:'柜体实木>PVC>密度板、台面可丽耐>陶瓷>人造石>大理石、镜柜带收纳、抽屉多、白色防刮、自备防霉密封胶', install:'台面高度85-90cm、深度50-60cm', brand:'定制'},
+  {space:'卫生间', cat:'hard', stage:'水电', name:'淋浴龙头', when:'', use:'安装阶段', select:'龙头纯铜/不锈钢一体成型+电镀、颜色不锈钢/白色/枪灰不选黑、陶瓷阀芯、硅胶喷头不选塑料铁皮、增压花洒选空气增压、带喷枪可清理', install:'', brand:'九牧王、摩恩'},
+  {space:'卫生间', cat:'hard', stage:'开工前', name:'智能马桶', when:'水电改造前确定', use:'安装阶段', select:'虹吸式冲水、买有水箱的（水压要求低）、即热式加热、双水路（清洗冲厕分开）、抗菌自洁可拆卸喷头、带遥控、停电冲水、脚感翻盖、釉面', install:'卫浴洁具与水电改造息息相关，必须在水电改造前确定', brand:'瑞尔特C2'},
+  {space:'卫生间', cat:'hard', stage:'水电', name:'马桶/蹲便器', when:'', use:'安装阶段', select:'虹吸式、釉面防挂污、水件品牌', install:'', brand:'TOTO、恒洁'},
+  {space:'卫生间', cat:'hard', stage:'油工', name:'电热毛巾架', when:'', use:'安装阶段', select:'碳纤维干式加热/石墨烯（无漏液）、太空铝/不锈钢不生锈、功率200W以下、宽65cm高80cm、ipx4防水、定时功能', install:'预留电源', brand:'舒格尔908B'},
+  {space:'卫生间', cat:'hard', stage:'木工', name:'铝扣板吊顶（卫生间）', when:'', use:'橱柜安装后', select:'烤漆防污防潮不变黄、厚度≥0.6mm、纯色哑光、30×30/60规格、龙骨≥0.8mm', install:'嵌入的射灯/筒灯/浴霸先到位', brand:'奥普、奥华'},
+  {space:'卫生间', cat:'elec', stage:'木工', name:'浴霸', when:'', use:'集成吊顶之后', select:'风暖不买灯暖（伤眼睛）、CCC认证、塑封电机不买裸露、双电机、3㎡1300W够用、功率按面积翻倍', install:'石膏板吊顶木工前提前预埋浴霸排气管、油烟机排烟管、燃气热水器燃气管', brand:'奥普'},
+  {space:'卫生间', cat:'elec', stage:'安装', name:'吹风机/插座（卫浴）', when:'', use:'', select:'浴室插座带防溅盒、吹风机挂钩', install:'', brand:''},
+  {space:'卫生间', cat:'soft', stage:'安装', name:'浴帘/隔断', when:'', use:'软装阶段', select:'防水防霉面料、宽度按淋浴区、磁吸底', install:'', brand:''},
+
+  /* ===== 卧室 ===== */
+  {space:'卧室', cat:'hard', stage:'瓦工', name:'木地板', when:'', use:'油工结束后', select:'强化复合性价比高耐磨保养少（选大品牌环保）、实木复合价格区间大、纯实木贵保养多、涂层三氧化二铝、厚度≥1.2cm', install:'先刷墙再铺地板、关注含辅材安装费', brand:'大自然、圣象、菲林格尔'},
+  {space:'卧室', cat:'hard', stage:'水电', name:'木门', when:'地砖铺好之后', use:'最后一遍腻子之前', select:'门板填充用木条不选蜂窝纸、门套和木门同材质不用密度板、静音磁锁、三个不锈钢合页、下单前问清配件安装费', install:'前两遍腻子找平、最后一遍腻子补缝、注意装静音锁', brand:''},
+  {space:'卧室', cat:'hard', stage:'安装', name:'衣柜（定制）', when:'水电改造前测量', use:'地板之前、吊顶之后', select:'环保ENF>E0、板材颗粒板/多层板/欧松板/密度板/生态板对比、封边EVA<PUR<激光、内部按衣服量设计、五金谨慎升级', install:'同板材对比、关注设计安装', brand:'欧派、索菲亚、尚品宅配'},
+  {space:'卧室', cat:'soft', stage:'安装', name:'床（含床垫）', when:'', use:'软装阶段', select:'床架：实木/板式/钢架；床垫：软硬分龄、独立袋装弹簧+乳胶层、透气、无甲醛', install:'床垫搬进卧室', brand:'舒达、慕思、喜临门'},
+  {space:'卧室', cat:'soft', stage:'安装', name:'床头柜', when:'', use:'软装阶段', select:'与床配套、收纳、高度与床平', install:'', brand:''},
+  {space:'卧室', cat:'soft', stage:'安装', name:'窗帘（卧室）', when:'硬装好测量', use:'软装阶段', select:'遮光率≥90%、纱帘+布帘双层、静音轨道', install:'布艺市场', brand:''},
+  {space:'卧室', cat:'elec', stage:'油工', name:'卧室主灯/壁灯', when:'', use:'油工完成后', select:'3000K、床头壁灯不占地、可调光', install:'', brand:''},
+  {space:'卧室', cat:'elec', stage:'安装', name:'空调（卧室）', when:'', use:'水电阶段', select:'壁挂机1-1.5匹、一级能效、变频、静音', install:'铜管走向', brand:'格力、美的'},
+
+  /* ===== 阳台 ===== */
+  {space:'阳台', cat:'hard', stage:'安装', name:'封窗（断桥铝）', when:'拆旧后', use:'瓦工阶段', select:'断桥铝（横切面80/90宽、壁厚1.4mm）、5楼以下60系列就够、PA66尼龙隔热条、玻璃认准3、夹胶中空隔音、5mm以上、三元乙丙密封条、五金选好', install:'窗户建议瓦工贴砖前安装，边口水泥砂浆抹平', brand:''}
+  ,{space:'阳台', cat:'elec', stage:'安装', name:'洗衣机', when:'', use:'安装阶段', select:'滚筒/波轮、容量10KG+、洗烘一体或分体、变频电机', install:'排水防臭地漏、插座留够', brand:'海尔、美的、小天鹅'},
+  {space:'阳台', cat:'elec', stage:'安装', name:'烘干机（可选）', when:'', use:'安装阶段', select:'热泵式（省电）、容量与洗衣机匹配', install:'叠放需连接件', brand:'海尔、西门子'},
+  {space:'阳台', cat:'elec', stage:'安装', name:'电动晾衣架', when:'', use:'安装阶段', select:'承重≥35kg、升降静音、带照明、智能风干/烘干', install:'吊顶前预埋', brand:'邦先生'},
+  {space:'阳台', cat:'hard', stage:'安装', name:'阳台洗衣柜/洗衣池', when:'', use:'安装阶段', select:'一体成柜防水防潮、带搓衣台、预留插座', install:'', brand:'定制'},
+  {space:'阳台', cat:'hard', stage:'瓦工', name:'阳台地砖', when:'拆旧后', use:'瓦工阶段', select:'防滑系数>0.6、耐磨、阳台高阳台地漏', install:'与客厅衔接处过门石', brand:'同卫生间砖'},
+
+  /* ===== 全屋/公共 ===== */
+  {space:'全屋/公共', cat:'hard', stage:'开工前', name:'全屋定制（汇总）', when:'开工前测量', use:'全阶段', select:'一次到位：鞋柜、餐边柜、衣柜、书柜、阳台柜；环保ENF>E0、封边EVA<PUR<激光、报价投影/展开面积', install:'分批次进场安装', brand:'欧派、索菲亚、尚品宅配'},
+  {space:'全屋/公共', cat:'hard', stage:'木工', name:'乳胶漆', when:'', use:'油工阶段', select:'环保看检测报告VOC甲醛未检出、对比率高于0.93遮盖强、耐擦洗大于1500次、到门店看色卡', install:'艺术漆提前告知师傅（需冲筋找平、墙面裂纹挂网）', brand:'立邦、多乐士'},
+  {space:'全屋/公共', cat:'hard', stage:'水电', name:'瓷砖（公共区域）', when:'拆旧后', use:'瓦工阶段', select:'客厅800×800、哑光/柔光不反光、摩擦系数>0.6、多买10%', install:'橱柜后用废砖省钱', brand:'东鹏、马可波罗'},
+  {space:'全屋/公共', cat:'hard', stage:'水电', name:'窗台石', when:'瓦工进场前', use:'安装窗套前', select:'大理石/人造石、浅纯色与窗框同色、L型/台面飞边/只铺台面、小耳朵尺寸', install:'玻璃胶自己用更好、与地板连接处必须密封', brand:''},
+  {space:'全屋/公共', cat:'hard', stage:'水电', name:'收口条/过门石', when:'瓷砖铺贴时', use:'贴边', select:'颜色与瓷砖相近、天然石耐磨、中间开槽放钢条、防裂贴网格布', install:'卫生间过门石下刷防水、木门套做耳朵防起鼓', brand:''},
+  {space:'全屋/公共', cat:'hard', stage:'瓦工', name:'踢脚线', when:'地面找平后', use:'安装阶段', select:'实木/铝合金/瓷砖、与门套同色、厚度4-6cm', install:'提前交代师傅做平、墙体打胶自备', brand:'铝合金、白色'},
+  {space:'全屋/公共', cat:'hard', stage:'水电', name:'木门/移门', when:'地砖铺好之后', use:'最后一遍腻子前', select:'门板填充木条不选蜂窝纸、门套同材质、静音磁吸锁、不锈钢合页', install:'前两遍腻子找平、最后一遍补缝隙', brand:''},
+  {space:'全屋/公共', cat:'hard', stage:'油工', name:'开关面板', when:'油工前', use:'安装阶段', select:'按电工开单网购、厨房带开关控制、卫生间防溅盒、斜五孔、空开漏保选品牌', install:'', brand:'西门子、施耐德、公牛'},
+  {space:'全屋/公共', cat:'hard', stage:'水电', name:'强弱电箱', when:'水电中后期', use:'水电中后期', select:'按电工要求购买', install:'', brand:''},
+  {space:'全屋/公共', cat:'hard', stage:'瓦工', name:'玻璃胶/美缝', when:'贴砖后一周', use:'瓦工阶段', select:'美缝油性、达到GB/T 36797-2018、VOC≤5%、颜色接近瓷砖；玻璃胶中性防霉', install:'卫生间先做防潮', brand:'德高、西卡、瓦克'},
+  {space:'全屋/公共', cat:'hard', stage:'开工前', name:'地暖', when:'水电交底前', use:'水电阶段', select:'选口碑好的暖通团队，分别考察锅炉、分集水器、管道、控制面板、保温材料', install:'结合方案和报价考察、靠谱团队', brand:''},
+  {space:'全屋/公共', cat:'elec', stage:'开工前', name:'新风系统', when:'开工前', use:'水电阶段', select:'风量=套内面积×层高×1、显热HRV/全热ERV、HEPA高效网+静电集尘、过滤', install:'吊顶前布管、与中央空调协调', brand:'松下、远大'},
+  {space:'全屋/公共', cat:'hard', stage:'安装', name:'扫地机器人/洗地机', when:'', use:'软装阶段', select:'扫地+拖地、基站自清洁、水箱容量', install:'', brand:'石头、云鲸、追觅'},
+  {space:'全屋/公共', cat:'soft', stage:'油工', name:'全屋灯光', when:'设计阶段确定', use:'油工后安装', select:'主灯+辅助光源分区、色温统一、显色指数≥90', install:'', brand:''}
 ];
 
 /* 完成状态 */
@@ -1335,28 +1455,152 @@ function getStagePurchases(stageId){
   return PURCHASES.filter(function(p){ return keys.indexOf(p.stage)>=0; });
 }
 /* ============ 采购时间表 ============ */
+/* ============ 采购时间表（空间维度） ============ */
+var PURCHASE_FILTER = 'all';   /* all | hard | soft | elec */
+var PURCHASE_SPACE = 'all';    /* all | 具体空间 */
+
+function purchaseTotal(rec){
+  if(!rec) return 0;
+  return Math.round((parseFloat(rec.price)||0) * (parseInt(rec.qty)||1) * 100) / 100;
+}
+function getPurRec(p){ return progress['purchase_'+p.name] || null; }
+
 function renderPurchase(area){
   var html = '';
-  html += '<div class="bento-card">';
-  html += '<div class="card-title"><span class="card-icon">🛒</span>装修采购时间表<span class="card-subtitle">来源：你的 PDF《装修采购时间表》+ 补充整理</span></div>';
-  html += '<div class="tip-box tip-info"><span class="tip-ic">💡</span><div><b>使用说明：</b>装修是环环相扣的，材料要在上一个阶段买好、下一个阶段用到。定制周期长的（窗户、木门、全屋定制）一定要提前 20-30 天，否则会停工等料。此表按阶段排列，点击左侧阶段导航可对照查看。</div></div>';
-  html += '<div class="purchase-table-wrap"><table class="purchase-table">';
-  html += '<thead><tr><th style="width:70px">阶段</th><th style="width:110px">材料</th><th style="width:150px">测量/下单时间</th><th style="width:120px">使用时间</th><th>选购标准（关键点）</th><th style="width:150px">安装注意事项</th><th style="width:120px">推荐品牌</th></tr></thead><tbody>';
+  var CAT_META = {hard:{label:'硬装', color:'#6366f1'}, soft:{label:'软装', color:'#ec4899'}, elec:{label:'电器', color:'#f59e0b'}};
+
+  /* 统计卡片 */
+  var allRecs = [];
+  var allTotal = 0;
   for(var i=0;i<PURCHASES.length;i++){
-    var p = PURCHASES[i];
-    html += '<tr>';
-    html += '<td><span class="stage-tag">'+p.stage+'</span></td>';
-    html += '<td><b>'+p.name+'</b></td>';
-    html += '<td class="measure-time">'+(p.when||'—')+'</td>';
-    html += '<td class="use-time">'+(p.use||'—')+'</td>';
-    html += '<td>'+p.select+'</td>';
-    html += '<td>'+(p.install||'—')+'</td>';
-    html += '<td>'+(p.brand?('<span class="brand-tag">'+p.brand+'</span>'):'')+'</td>';
-    html += '</tr>';
+    var rec = getPurRec(PURCHASES[i]);
+    if(rec){ allRecs.push({p:PURCHASES[i], rec:rec}); allTotal += purchaseTotal(rec); }
   }
-  html += '</tbody></table></div>';
+  var filledCount = allRecs.length;
+  var totalItems = PURCHASES.length;
+
+  html += '<div class="bento-card" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;margin-bottom:14px;">';
+  html += '<div style="display:flex;gap:26px;flex-wrap:wrap;align-items:center;">';
+  html += '<div><div style="font-size:13px;opacity:0.85;">已记录采购总额</div><div style="font-size:30px;font-weight:800;margin-top:2px;">¥'+(allTotal?allTotal.toLocaleString():'0')+'</div></div>';
+  html += '<div><div style="font-size:13px;opacity:0.85;">已填报</div><div style="font-size:24px;font-weight:700;margin-top:2px;">'+filledCount+' / '+totalItems+' 项</div></div>';
+  html += '<div><div style="font-size:13px;opacity:0.85;">空间数</div><div style="font-size:24px;font-weight:700;margin-top:2px;">'+SPACE_DEFS.length+' 个</div></div>';
+  html += '<div><div style="font-size:13px;opacity:0.85;">待填报</div><div style="font-size:24px;font-weight:700;margin-top:2px;">'+(totalItems-filledCount)+' 项</div></div>';
+  html += '</div></div>';
+
+  html += '<div class="bento-card">';
+  html += '<div class="card-title"><span class="card-icon">🛒</span>装修采购清单 · 按空间 <span class="card-subtitle">从空间角度确认要买什么，点击「✎ 填报」记录品牌/价格</span></div>';
+  html += '<div class="tip-box tip-info"><span class="tip-ic">💡</span><div><b>使用说明：</b>按「空间」逐项核对要买的东西，时间顺序已写在每项里（📏 下单时间 / 📅 使用时间）。每项都可填报<b>品牌、型号、价格、数量、购买地点、日期、备注</b>，填写后自动计入顶部总额并同步云端。</div></div>';
+
+  /* 筛选栏 */
+  html += '<div class="purchase-filter-bar">';
+  html += '<button class="pf-btn'+(PURCHASE_FILTER==='all'?' active':'')+'" onclick="setPurchaseFilter(\'all\')">全部</button>';
+  html += '<button class="pf-btn pf-hard'+(PURCHASE_FILTER==='hard'?' active':'')+'" onclick="setPurchaseFilter(\'hard\')">🔧 硬装</button>';
+  html += '<button class="pf-btn pf-soft'+(PURCHASE_FILTER==='soft'?' active':'')+'" onclick="setPurchaseFilter(\'soft\')">🛋️ 软装</button>';
+  html += '<button class="pf-btn pf-elec'+(PURCHASE_FILTER==='elec'?' active':'')+'" onclick="setPurchaseFilter(\'elec\')">⚡ 电器</button>';
+  html += '<span style="flex:1"></span>';
+  html += '<select class="pf-select" onchange="setPurchaseSpace(this.value)">';
+  html += '<option value="all"'+(PURCHASE_SPACE==='all'?' selected':'')+'>全部空间</option>';
+  for(var si=0;si<SPACE_DEFS.length;si++){
+    html += '<option value="'+SPACE_DEFS[si].key+'"'+(PURCHASE_SPACE===SPACE_DEFS[si].key?' selected':'')+'>'+SPACE_DEFS[si].icon+' '+SPACE_DEFS[si].key+'</option>';
+  }
+  html += '</select>';
+  html += '</div>';
+
+  /* 按空间分组渲染 */
+  var catLabels = {hard:'硬装', soft:'软装', elec:'电器'};
+  for(var si=0;si<SPACE_DEFS.length;si++){
+    var sp = SPACE_DEFS[si];
+    if(PURCHASE_SPACE!=='all' && PURCHASE_SPACE!==sp.key) continue;
+    var spaceItems = PURCHASES.filter(function(p){ return p.space===sp.key; });
+    if(PURCHASE_FILTER!=='all') spaceItems = spaceItems.filter(function(p){ return p.cat===PURCHASE_FILTER; });
+    if(!spaceItems.length) continue;
+    var spaceTotal = 0, spaceFilled = 0;
+    for(var i=0;i<spaceItems.length;i++){ var r=getPurRec(spaceItems[i]); if(r){ spaceTotal+=purchaseTotal(r); spaceFilled++; } }
+    html += '<div class="space-card">';
+    html += '<div class="space-head" onclick="toggleSpace(\''+sp.key+'\')">';
+    html += '<span class="space-icon">'+sp.icon+'</span><span class="space-name">'+sp.key+'</span>';
+    html += '<span class="space-meta">'+spaceFilled+'/'+spaceItems.length+' 已填报 · ¥'+(spaceTotal?spaceTotal.toLocaleString():'0')+'</span>';
+    html += '<span class="space-arrow">▼</span>';
+    html += '</div>';
+    html += '<div class="space-body" id="space-body-'+sp.key+'">';
+    for(var i=0;i<spaceItems.length;i++){
+      var p = spaceItems[i];
+      var rec = getPurRec(p);
+      var tot = purchaseTotal(rec);
+      var isFilled = !!rec;
+      html += '<div class="sp-item'+(isFilled?' filled':'')+'" id="sp-item-'+p.name+'">';
+      html += '<div class="sp-item-head" onclick="togglePurForm(\''+p.name+'\')">';
+      html += '<span class="sp-cat sp-cat-'+p.cat+'">'+vLabels(p.cat)+'</span>';
+      html += '<span class="sp-name">'+p.name+'</span>';
+      html += '<span class="sp-time">📏 '+(p.when||'—')+' ｜ 📅 '+(p.use||'—')+'</span>';
+      html += '<span class="sp-status'+(isFilled?' ok':'')+'">'+(isFilled?('¥'+tot.toLocaleString()):'待填报')+'</span>';
+      html += '<span class="sp-arrow">'+(isFilled?'▼':'✎')+'</span>';
+      html += '</div>';
+      html += '<div class="sp-form" id="sp-form-'+p.name+'">';
+      if(p.select) html += '<div class="sp-select-tip">📌 选购参考：'+esc(p.select)+'</div>';
+      html += '<div class="sp-fields">';
+      html += '<div class="sp-field"><label>品牌（必填）</label><input id="pu-brand-'+p.name+'" placeholder="如：方太" value="'+(rec?esc(rec.brand):'')+'"></div>';
+      html += '<div class="sp-field"><label>名称（必填）</label><input id="pu-name-'+p.name+'" placeholder="如：抽油烟机" value="'+(rec?esc(rec.name):'')+'"></div>';
+      html += '<div class="sp-field"><label>型号</label><input id="pu-model-'+p.name+'" placeholder="如：CXW-358-Z7T" value="'+(rec?esc(rec.model):'')+'"></div>';
+      html += '<div class="sp-field"><label>价格（元，必填）</label><input id="pu-price-'+p.name+'" type="number" min="0" step="0.01" placeholder="0" value="'+(rec?rec.price:'')+'"></div>';
+      html += '<div class="sp-field"><label>数量</label><input id="pu-qty-'+p.name+'" type="number" min="1" step="1" placeholder="1" value="'+(rec?rec.qty:'')+'"></div>';
+      html += '<div class="sp-field"><label>购买地点</label><input id="pu-place-'+p.name+'" placeholder="如：宜山路" value="'+(rec?esc(rec.place):'')+'"></div>';
+      html += '<div class="sp-field"><label>购买日期</label><input id="pu-date-'+p.name+'" type="date" value="'+(rec?esc(rec.date||''):'')+'"></div>';
+      html += '<div class="sp-field"><label>备注</label><input id="pu-note-'+p.name+'" placeholder="如：含安装费" value="'+(rec?esc(rec.note):'')+'"></div>';
+      html += '</div>';
+      html += '<div class="sp-actions">';
+      html += '<button class="btn" onclick="savePurRec(\''+p.name+'\')">💾 保存</button>';
+      if(isFilled) html += '<button class="btn btn-ghost" onclick="clearPurRec(\''+p.name+'\')">🗑️ 清除</button>';
+      if(isFilled) html += '<span class="sp-summary">已记录：'+esc(rec.brand||'')+' '+esc(rec.name||'')+' ￥'+(tot||0).toLocaleString()+'</span>';
+      html += '</div></div></div>';
+    }
+    html += '</div></div>';
+  }
   html += '</div>';
   area.innerHTML = html;
+}
+
+function vLabels(cat){ return {hard:'硬装', soft:'软装', elec:'电器'}[cat]||'其他'; }
+function getPurRec(p){ return progress['purchase_'+p.name] || null; }
+
+function setPurchaseFilter(f){
+  PURCHASE_FILTER = f;
+  renderContent();
+}
+function setPurchaseSpace(v){
+  PURCHASE_SPACE = v;
+  renderContent();
+}
+function toggleSpace(key){
+  var b = document.getElementById('space-body-'+key);
+  if(b){ b.classList.toggle('closed'); var a=b.previousElementSibling.querySelector('.space-arrow'); if(a) a.textContent = b.classList.contains('closed')?'▶':'▼'; }
+}
+function togglePurForm(name){
+  var f = document.getElementById('sp-form-'+name);
+  var head = document.getElementById('sp-item-'+name);
+  if(f){ f.classList.toggle('open'); var arrow = head?head.querySelector('.sp-arrow'):null; if(arrow) arrow.textContent = f.classList.contains('open')?'▲':'▼'; }
+}
+function savePurRec(name){
+  var brand = (document.getElementById('pu-brand-'+name)||{}).value||'';
+  var nm = (document.getElementById('pu-name-'+name)||{}).value||'';
+  var model = (document.getElementById('pu-model-'+name)||{}).value||'';
+  var price = parseFloat((document.getElementById('pu-price-'+name)||{}).value)||0;
+  var qty = parseInt((document.getElementById('pu-qty-'+name)||{}).value)||1;
+  var place = (document.getElementById('pu-place-'+name)||{}).value||'';
+  var date = (document.getElementById('pu-date-'+name)||{}).value||'';
+  var note = (document.getElementById('pu-note-'+name)||{}).value||'';
+  if(!brand.trim() && !nm.trim()){ alert('请至少填写品牌或名称'); return; }
+  if(!price){ alert('请填写价格（元）'); return; }
+  progress['purchase_'+name] = {brand:brand.trim(), name:nm.trim()||name, model:model.trim(), price:price, qty:qty, place:place.trim(), date:date, note:note.trim()};
+  saveProgress();
+  renderContent();
+}
+function clearPurRec(name){
+  if(!progress['purchase_'+name]) return;
+  if(!confirm('确定清除这条采购记录？')) return;
+  delete progress['purchase_'+name];
+  saveProgress();
+  renderContent();
 }
 
 /* ============ 专业术语 ============ */
@@ -1678,12 +1922,35 @@ function renderRecap(area){
       }
     }
   }
+  /* 合并空间清单的采购填报记录 */
+  for(var pi=0;pi<PURCHASES.length;pi++){
+    var p = PURCHASES[pi];
+    var rec = progress['purchase_'+p.name];
+    if(rec && (rec.name||rec.brand)){
+      records.push({
+        taskId: 'purchase_'+p.name,
+        label: p.space + ' · ' + (vLabels(p.cat)||''),
+        tag: '采购',
+        stage: p.stage||'',
+        space: p.space,
+        cat: p.cat,
+        isPurchase: true,
+        name: rec.name||p.name,
+        model: rec.model||'',
+        place: rec.place||'',
+        price: rec.price||0,
+        qty: rec.qty||1,
+        note: rec.note||'',
+        total: purchaseTotal(rec)
+      });
+    }
+  }
   var purchaseRecords = records.filter(function(r){return r.isPurchase;});
-  var purchaseTotal = purchaseRecords.reduce(function(s,r){return s+(r.total||0);},0);
+  var purchaseTotalSum = purchaseRecords.reduce(function(s,r){return s+(r.total||0);},0);
   /* 汇总卡片 */
   html += '<div class="bento-card" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;margin-bottom:14px;">';
   html += '<div style="display:flex;gap:30px;flex-wrap:wrap;align-items:center;">';
-  html += '<div><div style="font-size:13px;opacity:0.85;">采购总支出</div><div style="font-size:32px;font-weight:800;margin-top:2px;">¥'+purchaseTotal.toLocaleString()+'</div></div>';
+  html += '<div><div style="font-size:13px;opacity:0.85;">采购总支出</div><div style="font-size:32px;font-weight:800;margin-top:2px;">¥'+purchaseTotalSum.toLocaleString()+'</div></div>';
   html += '<div><div style="font-size:13px;opacity:0.85;">采购记录</div><div style="font-size:24px;font-weight:700;margin-top:2px;">'+purchaseRecords.length+' 条</div></div>';
   html += '<div><div style="font-size:13px;opacity:0.85;">决策记录</div><div style="font-size:24px;font-weight:700;margin-top:2px;">'+(records.length-purchaseRecords.length)+' 条</div></div>';
   html += '<div><div style="font-size:13px;opacity:0.85;">总记录</div><div style="font-size:24px;font-weight:700;margin-top:2px;">'+records.length+' 条</div></div>';
@@ -1698,7 +1965,7 @@ function renderRecap(area){
     html += '<div class="bento-card">';
     html += '<div class="card-title"><span class="card-icon">🛒</span>采购明细<span class="card-subtitle">按金额从高到低排列</span></div>';
     purchaseRecords.sort(function(a,b){return (b.total||0)-(a.total||0);});
-    html += '<div style="overflow-x:auto;"><table class="brand-table"><thead><tr><th>物品</th><th>品牌/型号</th><th>购买地点</th><th>单价</th><th>数量</th><th>总价</th><th>所属阶段</th><th>备注</th></tr></thead><tbody>';
+    html += '<div style="overflow-x:auto;"><table class="brand-table"><thead><tr><th>物品</th><th>品牌/型号</th><th>购买地点</th><th>单价</th><th>数量</th><th>总价</th><th>所属空间/阶段</th><th>备注</th></tr></thead><tbody>';
     for(var i=0;i<purchaseRecords.length;i++){
       var r = purchaseRecords[i];
       html += '<tr>';
@@ -1708,11 +1975,11 @@ function renderRecap(area){
       html += '<td>¥'+(r.price||0).toLocaleString()+'</td>';
       html += '<td>'+r.qty+'</td>';
       html += '<td style="font-weight:700;color:var(--accent);">¥'+(r.total||0).toLocaleString()+'</td>';
-      html += '<td>'+r.stage+'</td>';
+      html += '<td>'+(r.space?esc(r.space):esc(r.stage))+'</td>';
       html += '<td style="font-size:12px;color:var(--text-muted);">'+esc(r.note||'')+'</td>';
       html += '</tr>';
     }
-    html += '<tr style="background:rgba(99,102,241,0.06);font-weight:800;"><td colspan="5" style="text-align:right;">合计</td><td style="color:var(--accent);">¥'+purchaseTotal.toLocaleString()+'</td><td colspan="2"></td></tr>';
+    html += '<tr style="background:rgba(99,102,241,0.06);font-weight:800;"><td colspan="5" style="text-align:right;">合计</td><td style="color:var(--accent);">¥'+purchaseTotalSum.toLocaleString()+'</td><td colspan="2"></td></tr>';
     html += '</tbody></table></div>';
     html += '</div>';
     /* 按阶段支出柱状图 */
