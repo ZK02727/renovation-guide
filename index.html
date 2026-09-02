@@ -269,6 +269,45 @@ table.purchase-table { width:100%; border-collapse:collapse; font-size:13px; min
 .tip-success { background:#dcfce7; border:1px solid #bbf7d0; color:#166534; }
 .tip-danger { background:#fee2e2; border:1px solid #fecaca; color:#991b1b; }
 
+/* ============ 装修监理指南（合并板块） ============ */
+.guide-stage { background:rgba(255,255,255,0.88); border:1px solid rgba(255,255,255,0.6); border-radius:var(--radius-md); padding:20px 22px; margin-bottom:16px; box-shadow:0 2px 8px rgba(0,0,0,0.04); transition:box-shadow .3s ease; }
+.guide-stage:hover { box-shadow:0 6px 20px rgba(0,0,0,0.08); }
+.guide-stage-head { display:flex; align-items:center; gap:10px; margin-bottom:14px; cursor:pointer; }
+.guide-stage-num { width:32px; height:32px; min-width:32px; border-radius:50%; background:var(--accent-grad); color:#fff; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; }
+.guide-stage-title { font-size:18px; font-weight:700; flex:1; }
+.guide-stage-toggle { font-size:14px; color:var(--text-muted); transition:transform .3s ease; }
+.guide-stage.collapsed .guide-stage-toggle { transform:rotate(-90deg); }
+.guide-stage-body { transition:all .3s ease; }
+.guide-stage.collapsed .guide-stage-body { display:none; }
+.guide-sec { margin-bottom:14px; }
+.guide-sec-title { font-size:13px; font-weight:700; margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+.guide-sec-content { font-size:13px; line-height:1.7; color:var(--text-secondary); }
+.guide-sec-content ul { list-style:none; padding:0; margin:0; }
+.guide-sec-content ul li { padding:3px 0 3px 16px; position:relative; }
+.guide-sec-content ul li::before { content:"▸"; position:absolute; left:0; color:var(--accent); font-size:11px; top:4px; }
+.guide-term { background:rgba(255,255,255,0.85); border:1px solid rgba(255,255,255,0.5); border-radius:var(--radius-sm); padding:10px 14px; margin-bottom:6px; cursor:pointer; transition:var(--transition); }
+.guide-term:hover { box-shadow:0 3px 12px rgba(0,0,0,0.06); transform:translateX(2px); }
+.guide-term-head { display:flex; align-items:center; gap:8px; }
+.guide-term-name { font-size:13px; font-weight:700; }
+.guide-term-cat { font-size:10px; color:var(--accent); background:var(--accent-light); padding:2px 8px; border-radius:10px; }
+.guide-term-expand { font-size:12px; color:var(--text-muted); margin-left:auto; transition:transform .3s ease; }
+.guide-term.open .guide-term-expand { transform:rotate(180deg); }
+.guide-term-desc { display:none; font-size:12.5px; line-height:1.7; color:var(--text-secondary); margin-top:8px; padding-top:8px; border-top:1px dashed #e2e8f0; }
+.guide-term.open .guide-term-desc { display:block; }
+.guide-pass { background:#dcfce7; border:1px solid #bbf7d0; border-radius:var(--radius-sm); padding:10px 14px; margin-bottom:6px; }
+.guide-pass-title { font-size:12.5px; font-weight:700; color:#166534; margin-bottom:4px; display:flex; align-items:center; gap:6px; }
+.guide-fail { background:#fee2e2; border:1px solid #fecaca; border-radius:var(--radius-sm); padding:10px 14px; margin-bottom:6px; }
+.guide-fail-title { font-size:12.5px; font-weight:700; color:#991b1b; margin-bottom:4px; display:flex; align-items:center; gap:6px; }
+.guide-fix { background:#fef3c7; border:1px solid #fde68a; border-radius:var(--radius-sm); padding:10px 14px; margin-bottom:6px; }
+.guide-fix-title { font-size:12.5px; font-weight:700; color:#92400e; margin-bottom:4px; display:flex; align-items:center; gap:6px; }
+.guide-sol-card { background:rgba(255,255,255,0.85); border:1px solid rgba(255,255,255,0.5); border-radius:var(--radius-sm); padding:12px 14px; margin-bottom:8px; }
+.guide-sol-issue { font-size:13px; font-weight:700; margin-bottom:8px; }
+.guide-advice-card { background:rgba(255,255,255,0.85); border:1px solid rgba(255,255,255,0.5); border-radius:var(--radius-sm); padding:14px 16px; margin-bottom:8px; }
+.guide-advice-card h4 { font-size:13.5px; font-weight:700; margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+.guide-advice-card ul { list-style:none; padding:0; margin:0; }
+.guide-advice-card ul li { font-size:12.5px; line-height:1.65; color:var(--text-secondary); padding:3px 0 3px 16px; position:relative; }
+.guide-advice-card ul li::before { content:"▸"; position:absolute; left:0; color:var(--accent); font-size:11px; top:4px; }
+
 /* 采购清单（阶段页内） */
 .purchase-mini { background:rgba(255,255,255,0.88); border:1px solid rgba(255,255,255,0.6); border-radius:var(--radius-sm); padding:12px 14px; margin-bottom:8px; transition:box-shadow .3s; }
 .purchase-mini:hover { box-shadow:0 4px 16px rgba(0,0,0,0.06); }
@@ -572,14 +611,8 @@ table.brand-table { width:100%; border-collapse:collapse; font-size:13px; min-wi
     <div class="nav-item" data-tab="purchase" onclick="switchTab('purchase')">
       <span class="nav-icon">🛒</span><span class="nav-label">采购时间表</span>
     </div>
-    <div class="nav-item" data-tab="terms" onclick="switchTab('terms')">
-      <span class="nav-icon">📖</span><span class="nav-label">专业术语</span>
-    </div>
-    <div class="nav-item" data-tab="solutions" onclick="switchTab('solutions')">
-      <span class="nav-icon">🧭</span><span class="nav-label">解决路径</span>
-    </div>
-    <div class="nav-item" data-tab="advice" onclick="switchTab('advice')">
-      <span class="nav-icon">💡</span><span class="nav-label">工作建议</span>
+    <div class="nav-item" data-tab="guide" onclick="switchTab('guide')">
+      <span class="nav-icon">📋</span><span class="nav-label">装修监理指南</span>
     </div>
     <div class="nav-item" data-tab="checklist" onclick="switchTab('checklist')">
       <span class="nav-icon">✅</span><span class="nav-label">验收检查表</span>
@@ -1077,7 +1110,7 @@ function switchTab(tab){
     if(items[i].getAttribute('data-tab')===tab) items[i].classList.add('active');
     else items[i].classList.remove('active');
   }
-  var titles = {overview:'装修进度总览', floorplan:'户型图 · 效果图', stage1:'① 准备阶段', 'stage1.5':'② 设计阶段', stage2:'③ 拆改封窗', stage3:'④ 水电改造', stage4:'⑤ 瓦工阶段', stage5:'⑥ 木工阶段', stage6:'⑦ 油工阶段', stage7:'⑧ 安装阶段', stage8:'⑨ 软装收尾', purchase:'采购时间表', terms:'专业术语', solutions:'解决路径', advice:'工作建议', checklist:'验收检查表', shops:'上海采购地图', brands:'品牌推荐', recap:'采购统计'};
+  var titles = {overview:'装修进度总览', floorplan:'户型图 · 效果图', stage1:'① 准备阶段', 'stage1.5':'② 设计阶段', stage2:'③ 拆改封窗', stage3:'④ 水电改造', stage4:'⑤ 瓦工阶段', stage5:'⑥ 木工阶段', stage6:'⑦ 油工阶段', stage7:'⑧ 安装阶段', stage8:'⑨ 软装收尾', purchase:'采购时间表', guide:'装修监理指南', checklist:'验收检查表', shops:'上海采购地图', brands:'品牌推荐', recap:'采购统计'};
   document.getElementById('main-title').textContent = titles[tab];
   renderContent();
 }
@@ -1089,9 +1122,7 @@ function renderContent(){
   else if(currentTab==='floorplan') renderFloorplan(area);
   else if(currentTab.indexOf('stage')===0) renderStage(area, currentTab);
   else if(currentTab==='purchase') renderPurchase(area);
-  else if(currentTab==='terms') renderTerms(area);
-  else if(currentTab==='solutions') renderSolutions(area);
-  else if(currentTab==='advice') renderAdvice(area);
+  else if(currentTab==='guide') renderGuide(area);
   else if(currentTab==='checklist') renderChecklist(area);
   else if(currentTab==='shops') renderShops(area);
   else if(currentTab==='brands') renderBrands(area);
@@ -1244,6 +1275,69 @@ var ADVICE = [
   {title:'装修中最值得花的钱', icon:'⭐', items:['水电材料（线管、水管、防水）——坏了难修','卫生间防水——渗漏惨重','床垫、智能马桶、龙头花洒——每天都用','设计费——花小钱省大钱（好设计=省空间+省返工）']},
   {title:'装修中最省不得的心', icon:'🧠', items:['水电点位图一定要拍照留底（后期挂画打孔）','每一批材料进场对一下品牌型号','主材色差大，全场同批次购买']}
 ];
+
+/* ============ 装修监理指南数据（合并术语+解决路径+建议，按阶段映射） ============ */
+/* terms: 该阶段相关术语索引（对应 TERMS 数组下标）        */
+/* solutions: 该阶段相关解决路径索引（对应 SOLUTIONS 数组下标） */
+/* advice: 该阶段相关建议索引（对应 ADVICE 数组下标）         */
+/* pass: 怎么算做好了 | fail: 怎么算没做好 | fix: 没做好怎么弥补 */
+var STAGE_GUIDE = {
+  stage1: {
+    terms:[0,12], solutions:[0,1,2,8,9,10], advice:[0,1],
+    pass:['预算清单已写进合同附件，每项都有品牌型号','装修方式已确定（全包/半包/清包/全案），签约前对比了2-3家','全屋定制、中央空调、新风等设备商家已谈妥','留有10%-15%机动预算','合同明确工期、增项规则、验收标准、质保年限'],
+    fail:['只有口头报价没有书面清单','没对比就匆忙签约','定制类商家一个都没定','预算卡死没有机动空间','合同里增项规则不清晰、质保没写'],
+    fix:['签约前补签明细报价附件','增项上限写进补充协议','立刻开始联系定制类商家','挤出10%作为安全垫','请懂行的朋友或第三方审合同']
+  },
+  'stage1.5': {
+    terms:[], solutions:[], advice:[],
+    pass:['平面布局方案已定稿（2版以上对比后选定）','全屋水电点位图定稿并留档','主材已定样（瓷砖、地板、乳胶漆花色）','灯光设计方案确认（主灯/筒灯/射灯位置数量）','全屋定制柜体方案确认'],
+    fail:['只有一张平面图，没有水电点位图','主材花色还没定就开始施工','灯光设计没做，到安装阶段才想起','柜体方案模糊，尺寸没确认','设计频繁变更未定稿'],
+    fix:['立刻让设计师补出水电点位图','停工定主材再继续','紧急联系灯具商家做灯光方案','定制商家现场复尺','冻结设计变更，签字确认后继续']
+  },
+  stage2: {
+    terms:[2,10], solutions:[], advice:[],
+    pass:['承重墙位置已确认，无破坏','非承重墙按设计拆除到位','封窗已完成（断桥铝双层中空）','垃圾清运完毕','更换防盗门（瓦工前完成）'],
+    fail:['承重墙被破坏','封窗没做就先进场瓦工','垃圾堆满影响后续施工','门洞尺寸不符合设计','拆除范围不对'],
+    fix:['承重墙立即加固、请结构工程师评估','赶紧安排封窗、延迟瓦工进场','加急清运垃圾','重新测量修正门洞','按图纸修正拆除范围']
+  },
+  stage3: {
+    terms:[1,3,15], solutions:[3], advice:[4,5],
+    pass:['水电交底各方到场（设计师、水电工、橱柜师傅、设备商家）','所有点位在墙面弹线确认','强弱电分离、线径达标','水管打压0.8MPa 30分钟以上合格','闭水试验48小时无渗漏','线路拍照留底'],
+    fail:['没做水电交底就开工','点位没确认就开槽','强弱电同管、线径不够','没做打压测试','闭水试验没做或时间不够','没有留线路图'],
+    fix:['暂停施工补做交底','重新弹线确认点位','返工重走不合格线路','补做打压测试','补做闭水试验（48小时以上）','全屋拍照、绘制线路图留档']
+  },
+  stage4: {
+    terms:[4,7,8,19,20], solutions:[4,5], advice:[],
+    pass:['防水至少两遍+闭水试验48小时合格','瓷砖无空鼓（地砖全检无空鼓、墙砖≤5%）','地面坡度正确（泼水测试流向地漏）','美缝在水泥干透后施工','过门石/窗台石已安装'],
+    fail:['防水只做一遍或闭水试验没做','瓷砖空鼓率超标','地面坡度不对导致积水','美缝在水泥没干透就做','过门石没装'],
+    fix:['重做防水+补做闭水试验','空鼓砖返工重贴','返工修正坡度','铲除美缝重做','补装过门石']
+  },
+  stage5: {
+    terms:[9,11,13,14,21], solutions:[], advice:[],
+    pass:['吊顶平整无开裂','全屋定制柜体尺寸精准、与墙面严丝合缝','板材环保等级达标（ENF/E0）','封边工艺合格（无溢胶、缝隙细）','五金品牌确认（铰链、滑轨）'],
+    fail:['吊顶不平、有裂缝','柜体与墙面有大缝','板材环保不达标、有刺鼻气味','封边溢胶、缝隙大','五金杂牌、开关不顺'],
+    fix:['吊顶裂缝处挂网重新批刮','定制商家调校或返工','要求更换达标板材','返工重封边','更换品牌五金']
+  },
+  stage6: {
+    terms:[5,6], solutions:[6], advice:[],
+    pass:['墙面平整（2米靠尺误差≤3mm）','阴阳角垂直','腻子2-3遍每遍晾干','乳胶漆无色差、无流坠','底漆1遍+面漆2遍完成'],
+    fail:['墙面不平整、波浪纹','阴阳角不直','腻子没干就刷漆导致开裂','有色差或流坠','只刷面漆没刷底漆'],
+    fix:['冲筋找平返工','阴阳角返工做直','铲除后重新刮腻子','补漆修正色差和流坠','补刷底漆']
+  },
+  stage7: {
+    terms:[16,18], solutions:[6,10], advice:[2],
+    pass:['安装顺序正确（先大后小、先里后外）','所有洁具、灯具、开关、家电安装到位','止逆阀已安装','下水通畅、电路通电','每个安装师傅完工后现场验收'],
+    fail:['安装顺序混乱导致返工','止逆阀没装（卫生间反味）','下水堵塞或电路不通','安装完没有验收就放师傅走','尺寸不对装不上'],
+    fix:['调整安装顺序、协调交叉作业','补装止逆阀','疏通下水、排查电路','抓紧验收、有问题当场要求整改','联系商家换货或定制']
+  },
+  stage8: {
+    terms:[17], solutions:[11], advice:[3],
+    pass:['家具尺寸确认能进电梯/楼梯','硬装结束通风3个月以上','甲醛检测合格','软装比例协调','质保卡和合同归档'],
+    fail:['家具买来进不了门','没有通风就入住','甲醛超标','软装和硬装风格不搭','质保资料丢失'],
+    fix:['家具拆窗吊装或退货换小尺寸','立即开窗通风+空气净化器','治理甲醛（活性炭/光触媒）后再检测','逐步调整软装','联系装修公司和商家补质保卡']
+  }
+};
+
 /* ============ 总览仪表盘 ============ */
 function renderOverview(area){
   var st = getAllStats();
@@ -1629,64 +1723,140 @@ function clearPurRec(name){
   renderContent();
 }
 
-/* ============ 专业术语 ============ */
-function renderTerms(area){
-  var html = '';
-  html += '<div class="bento-card">';
-  html += '<div class="card-title"><span class="card-icon">📖</span>装修专业术语表<span class="card-subtitle">点击展开解释 · 共 '+TERMS.length+' 个词条</span></div>';
-  html += '<div class="term-list">';
-  for(var i=0;i<TERMS.length;i++){
-    var t = TERMS[i];
-    html += '<div class="term-item" onclick="toggleTerm('+i+')">';
-    html += '<div class="term-head"><span class="term-name">'+t.name+'</span><span class="term-cat">'+t.cat+'</span><span class="term-expand">▼</span></div>';
-    html += '<div class="term-desc">'+t.desc+'</div>';
-    html += '</div>';
-  }
-  html += '</div></div>';
-  area.innerHTML = html;
+/* ============ 装修监理指南（合并术语+解决路径+建议） ============ */
+var guideExpandState = {};
+function toggleGuideStage(stageKey){
+  guideExpandState[stageKey] = !guideExpandState[stageKey];
+  var el = document.getElementById('guide-stage-'+stageKey);
+  if(el) el.classList.toggle('collapsed');
 }
-function toggleTerm(idx){
-  var items = document.querySelectorAll('.term-item');
+function toggleGuideTerm(idx){
+  var items = document.querySelectorAll('.guide-term');
   if(items[idx]) items[idx].classList.toggle('open');
 }
-
-/* ============ 解决路径 ============ */
-function renderSolutions(area){
+function renderGuide(area){
+  var stageOrder = ['stage1','stage1.5','stage2','stage3','stage4','stage5','stage6','stage7','stage8'];
+  var stageIcons = {'stage1':'📋','stage1.5':'📐','stage2':'🔨','stage3':'⚡','stage4':'🧱','stage5':'🪵','stage6':'🎨','stage7':'🔧','stage8':'🛋️'};
   var html = '';
   html += '<div class="bento-card">';
-  html += '<div class="card-title"><span class="card-icon">🛠️</span>常见问题解决路径<span class="card-subtitle">遇到问题直接找路径</span></div>';
-  html += '<div class="tip-box tip-warn"><span class="tip-ic">⚠️</span><div>装修没有完美，重点是<b>问题发生时有路径、有预案</b>。以下是最常见的 12 类问题及解决步骤。</div></div>';
-  for(var i=0;i<SOLUTIONS.length;i++){
-    var s = SOLUTIONS[i];
-    html += '<div class="info-card" style="margin-bottom:10px;">';
-    html += '<h4>❓ '+s.issue+'</h4>';
-    html += '<div class="path-steps">';
-    for(var j=0;j<s.steps.length;j++){
-      html += '<span class="path-step">'+s.steps[j]+'</span>';
-      if(j<s.steps.length-1) html += '<span class="path-arrow">→</span>';
+  html += '<div class="card-title"><span class="card-icon">📋</span>装修监理指南<span class="card-subtitle">从准备到软装 · 让外行达到监理水平 · 共9个阶段</span></div>';
+  html += '<div class="tip-box tip-info"><span class="tip-ic">💡</span><div>本指南按施工阶段组织，每个阶段包含<b>做什么、怎么做、涉及术语、关注点、合格标准、不合格标准、补救措施、经验建议</b>。点击阶段标题可折叠/展开。</div></div>';
+
+  /* 收集所有阶段用到的术语（用于全局编号） */
+  var termGlobalIdx = 0;
+
+  for(var si=0; si<stageOrder.length; si++){
+    var sk = stageOrder[si];
+    var sd = STAGE_DETAILS[sk];
+    var sg = STAGE_GUIDE[sk] || {terms:[],solutions:[],advice:[],pass:[],fail:[],fix:[]};
+    var icon = stageIcons[sk] || '📌';
+
+    html += '<div class="guide-stage" id="guide-stage-'+sk+'">';
+    /* 阶段标题 */
+    html += '<div class="guide-stage-head" onclick="toggleGuideStage(\''+sk+'\')">';
+    html += '<div class="guide-stage-num">'+(si+1)+'</div>';
+    html += '<div class="guide-stage-title">'+icon+' '+sd.name+'</div>';
+    html += '<div class="guide-stage-toggle">▼</div>';
+    html += '</div>';
+    html += '<div class="guide-stage-body">';
+
+    /* 1. 做什么 */
+    html += '<div class="guide-sec"><div class="guide-sec-title">📌 做什么</div><div class="guide-sec-content">'+sd.what+'</div></div>';
+
+    /* 2. 为什么重要 */
+    html += '<div class="guide-sec"><div class="guide-sec-title">💡 为什么重要</div><div class="guide-sec-content">'+sd.why+'</div></div>';
+
+    /* 3. 怎么做 */
+    html += '<div class="guide-sec"><div class="guide-sec-title">🔨 怎么做</div><div class="guide-sec-content"><ul>';
+    for(var k=0; k<sd.how.length; k++){ html += '<li>'+sd.how[k]+'</li>'; }
+    html += '</ul></div></div>';
+
+    /* 4. 涉及专业术语 */
+    if(sg.terms.length > 0){
+      html += '<div class="guide-sec"><div class="guide-sec-title">📖 涉及专业术语</div>';
+      for(var ti=0; ti<sg.terms.length; ti++){
+        var t = TERMS[sg.terms[ti]];
+        html += '<div class="guide-term" onclick="toggleGuideTerm('+termGlobalIdx+')">';
+        html += '<div class="guide-term-head"><span class="guide-term-name">'+t.name+'</span><span class="guide-term-cat">'+t.cat+'</span><span class="guide-term-expand">▼</span></div>';
+        html += '<div class="guide-term-desc">'+t.desc+'</div>';
+        html += '</div>';
+        termGlobalIdx++;
+      }
+      html += '</div>';
     }
-    html += '</div>';
-    html += '<div style="margin-top:10px;" class="path-solution" style="display:inline-block;">✅ 解决方案：'+s.solution+'</div>';
-    html += '</div>';
-  }
-  html += '</div>';
-  area.innerHTML = html;
-}
 
-/* ============ 工作建议 ============ */
-function renderAdvice(area){
-  var html = '';
-  html += '<div class="bento-card">';
-  html += '<div class="card-title"><span class="card-icon">💡</span>装修工作建议<span class="card-subtitle">过来人的经验总结</span></div>';
-  html += '<div class="grid-3">';
-  for(var i=0;i<ADVICE.length;i++){
-    var a = ADVICE[i];
-    html += '<div class="info-card">';
-    html += '<h4>'+a.icon+' '+a.title+'</h4><ul>';
-    for(var j=0;j<a.items.length;j++){ html += '<li>'+a.items[j]+'</li>'; }
-    html += '</ul></div>';
+    /* 5. 关注点 */
+    html += '<div class="guide-sec"><div class="guide-sec-title">🎯 关注点</div><div class="guide-sec-content">'+sd.focus+'</div></div>';
+
+    /* 6. 怎么算做好了 */
+    if(sg.pass.length > 0){
+      html += '<div class="guide-sec"><div class="guide-sec-title">✅ 怎么算做好了</div>';
+      for(var pi=0; pi<sg.pass.length; pi++){
+        html += '<div class="guide-pass"><div class="guide-pass-title">✓</div><div class="guide-sec-content">'+sg.pass[pi]+'</div></div>';
+      }
+      html += '</div>';
+    }
+
+    /* 7. 怎么算没做好 */
+    if(sg.fail.length > 0){
+      html += '<div class="guide-sec"><div class="guide-sec-title">❌ 怎么算没做好</div>';
+      for(var fi=0; fi<sg.fail.length; fi++){
+        html += '<div class="guide-fail"><div class="guide-fail-title">✗</div><div class="guide-sec-content">'+sg.fail[fi]+'</div></div>';
+      }
+      html += '</div>';
+    }
+
+    /* 8. 没做好怎么弥补 */
+    if(sg.fix.length > 0){
+      html += '<div class="guide-sec"><div class="guide-sec-title">🔧 没做好怎么弥补</div>';
+      for(var xi=0; xi<sg.fix.length; xi++){
+        html += '<div class="guide-fix"><div class="guide-fix-title">↻</div><div class="guide-sec-content">'+sg.fix[xi]+'</div></div>';
+      }
+      html += '</div>';
+    }
+
+    /* 9. 常见问题与解决路径 */
+    if(sg.solutions.length > 0){
+      html += '<div class="guide-sec"><div class="guide-sec-title">🧭 常见问题与解决路径</div>';
+      for(var soli=0; soli<sg.solutions.length; soli++){
+        var s = SOLUTIONS[sg.solutions[soli]];
+        html += '<div class="guide-sol-card">';
+        html += '<div class="guide-sol-issue">❓ '+s.issue+'</div>';
+        html += '<div class="path-steps">';
+        for(var sj=0; sj<s.steps.length; sj++){
+          html += '<span class="path-step">'+s.steps[sj]+'</span>';
+          if(sj<s.steps.length-1) html += '<span class="path-arrow">→</span>';
+        }
+        html += '</div>';
+        html += '<div style="margin-top:8px;" class="path-solution">✅ '+s.solution+'</div>';
+        html += '</div>';
+      }
+      html += '</div>';
+    }
+
+    /* 10. 经验建议 */
+    if(sg.advice.length > 0){
+      html += '<div class="guide-sec"><div class="guide-sec-title">💡 经验建议</div>';
+      for(var ai=0; ai<sg.advice.length; ai++){
+        var a = ADVICE[sg.advice[ai]];
+        html += '<div class="guide-advice-card">';
+        html += '<h4>'+a.icon+' '+a.title+'</h4><ul>';
+        for(var aj=0; aj<a.items.length; aj++){ html += '<li>'+a.items[aj]+'</li>'; }
+        html += '</ul></div>';
+      }
+      html += '</div>';
+    }
+
+    /* 11. 阶段贴士 */
+    if(sd.tip){
+      html += '<div class="tip-box tip-warn" style="margin-top:10px;"><span class="tip-ic">⚠️</span><div>'+sd.tip+'</div></div>';
+    }
+
+    html += '</div>'; /* guide-stage-body */
+    html += '</div>'; /* guide-stage */
   }
-  html += '</div></div>';
+
+  html += '</div>';
   area.innerHTML = html;
 }
 
