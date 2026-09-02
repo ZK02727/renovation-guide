@@ -270,43 +270,56 @@ table.purchase-table { width:100%; border-collapse:collapse; font-size:13px; min
 .tip-danger { background:#fee2e2; border:1px solid #fecaca; color:#991b1b; }
 
 /* ============ 装修监理指南（合并板块） ============ */
-.guide-stage { background:rgba(255,255,255,0.88); border:1px solid rgba(255,255,255,0.6); border-radius:var(--radius-sm); padding:10px 14px; margin-bottom:6px; box-shadow:0 1px 4px rgba(0,0,0,0.03); transition:box-shadow .3s ease; }
-.guide-stage:hover { box-shadow:0 3px 12px rgba(0,0,0,0.06); }
-.guide-stage-head { display:flex; align-items:center; gap:8px; cursor:pointer; }
-.guide-stage-num { width:24px; height:24px; min-width:24px; border-radius:50%; background:var(--accent-grad); color:#fff; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; }
-.guide-stage-title { font-size:14px; font-weight:700; flex:1; }
-.guide-stage-toggle { font-size:12px; color:var(--text-muted); transition:transform .3s ease; }
+.guide-stage { background:rgba(255,255,255,0.88); border:1px solid rgba(255,255,255,0.6); border-radius:var(--radius-md); padding:16px 20px; margin-bottom:8px; box-shadow:0 2px 8px rgba(0,0,0,0.04); transition:box-shadow .3s ease; }
+.guide-stage:hover { box-shadow:0 4px 16px rgba(0,0,0,0.07); }
+.guide-stage-head { display:flex; align-items:center; gap:10px; cursor:pointer; }
+.guide-stage-num { width:28px; height:28px; min-width:28px; border-radius:50%; background:var(--accent-grad); color:#fff; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; }
+.guide-stage-title { font-size:16px; font-weight:700; flex:1; }
+.guide-stage-toggle { font-size:13px; color:var(--text-muted); transition:transform .3s ease; }
 .guide-stage.collapsed .guide-stage-toggle { transform:rotate(-90deg); }
-.guide-stage-body { transition:all .3s ease; padding-top:10px; border-top:1px dashed #e2e8f0; margin-top:8px; }
+.guide-stage-body { transition:all .3s ease; padding-top:12px; border-top:1px dashed #e2e8f0; margin-top:8px; }
 .guide-stage.collapsed .guide-stage-body { display:none; }
-.guide-sec { margin-bottom:8px; }
-.guide-sec-title { font-size:12px; font-weight:700; margin-bottom:4px; display:flex; align-items:center; gap:5px; }
-.guide-sec-content { font-size:12px; line-height:1.6; color:var(--text-secondary); }
+.guide-sec { margin-bottom:10px; }
+.guide-sec-title { font-size:13px; font-weight:700; margin-bottom:6px; display:flex; align-items:center; gap:6px; }
+.guide-sec-content { font-size:13px; line-height:1.7; color:var(--text-secondary); }
 .guide-sec-content ul { list-style:none; padding:0; margin:0; }
-.guide-sec-content ul li { padding:2px 0 2px 14px; position:relative; }
-.guide-sec-content ul li::before { content:"▸"; position:absolute; left:0; color:var(--accent); font-size:10px; top:3px; }
-.guide-term { background:rgba(255,255,255,0.85); border:1px solid rgba(255,255,255,0.5); border-radius:var(--radius-sm); padding:7px 10px; margin-bottom:4px; cursor:pointer; transition:var(--transition); }
-.guide-term:hover { box-shadow:0 2px 8px rgba(0,0,0,0.05); transform:translateX(2px); }
-.guide-term-head { display:flex; align-items:center; gap:6px; }
-.guide-term-name { font-size:12px; font-weight:700; }
-.guide-term-cat { font-size:9px; color:var(--accent); background:var(--accent-light); padding:1px 6px; border-radius:8px; }
-.guide-term-expand { font-size:10px; color:var(--text-muted); margin-left:auto; transition:transform .3s ease; }
+.guide-sec-content ul li { padding:3px 0 3px 16px; position:relative; }
+.guide-sec-content ul li::before { content:"▸"; position:absolute; left:0; color:var(--accent); font-size:11px; top:4px; }
+/* 做什么+为什么重要 双列 */
+.guide-dual { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:10px; }
+@media(max-width:700px){ .guide-dual { grid-template-columns:1fr; } }
+.guide-dual-item { background:rgba(255,255,255,0.6); border-radius:var(--radius-sm); padding:10px 14px; }
+.guide-dual-label { font-size:13px; font-weight:700; margin-bottom:4px; display:flex; align-items:center; gap:5px; }
+/* 合格/不合格/补救 对比表 */
+.guide-compare { width:100%; border-collapse:separate; border-spacing:0; margin-bottom:10px; border-radius:var(--radius-sm); overflow:hidden; }
+.guide-compare th { padding:8px 12px; font-size:13px; font-weight:700; text-align:left; }
+.guide-compare th.col-pass { background:#dcfce7; color:#166534; }
+.guide-compare th.col-fail { background:#fee2e2; color:#991b1b; }
+.guide-compare th.col-fix { background:#fef3c7; color:#92400e; }
+.guide-compare td { padding:8px 12px; font-size:13px; line-height:1.6; color:var(--text-secondary); border-bottom:1px solid #f1f5f9; vertical-align:top; }
+.guide-compare tr:last-child td { border-bottom:none; }
+.guide-compare td.td-pass { background:rgba(220,252,231,0.35); }
+.guide-compare td.td-fail { background:rgba(254,226,226,0.35); }
+.guide-compare td.td-fix { background:rgba(254,243,199,0.35); }
+/* 术语 */
+.guide-term { background:rgba(255,255,255,0.85); border:1px solid rgba(255,255,255,0.5); border-radius:var(--radius-sm); padding:10px 14px; margin-bottom:6px; cursor:pointer; transition:var(--transition); }
+.guide-term:hover { box-shadow:0 3px 12px rgba(0,0,0,0.06); transform:translateX(2px); }
+.guide-term-head { display:flex; align-items:center; gap:8px; }
+.guide-term-name { font-size:13px; font-weight:700; }
+.guide-term-cat { font-size:10px; color:var(--accent); background:var(--accent-light); padding:2px 8px; border-radius:10px; }
+.guide-term-expand { font-size:12px; color:var(--text-muted); margin-left:auto; transition:transform .3s ease; }
 .guide-term.open .guide-term-expand { transform:rotate(180deg); }
-.guide-term-desc { display:none; font-size:11.5px; line-height:1.6; color:var(--text-secondary); margin-top:6px; padding-top:6px; border-top:1px dashed #e2e8f0; }
+.guide-term-desc { display:none; font-size:13px; line-height:1.7; color:var(--text-secondary); margin-top:8px; padding-top:8px; border-top:1px dashed #e2e8f0; }
 .guide-term.open .guide-term-desc { display:block; }
-.guide-pass { background:#dcfce7; border:1px solid #bbf7d0; border-radius:var(--radius-sm); padding:6px 10px; margin-bottom:4px; }
-.guide-pass-title { font-size:11.5px; font-weight:700; color:#166534; margin-bottom:2px; display:flex; align-items:center; gap:4px; }
-.guide-fail { background:#fee2e2; border:1px solid #fecaca; border-radius:var(--radius-sm); padding:6px 10px; margin-bottom:4px; }
-.guide-fail-title { font-size:11.5px; font-weight:700; color:#991b1b; margin-bottom:2px; display:flex; align-items:center; gap:4px; }
-.guide-fix { background:#fef3c7; border:1px solid #fde68a; border-radius:var(--radius-sm); padding:6px 10px; margin-bottom:4px; }
-.guide-fix-title { font-size:11.5px; font-weight:700; color:#92400e; margin-bottom:2px; display:flex; align-items:center; gap:4px; }
-.guide-sol-card { background:rgba(255,255,255,0.85); border:1px solid rgba(255,255,255,0.5); border-radius:var(--radius-sm); padding:8px 10px; margin-bottom:5px; }
-.guide-sol-issue { font-size:12px; font-weight:700; margin-bottom:5px; }
-.guide-advice-card { background:rgba(255,255,255,0.85); border:1px solid rgba(255,255,255,0.5); border-radius:var(--radius-sm); padding:10px 12px; margin-bottom:5px; }
-.guide-advice-card h4 { font-size:12.5px; font-weight:700; margin-bottom:5px; display:flex; align-items:center; gap:5px; }
+/* 解决路径 */
+.guide-sol-card { background:rgba(255,255,255,0.85); border:1px solid rgba(255,255,255,0.5); border-radius:var(--radius-sm); padding:12px 14px; margin-bottom:8px; }
+.guide-sol-issue { font-size:13px; font-weight:700; margin-bottom:8px; }
+/* 建议卡片 */
+.guide-advice-card { background:rgba(255,255,255,0.85); border:1px solid rgba(255,255,255,0.5); border-radius:var(--radius-sm); padding:14px 16px; margin-bottom:8px; }
+.guide-advice-card h4 { font-size:14px; font-weight:700; margin-bottom:8px; display:flex; align-items:center; gap:6px; }
 .guide-advice-card ul { list-style:none; padding:0; margin:0; }
-.guide-advice-card ul li { font-size:11.5px; line-height:1.55; color:var(--text-secondary); padding:2px 0 2px 14px; position:relative; }
-.guide-advice-card ul li::before { content:"▸"; position:absolute; left:0; color:var(--accent); font-size:10px; top:3px; }
+.guide-advice-card ul li { font-size:13px; line-height:1.65; color:var(--text-secondary); padding:3px 0 3px 16px; position:relative; }
+.guide-advice-card ul li::before { content:"▸"; position:absolute; left:0; color:var(--accent); font-size:11px; top:4px; }
 
 /* 采购清单（阶段页内） */
 .purchase-mini { background:rgba(255,255,255,0.88); border:1px solid rgba(255,255,255,0.6); border-radius:var(--radius-sm); padding:12px 14px; margin-bottom:8px; transition:box-shadow .3s; }
@@ -1740,7 +1753,7 @@ function renderGuide(area){
   var html = '';
   html += '<div class="bento-card">';
   html += '<div class="card-title"><span class="card-icon">📋</span>装修监理指南<span class="card-subtitle">从准备到软装 · 让外行达到监理水平 · 共9个阶段</span></div>';
-  html += '<div class="tip-box tip-info"><span class="tip-ic">💡</span><div>本指南按施工阶段组织，每个阶段包含<b>做什么、怎么做、涉及术语、关注点、合格标准、不合格标准、补救措施、经验建议</b>。点击阶段标题可折叠/展开。</div></div>';
+  html += '<div class="tip-box tip-info"><span class="tip-ic">💡</span><div>本指南按施工阶段组织，每个阶段包含<b>做什么、怎么做、涉及术语、关注点、合格/不合格/补救对照、经验建议</b>。点击阶段标题可折叠/展开。</div></div>';
 
   /* 收集所有阶段用到的术语（用于全局编号） */
   var termGlobalIdx = 0;
@@ -1760,11 +1773,11 @@ function renderGuide(area){
     html += '</div>';
     html += '<div class="guide-stage-body">';
 
-    /* 1. 做什么 */
-    html += '<div class="guide-sec"><div class="guide-sec-title">📌 做什么</div><div class="guide-sec-content">'+sd.what+'</div></div>';
-
-    /* 2. 为什么重要 */
-    html += '<div class="guide-sec"><div class="guide-sec-title">💡 为什么重要</div><div class="guide-sec-content">'+sd.why+'</div></div>';
+    /* 1+2. 做什么 & 为什么重要（双列并排） */
+    html += '<div class="guide-dual">';
+    html += '<div class="guide-dual-item"><div class="guide-dual-label">📌 做什么</div><div class="guide-sec-content">'+sd.what+'</div></div>';
+    html += '<div class="guide-dual-item"><div class="guide-dual-label">💡 为什么重要</div><div class="guide-sec-content">'+sd.why+'</div></div>';
+    html += '</div>';
 
     /* 3. 怎么做 */
     html += '<div class="guide-sec"><div class="guide-sec-title">🔨 怎么做</div><div class="guide-sec-content"><ul>';
@@ -1788,31 +1801,19 @@ function renderGuide(area){
     /* 5. 关注点 */
     html += '<div class="guide-sec"><div class="guide-sec-title">🎯 关注点</div><div class="guide-sec-content">'+sd.focus+'</div></div>';
 
-    /* 6. 怎么算做好了 */
+    /* 6+7+8. 合格 / 不合格 / 补救 对比表 */
     if(sg.pass.length > 0){
-      html += '<div class="guide-sec"><div class="guide-sec-title">✅ 怎么算做好了</div>';
-      for(var pi=0; pi<sg.pass.length; pi++){
-        html += '<div class="guide-pass"><div class="guide-pass-title">✓</div><div class="guide-sec-content">'+sg.pass[pi]+'</div></div>';
+      html += '<div class="guide-sec"><div class="guide-sec-title">⚖️ 合格 / 不合格 / 补救对照</div>';
+      html += '<table class="guide-compare">';
+      html += '<tr><th class="col-pass">✅ 合格标准</th><th class="col-fail">❌ 不合格标准</th><th class="col-fix">🔧 补救措施</th></tr>';
+      for(var ci=0; ci<sg.pass.length; ci++){
+        html += '<tr>';
+        html += '<td class="td-pass">'+(sg.pass[ci]||'')+'</td>';
+        html += '<td class="td-fail">'+(sg.fail[ci]||'')+'</td>';
+        html += '<td class="td-fix">'+(sg.fix[ci]||'')+'</td>';
+        html += '</tr>';
       }
-      html += '</div>';
-    }
-
-    /* 7. 怎么算没做好 */
-    if(sg.fail.length > 0){
-      html += '<div class="guide-sec"><div class="guide-sec-title">❌ 怎么算没做好</div>';
-      for(var fi=0; fi<sg.fail.length; fi++){
-        html += '<div class="guide-fail"><div class="guide-fail-title">✗</div><div class="guide-sec-content">'+sg.fail[fi]+'</div></div>';
-      }
-      html += '</div>';
-    }
-
-    /* 8. 没做好怎么弥补 */
-    if(sg.fix.length > 0){
-      html += '<div class="guide-sec"><div class="guide-sec-title">🔧 没做好怎么弥补</div>';
-      for(var xi=0; xi<sg.fix.length; xi++){
-        html += '<div class="guide-fix"><div class="guide-fix-title">↻</div><div class="guide-sec-content">'+sg.fix[xi]+'</div></div>';
-      }
-      html += '</div>';
+      html += '</table></div>';
     }
 
     /* 9. 常见问题与解决路径 */
