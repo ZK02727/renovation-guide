@@ -270,6 +270,32 @@ table.purchase-table { width:100%; border-collapse:collapse; font-size:13px; min
 .tip-danger { background:#fee2e2; border:1px solid #fecaca; color:#991b1b; }
 
 /* ============ 装修监理指南（攻略式步骤） ============ */
+/* 阶段总览卡片 */
+.guide-overview-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:14px; margin-top:14px; }
+.guide-ov-card { background:rgba(255,255,255,0.9); border:1px solid rgba(255,255,255,0.7); border-radius:var(--radius-md); padding:16px 18px; cursor:pointer; box-shadow:0 2px 10px rgba(0,0,0,0.05); transition:all .25s ease; position:relative; overflow:hidden; }
+.guide-ov-card:hover { transform:translateY(-3px); box-shadow:0 8px 24px rgba(99,102,241,0.15); border-color:var(--accent); }
+.guide-ov-card.ov-done { border-left:4px solid #22c55e; }
+.guide-ov-card.ov-doing { border-left:4px solid #f59e0b; }
+.guide-ov-card.ov-todo { border-left:4px solid #cbd5e1; }
+.guide-ov-head { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+.guide-ov-num { width:26px; height:26px; min-width:26px; border-radius:50%; background:linear-gradient(135deg,#6366f1,#8b5cf6); color:#fff; display:flex; align-items:center; justify-content:center; font-size:12.5px; font-weight:700; }
+.guide-ov-icon { font-size:22px; }
+.guide-ov-info { flex:1; min-width:0; }
+.guide-ov-name { font-size:15px; font-weight:700; }
+.guide-ov-period { font-size:12px; color:var(--text-muted); margin-top:1px; }
+.guide-ov-intro { font-size:12.5px; line-height:1.65; color:var(--text-secondary); margin-bottom:10px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.guide-ov-bar { height:6px; background:#eef2f7; border-radius:4px; overflow:hidden; margin-bottom:6px; }
+.guide-ov-bar i { display:block; height:100%; background:linear-gradient(90deg,#6366f1,#8b5cf6); border-radius:4px; transition:width .4s ease; }
+.guide-ov-card.ov-done .guide-ov-bar i { background:linear-gradient(90deg,#22c55e,#4ade80); }
+.guide-ov-foot { display:flex; justify-content:space-between; align-items:center; font-size:12px; color:var(--text-muted); margin-bottom:8px; }
+.guide-ov-pct { font-weight:700; font-size:13px; color:var(--accent); }
+.guide-ov-card.ov-done .guide-ov-pct { color:#16a34a; }
+.guide-ov-enter { font-size:12.5px; font-weight:700; color:var(--accent); padding-top:8px; border-top:1px dashed #e2e8f0; text-align:center; }
+.guide-ov-card:hover .guide-ov-enter { color:#4f46e5; }
+/* 环节页内攻略容器 */
+.stage-guide-wrap { margin-top:4px; }
+.stage-guide-wrap .guide-step:last-child { margin-bottom:0; }
+/* 攻略步骤 */
 .guide-stage { background:rgba(255,255,255,0.88); border:1px solid rgba(255,255,255,0.6); border-radius:var(--radius-md); padding:16px 20px; margin-bottom:8px; box-shadow:0 2px 8px rgba(0,0,0,0.04); transition:box-shadow .3s ease; }
 .guide-stage:hover { box-shadow:0 4px 16px rgba(0,0,0,0.07); }
 .guide-stage-head { display:flex; align-items:center; gap:10px; cursor:pointer; }
@@ -607,7 +633,7 @@ table.brand-table { width:100%; border-collapse:collapse; font-size:13px; min-wi
       <span class="nav-icon">🗺️</span><span class="nav-label">户型图</span>
     </div>
     <div class="nav-item" data-tab="guide" onclick="switchTab('guide')">
-      <span class="nav-icon">📋</span><span class="nav-label">装修监理指南</span>
+      <span class="nav-icon">🗂️</span><span class="nav-label">阶段总览</span>
     </div>
     <div class="nav-divider"></div>
     <div class="nav-item" data-tab="stage1" onclick="switchTab('stage1')">
@@ -1146,7 +1172,7 @@ function switchTab(tab){
     if(items[i].getAttribute('data-tab')===tab) items[i].classList.add('active');
     else items[i].classList.remove('active');
   }
-  var titles = {overview:'装修进度总览', floorplan:'户型图 · 效果图', stage1:'① 准备阶段', 'stage1.5':'② 设计阶段', stage2:'③ 拆改封窗', stage3:'④ 水电改造', stage4:'⑤ 瓦工阶段', stage5:'⑥ 木工阶段', stage6:'⑦ 油工阶段', stage7:'⑧ 安装阶段', stage8:'⑨ 软装收尾', purchase:'采购时间表', guide:'装修监理指南', checklist:'验收检查表', shops:'上海采购地图', brands:'品牌推荐', recap:'采购统计'};
+  var titles = {overview:'装修进度总览', floorplan:'户型图 · 效果图', stage1:'① 准备阶段', 'stage1.5':'② 设计阶段', stage2:'③ 拆改封窗', stage3:'④ 水电改造', stage4:'⑤ 瓦工阶段', stage5:'⑥ 木工阶段', stage6:'⑦ 油工阶段', stage7:'⑧ 安装阶段', stage8:'⑨ 软装收尾', purchase:'采购时间表', guide:'阶段总览', checklist:'验收检查表', shops:'上海采购地图', brands:'品牌推荐', recap:'采购统计'};
   document.getElementById('main-title').textContent = titles[tab];
   renderContent();
 }
@@ -1764,6 +1790,19 @@ function renderStage(area, stageId){
   html += '<div class="stage-bar"><i style="width:'+pct+'%"></i></div>';
   html += '</div>';
 
+  /* 阶段攻略（合并自监理指南：简介+全部步骤+阶段贴士） */
+  var gs = GUIDE_STEPS[stageId];
+  if(gs){
+    var gDone = getGuideStageDone(stageId), gTotal = getGuideStageTotal(stageId);
+    html += '<div class="bento-card">';
+    html += '<div class="card-title"><span class="card-icon">🎮</span>阶段攻略<span class="card-subtitle">'+(gTotal?('攻略进度 '+gDone+'/'+gTotal+' 步'):'')+' · 勾选+作答后点「确认完成」</span></div>';
+    html += '<div class="stage-guide-wrap">';
+    html += buildGuideStepsHTML(stageId, gs);
+    html += buildGuideTipHTML(gs);
+    html += '</div>';
+    html += '</div>';
+  }
+
   html += '<div class="bento-card">';
   html += '<div class="card-title"><span class="card-icon">✅</span>本阶段任务清单<span class="card-subtitle">勾选完成 · 可展开记录采购或决策内容</span></div>';
   html += '<div class="check-list">';
@@ -2139,149 +2178,177 @@ function undoGuideStep(stKey){
   saveProgress();
   renderContent();
 }
+/* ============ 攻略步骤渲染（公共） ============ */
+/* 生成某阶段的完整攻略HTML（简介+全部步骤，含交互）。数据键保持 guide_<sk>_<i> 不变。 */
+function buildGuideStepsHTML(sk, gs){
+  var html = '';
+  if(gs && gs.intro){
+    html += '<div class="guide-stage-intro">'+gs.intro+'</div>';
+  }
+  if(gs && gs.steps){
+    for(var sti=0; sti<gs.steps.length; sti++){
+      var step = gs.steps[sti];
+      var stKey = 'guide_' + sk + '_' + sti;
+      var stDone = !!progress[stKey];
+      var stRec = progress['rec_' + stKey] || {};
+      var stChecks = progress['ck_' + stKey] || {};
+
+      html += '<div class="guide-step'+(stDone?' guide-step-done':'')+'">';
+      html += '<div class="guide-step-num">'+(sti+1)+'</div>';
+      html += '<div class="guide-step-body">';
+      html += '<div class="guide-step-title">'+step.title;
+      if(stDone) html += '<span class="guide-step-badge done">✅ 已完成</span>';
+      else html += '<span class="guide-step-badge todo">⏳ 待完成</span>';
+      html += '</div>';
+      html += '<div class="guide-step-desc">'+step.desc+'</div>';
+
+      /* 内联标注：术语/坑 双列 + 验收/补救 双列 */
+      var hasTerm = step.term && step.term.length>0;
+      var hasWarn = step.warn && step.warn.length>0;
+      var hasPass = step.pass && step.pass.length>0;
+      var hasFix = step.fix && step.fix.length>0;
+
+      if(hasTerm || hasWarn){
+        html += '<div class="guide-inline">';
+        if(hasTerm) html += '<div class="guide-inline-item guide-inline-term"><b>📖 术语</b><br>'+step.term+'</div>';
+        if(hasWarn) html += '<div class="guide-inline-item guide-inline-warn"><b>⚠️ 常见坑</b><br>'+step.warn+'</div>';
+        html += '</div>';
+      }
+
+      /* 交互区：勾选清单 + 输入框 + 确认按钮 */
+      html += '<div class="guide-interactive" id="gi-'+stKey+'">';
+      var hasChecks = step.checks && step.checks.length>0;
+      var hasInputs = step.inputs && step.inputs.length>0;
+      /* 计算是否全部完成（用于初始按钮状态） */
+      var allCkInit = true;
+      if(hasChecks){
+        for(var cii=0; cii<step.checks.length; cii++){
+          if(!stChecks['ck_'+stKey+'_'+cii]){ allCkInit = false; break; }
+        }
+      }
+      var allInInit = true;
+      if(hasInputs){
+        for(var iii=0; iii<step.inputs.length; iii++){
+          if(step.inputs[iii].type==='text') continue;
+          if(!stRec['in_'+stKey+'_'+iii]){ allInInit = false; break; }
+        }
+      }
+      var canConfirm = allCkInit && allInInit;
+      if(hasChecks){
+        html += '<div class="guide-sec-label">📋 检查清单（逐项勾选）</div>';
+        html += '<ul class="guide-check-list">';
+        for(var ci=0; ci<step.checks.length; ci++){
+          var ck = 'ck_'+stKey+'_'+ci;
+          var cDone = !!stChecks[ck];
+          html += '<li class="'+(cDone?'checked':'')+'" data-ci="'+ci+'" onclick="toggleGuideCheck(\''+stKey+'\',\''+ci+'\')"><span class="guide-check-box">'+(cDone?'✓':'')+'</span><span>'+step.checks[ci]+'</span></li>';
+        }
+        html += '</ul>';
+      }
+      if(hasInputs){
+        html += '<div class="guide-sec-label">📝 选择题（点选即可）</div>';
+        for(var ii=0; ii<step.inputs.length; ii++){
+          var inp = step.inputs[ii];
+          var inKey = 'in_'+stKey+'_'+ii;
+          var savedVal = stRec[inKey] || '';
+          if(inp.type==='choice'){
+            html += '<div class="guide-choice-group">';
+            html += '<div class="guide-choice-label">'+inp.label+'</div>';
+            html += '<div class="guide-choice-btns">';
+            for(var oi=0; oi<inp.options.length; oi++){
+              var opt = inp.options[oi];
+              html += '<span class="guide-choice-btn'+(savedVal===opt?' selected':'')+'" data-val="'+esc(opt)+'" data-oi="'+oi+'" onclick="selectGuideChoice(\''+stKey+'\',\''+ii+'\',\''+oi+'\')">'+opt+'</span>';
+            }
+            html += '</div></div>';
+          } else {
+            html += '<div class="guide-input-row"><span class="guide-input-label">'+inp.label+'</span><input type="text" id="'+inKey+'" value="'+esc(savedVal)+'" placeholder="'+(inp.ph||'')+'" onblur="saveGuideInput(\''+stKey+'\',\''+ii+'\')"><span class="guide-input-saved'+(savedVal?'':' hidden')+'" id="saved-'+inKey+'">✓ 已存</span></div>';
+          }
+        }
+      }
+      html += '<div class="guide-confirm-row">';
+      if(stDone){
+        html += '<button class="guide-btn guide-btn-undo" onclick="undoGuideStep(\''+stKey+'\')">↩ 撤销确认</button>';
+        html += '<span class="guide-confirm-tip">该步骤已确认完成</span>';
+      } else {
+        html += '<button class="guide-btn guide-btn-confirm" onclick="confirmGuideStep(\''+stKey+'\')"'+(canConfirm?'':' disabled')+'>✅ 确认完成</button>';
+        var initTipMsg = canConfirm ? '全部完成，可以确认了' : (hasChecks && !allCkInit ? '还有清单未勾选' : '') + ((hasChecks && !allCkInit) && (hasInputs && !allInInit) ? '，' : '') + (hasInputs && !allInInit ? '还有选择题未作答' : '') + (canConfirm?'':'，确认按钮暂不可用');
+        html += '<span class="guide-confirm-tip'+(canConfirm?'':' incomplete')+'" id="tip-'+stKey+'">'+initTipMsg+'</span>';
+      }
+      html += '</div>';
+      html += '</div>'; /* guide-interactive */
+
+      if(hasPass || hasFix){
+        html += '<div class="guide-inline">';
+        if(hasPass) html += '<div class="guide-inline-item guide-inline-pass"><b>✅ 验收标准</b><br>'+step.pass+'</div>';
+        if(hasFix) html += '<div class="guide-inline-item guide-inline-fix"><b>🔧 补救措施</b><br>'+step.fix+'</div>';
+        html += '</div>';
+      }
+
+      html += '</div>'; /* guide-step-body */
+      html += '</div>'; /* guide-step */
+    }
+  }
+  return html;
+}
+
+/* 生成某阶段的"攻略提示"（阶段贴士） */
+function buildGuideTipHTML(gs){
+  var html = '';
+  if(gs && gs.tip){
+    html += '<div class="guide-stage-tip"><div class="tip-box tip-warn"><span class="tip-ic">⚠️</span><div>'+gs.tip+'</div></div></div>';
+  }
+  return html;
+}
+
+/* 某阶段攻略步骤完成数统计 */
+function getGuideStageDone(sk){
+  var gs = GUIDE_STEPS[sk];
+  if(!gs || !gs.steps) return 0;
+  var done=0;
+  for(var i=0;i<gs.steps.length;i++){ if(progress['guide_'+sk+'_'+i]) done++; }
+  return done;
+}
+function getGuideStageTotal(sk){
+  var gs = GUIDE_STEPS[sk];
+  return (gs && gs.steps) ? gs.steps.length : 0;
+}
+
+/* ============ 监理指南（阶段总览导航页） ============ */
 function renderGuide(area){
   var stageOrder = ['stage1','stage1.5','stage2','stage3','stage4','stage5','stage6','stage7','stage8'];
   var stageIcons = {'stage1':'📋','stage1.5':'📐','stage2':'🔨','stage3':'⚡','stage4':'🧱','stage5':'🪵','stage6':'🎨','stage7':'🔧','stage8':'🛋️'};
+  var stagePeriod = {};
+  for(var si0=0; si0<STAGES.length; si0++){ stagePeriod[STAGES[si0].id] = STAGES[si0].period; }
   var html = '';
   html += '<div class="bento-card">';
-  html += '<div class="card-title"><span class="card-icon">📋</span>装修监理指南<span class="card-subtitle">从准备到软装 · 攻略式逐步引导 · 共9个阶段</span></div>';
-  html += '<div class="tip-box tip-info"><span class="tip-ic">💡</span><div>本指南像游戏攻略一样，按施工顺序一步步引导你完成每个阶段。每个步骤都包含<b>做什么、勾选确认清单、选择题、其他补充、术语解释、常见坑、验收标准、补救措施</b>。勾选+作答后点击「确认完成」才算完成该步骤。点击阶段标题可折叠/展开。</div></div>';
+  html += '<div class="card-title"><span class="card-icon">📋</span>装修阶段总览<span class="card-subtitle">从准备到软装 · 共9个阶段 · 点击进入详细攻略</span></div>';
+  html += '<div class="tip-box tip-info"><span class="tip-ic">💡</span><div>每个阶段的详细攻略（做什么、勾选清单、选择题、术语、常见坑、验收标准、补救措施）已并入对应阶段页。本页是导航总览，点击卡片进入对应阶段。</div></div>';
 
+  html += '<div class="guide-overview-grid">';
   for(var si=0; si<stageOrder.length; si++){
     var sk = stageOrder[si];
     var sd = STAGE_DETAILS[sk];
     var gs = GUIDE_STEPS[sk];
     var icon = stageIcons[sk] || '📌';
+    var period = stagePeriod[sk] || '';
+    var done = getGuideStageDone(sk), total = getGuideStageTotal(sk);
+    var pct = total ? Math.round(done/total*100) : 0;
+    var cls = pct===100?'ov-done':(pct>0?'ov-doing':'ov-todo');
 
-    html += '<div class="guide-stage collapsed" id="guide-stage-'+sk+'">';
-    /* 阶段标题 */
-    html += '<div class="guide-stage-head" onclick="toggleGuideStage(\''+sk+'\')">';
-    html += '<div class="guide-stage-num">'+(si+1)+'</div>';
-    html += '<div class="guide-stage-title">'+icon+' '+sd.name+'</div>';
-    html += '<div class="guide-stage-toggle">▼</div>';
+    html += '<div class="guide-ov-card '+cls+'" onclick="switchTab(\''+sk+'\')">';
+    html += '<div class="guide-ov-head">';
+    html += '<div class="guide-ov-num">'+(si+1)+'</div>';
+    html += '<div class="guide-ov-icon">'+icon+'</div>';
+    html += '<div class="guide-ov-info"><div class="guide-ov-name">'+sd.name+'</div><div class="guide-ov-period">⏱ '+period+'</div></div>';
     html += '</div>';
-    html += '<div class="guide-stage-body">';
-
-    /* 阶段简介 */
-    if(gs && gs.intro){
-      html += '<div class="guide-stage-intro">'+gs.intro+'</div>';
-    }
-
-    /* 攻略步骤 */
-    if(gs && gs.steps){
-      for(var sti=0; sti<gs.steps.length; sti++){
-        var step = gs.steps[sti];
-        var stKey = 'guide_' + sk + '_' + sti;
-        var stDone = !!progress[stKey];
-        var stRec = progress['rec_' + stKey] || {};
-        var stChecks = progress['ck_' + stKey] || {};
-
-        html += '<div class="guide-step'+(stDone?' guide-step-done':'')+'">';
-        html += '<div class="guide-step-num">'+(sti+1)+'</div>';
-        html += '<div class="guide-step-body">';
-        html += '<div class="guide-step-title">'+step.title;
-        if(stDone) html += '<span class="guide-step-badge done">✅ 已完成</span>';
-        else html += '<span class="guide-step-badge todo">⏳ 待完成</span>';
-        html += '</div>';
-        html += '<div class="guide-step-desc">'+step.desc+'</div>';
-
-        /* 内联标注：术语/坑 双列 + 验收/补救 双列 */
-        var hasTerm = step.term && step.term.length>0;
-        var hasWarn = step.warn && step.warn.length>0;
-        var hasPass = step.pass && step.pass.length>0;
-        var hasFix = step.fix && step.fix.length>0;
-
-        if(hasTerm || hasWarn){
-          html += '<div class="guide-inline">';
-          if(hasTerm) html += '<div class="guide-inline-item guide-inline-term"><b>📖 术语</b><br>'+step.term+'</div>';
-          if(hasWarn) html += '<div class="guide-inline-item guide-inline-warn"><b>⚠️ 常见坑</b><br>'+step.warn+'</div>';
-          html += '</div>';
-        }
-
-        /* 交互区：勾选清单 + 输入框 + 确认按钮 */
-        html += '<div class="guide-interactive" id="gi-'+stKey+'">';
-        var hasChecks = step.checks && step.checks.length>0;
-        var hasInputs = step.inputs && step.inputs.length>0;
-        /* 计算是否全部完成（用于初始按钮状态） */
-        var allCkInit = true;
-        if(hasChecks){
-          for(var cii=0; cii<step.checks.length; cii++){
-            if(!stChecks['ck_'+stKey+'_'+cii]){ allCkInit = false; break; }
-          }
-        }
-        var allInInit = true;
-        if(hasInputs){
-          for(var iii=0; iii<step.inputs.length; iii++){
-            if(step.inputs[iii].type==='text') continue;
-            if(!stRec['in_'+stKey+'_'+iii]){ allInInit = false; break; }
-          }
-        }
-        var canConfirm = allCkInit && allInInit;
-        if(hasChecks){
-          html += '<div class="guide-sec-label">📋 检查清单（逐项勾选）</div>';
-          html += '<ul class="guide-check-list">';
-          for(var ci=0; ci<step.checks.length; ci++){
-            var ck = 'ck_'+stKey+'_'+ci;
-            var cDone = !!stChecks[ck];
-            html += '<li class="'+(cDone?'checked':'')+'" data-ci="'+ci+'" onclick="toggleGuideCheck(\''+stKey+'\',\''+ci+'\')"><span class="guide-check-box">'+(cDone?'✓':'')+'</span><span>'+step.checks[ci]+'</span></li>';
-          }
-          html += '</ul>';
-        }
-        if(hasInputs){
-          html += '<div class="guide-sec-label">📝 选择题（点选即可）</div>';
-          for(var ii=0; ii<step.inputs.length; ii++){
-            var inp = step.inputs[ii];
-            var inKey = 'in_'+stKey+'_'+ii;
-            var savedVal = stRec[inKey] || '';
-            if(inp.type==='choice'){
-              html += '<div class="guide-choice-group">';
-              html += '<div class="guide-choice-label">'+inp.label+'</div>';
-              html += '<div class="guide-choice-btns">';
-              for(var oi=0; oi<inp.options.length; oi++){
-                var opt = inp.options[oi];
-                html += '<span class="guide-choice-btn'+(savedVal===opt?' selected':'')+'" data-val="'+esc(opt)+'" data-oi="'+oi+'" onclick="selectGuideChoice(\''+stKey+'\',\''+ii+'\',\''+oi+'\')">'+opt+'</span>';
-              }
-              html += '</div></div>';
-            } else {
-              html += '<div class="guide-input-row"><span class="guide-input-label">'+inp.label+'</span><input type="text" id="'+inKey+'" value="'+esc(savedVal)+'" placeholder="'+(inp.ph||'')+'" onblur="saveGuideInput(\''+stKey+'\',\''+ii+'\')"><span class="guide-input-saved'+(savedVal?'':' hidden')+'" id="saved-'+inKey+'">✓ 已存</span></div>';
-            }
-          }
-        }
-        html += '<div class="guide-confirm-row">';
-        if(stDone){
-          html += '<button class="guide-btn guide-btn-undo" onclick="undoGuideStep(\''+stKey+'\')">↩ 撤销确认</button>';
-          html += '<span class="guide-confirm-tip">该步骤已确认完成</span>';
-        } else {
-          html += '<button class="guide-btn guide-btn-confirm" onclick="confirmGuideStep(\''+stKey+'\')"'+(canConfirm?'':' disabled')+'>✅ 确认完成</button>';
-          var initTipMsg = canConfirm ? '全部完成，可以确认了' : (hasChecks && !allCkInit ? '还有清单未勾选' : '') + ((hasChecks && !allCkInit) && (hasInputs && !allInInit) ? '，' : '') + (hasInputs && !allInInit ? '还有选择题未作答' : '') + (canConfirm?'':'，确认按钮暂不可用');
-          html += '<span class="guide-confirm-tip'+(canConfirm?'':' incomplete')+'" id="tip-'+stKey+'">'+initTipMsg+'</span>';
-        }
-        html += '</div>';
-        html += '</div>'; /* guide-interactive */
-
-        if(hasPass || hasFix){
-          html += '<div class="guide-inline">';
-          if(hasPass) html += '<div class="guide-inline-item guide-inline-pass"><b>✅ 验收标准</b><br>'+step.pass+'</div>';
-          if(hasFix) html += '<div class="guide-inline-item guide-inline-fix"><b>🔧 补救措施</b><br>'+step.fix+'</div>';
-          html += '</div>';
-        }
-
-        html += '</div>'; /* guide-step-body */
-        html += '</div>'; /* guide-step */
-      }
-    }
-
-    /* 阶段贴士 */
-    if(gs && gs.tip){
-      html += '<div class="guide-stage-tip"><div class="tip-box tip-warn"><span class="tip-ic">⚠️</span><div>'+gs.tip+'</div></div></div>';
-    }
-
-    html += '</div>'; /* guide-stage-body */
-    html += '</div>'; /* guide-stage */
+    if(gs && gs.intro) html += '<div class="guide-ov-intro">'+gs.intro+'</div>';
+    html += '<div class="guide-ov-bar"><i style="width:'+pct+'%"></i></div>';
+    html += '<div class="guide-ov-foot"><span>攻略进度 '+done+'/'+total+' 步</span><span class="guide-ov-pct">'+pct+'%</span></div>';
+    html += '<div class="guide-ov-enter">进入 '+sd.name+' →</div>';
+    html += '</div>';
   }
-
   html += '</div>';
-  area.innerHTML = html;
+  html += '</div>';
+area.innerHTML = html;
 }
 
 /* ============ 验收检查表 ============ */
