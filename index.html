@@ -1142,14 +1142,12 @@ function saveProgress(){
   }
 }
 
+/* 统计口径改为 GUIDE_STEPS 步骤完成数（原先用 CHECKLIST 条目数） */
 function getStageDone(stageId){
-  var list = CHECKLIST[stageId]||[];
-  var done=0;
-  for(var i=0;i<list.length;i++){ if(progress[list[i].id]) done++; }
-  return done;
+  return getGuideStageDone(stageId);
 }
 function getStageTotal(stageId){
-  return (CHECKLIST[stageId]||[]).length;
+  return getGuideStageTotal(stageId);
 }
 function getStagePct(stageId){
   var t=getStageTotal(stageId); if(!t) return 0;
@@ -1157,9 +1155,9 @@ function getStagePct(stageId){
 }
 function getAllStats(){
   var total=0, done=0;
-  for(var k in CHECKLIST){
-    total+=CHECKLIST[k].length;
-    for(var i=0;i<CHECKLIST[k].length;i++){ if(progress[CHECKLIST[k][i].id]) done++; }
+  for(var k in GUIDE_STEPS){
+    total += getGuideStageTotal(k);
+    done += getGuideStageDone(k);
   }
   return {total:total, done:done, pct: total?Math.round(done/total*100):0};
 }
@@ -1353,7 +1351,7 @@ var GUIDE_STEPS = {
         warn:'千万别直接找装修公司就说"你帮我设计吧"，自己没想法会被设计师牵着走，出来的方案不是你想要的家。',
         pass:'列出一份详细的需求清单，包含每个房间的用途、必备功能、收纳量预估。',
         fix:'如果已经稀里糊涂签了约，赶紧补一份需求清单给设计师，要求重新调整方案。',
-        checks:['常住人数、年龄、作息已列出','每个房间的用途和必备功能已想清楚','收纳需求已预估（衣物/杂物/行李箱等）','未来5-10年可能的变化已考虑（二胎/老人同住/居家办公）','家里是否有宠物、是否需特殊设计'],
+        checks:['常住人数、年龄、作息已列出','每个房间的用途和必备功能已想清楚','收纳需求已预估（衣物/杂物/行李箱等）','未来5-10年可能的变化已考虑（二胎/老人同住/居家办公）','家里是否有宠物、是否需特殊设计','已量房、确认户型图与承重墙位置'],
         inputs:[{type:'choice',label:'户型面积（㎡）',options:['<60','60-90','90-120','120-150','>150']},{type:'choice',label:'户型几室几厅',options:['1室','2室1厅','2室2厅','3室1厅','3室2厅','4室+']},{type:'choice',label:'家中几口人',options:['1人','2人','3人(2大1小)','4人(2大2小)','5人+']},{type:'text',label:'其他特殊需求',ph:'如：需要书房、阳台封窗'}]},
       { title:'确定预算上限，拆解到四个板块', desc:'根据房屋面积和当地行情，定一个总预算上限，然后拆解：硬装基础+辅材约35%、主材约25%、软装约15%、家电家具约20%、机动5%。每项都要有上限，超了就从别的项扣。',
         term:'<b>全包/半包/清包</b> — 全包：装修公司包工包料，最省心但单价高；半包：包工+辅材，主材自买，性价比最高最主流；清包：只包人工，所有材料自己买，最省钱但最操心。',
@@ -1372,14 +1370,14 @@ var GUIDE_STEPS = {
         warn:'合同里只写"增项按实际计算"是最危险的条款，等于空白支票。必须约定增项上限（一般不超过总价5%），任何增项先签字再施工。',
         pass:'合同明确工期、材料品牌型号、增项规则（有上限）、验收标准、质保年限（5年），付款分4个节点。',
         fix:'合同已签但条款不清的，补签补充协议锁定增项上限和材料明细。',
-        checks:['工期已明确（含违约责任）','材料品牌型号逐项写进合同','增项规则有上限（≤5%）','付款分4个节点（30/30/30/10）','质保年限明确（保5年）','报价明细已附为合同附件'],
+        checks:['工期已明确（含违约责任）','材料品牌型号逐项写进合同','增项规则有上限（≤5%）','付款分4个节点（30/30/30/10）','质保年限明确（保5年）','报价明细已附为合同附件','已到物业办理装修手续、缴纳押金'],
         inputs:[{type:'text',label:'合同签约公司',ph:'如：XX装饰（简答）'},{type:'choice',label:'合同总价（万元）',options:['<10','10-15','15-20','20-25','25-30','>30']},{type:'choice',label:'约定工期（天）',options:['<60','60-75','75-90','90-120','>120']},{type:'choice',label:'质保年限',options:['2年','3年','5年','其他']}]},
       { title:'开工前把所有定制类商家谈妥', desc:'橱柜、衣柜等全屋定制、中央空调、新风系统、窗户、木门——这些都有较长生产周期（20-30天甚至更长），必须在开工前就选定商家、完成初测，否则到了该安装的时候还没生产出来，工期一拖再拖。',
         term:'<b>全屋定制</b>：按你家尺寸量身定做的柜子，工厂生产现场安装。注意板材环保等级（ENF>E0）、封边工艺、五金品牌、投影/展开面积报价方式。',
         warn:'定制类商家一个都没定就开工，是最常见的工期延误原因。全屋定制周期30天+，等到木工阶段才定根本来不及。',
         pass:'全屋定制、中央空调/新风、窗户、木门等设备商家已全部谈妥，已预约初测时间。',
         fix:'立刻开始联系定制类商家，能抢一天是一天。同时和施工方沟通调整工序顺序，先做不依赖定制的部分。',
-        checks:['全屋定制（橱柜/衣柜）已选商家','中央空调/新风已选商家','窗户/封窗已选商家','木门已选商家','已预约初测时间'],
+        checks:['全屋定制（橱柜/衣柜）已选商家','中央空调/新风已选商家','窗户/封窗已选商家','木门已选商家','已预约初测时间','确定嵌入式电器型号尺寸（为全屋定制做准备）'],
         inputs:[{type:'choice',label:'全屋定制商家',options:['欧派','索菲亚','尚品宅配','五金百货市场','其他品牌']},{type:'text',label:'窗户商家',ph:'如：XX封窗（简答）'},{type:'choice',label:'木门商家',options:['TATA木门','梦天木门','江山欧派','本地厂家','其他']},{type:'choice',label:'空调/新风商家',options:['大金','格力','美的','日立','其他']}]}
     ]
   },
@@ -1418,7 +1416,7 @@ steps:[
         warn:'主材花色还没定就开始施工，到了该贴砖的时候才去选，工期延误且匆忙选错。乳胶漆色号一定要去门店看色卡，不要只看手机图。',
         pass:'主材已定样（瓷砖、地板、乳胶漆、卫浴），灯光设计方案确认，色号留档。',
         fix:'如果施工已开始但主材没定，紧急去建材市场选样，优先定马上要用的（如防水阶段的瓷砖），其余边施工边定。',
-        checks:['瓷砖花色/规格已选定','地板材质/颜色已选定','乳胶漆色号已定（去门店看过色卡）','卫浴花色已选定','灯光设计已确认（主灯/筒灯/射灯位置）'],
+        checks:['瓷砖花色/规格已选定','地板材质/颜色已选定','乳胶漆色号已定（去门店看过色卡）','卫浴花色已选定','灯光设计已确认（主灯/筒灯/射灯位置）','全屋风格与主色调已确定','软装风格意向图已收集'],
         inputs:[{type:'choice',label:'瓷砖型号',options:['800×800柔光砖','800×800哑光砖','600×1200大砖','木纹砖','其他']},{type:'choice',label:'地板型号',options:['三层实木','多层实木','强化复合','SPC石塑','其他']},{type:'choice',label:'乳胶漆色号',options:['珍珠白/暖白','纯白','浅灰','奶咖色','其他']},{type:'choice',label:'灯光色温',options:['3000K暖光','4000K自然光','3500K中性','混搭(区域不同)']}]}
     ]
   },
@@ -1436,7 +1434,7 @@ steps:[
         warn:'拆除范围一定要按图纸来，别多拆也别少拆。多拆了要补墙，少拆了影响后续工序。',
         pass:'非承重墙按设计拆除到位，墙皮铲除干净，现场清理基本完成。',
         fix:'拆除范围不对的，按图纸修正——多拆的补回去，少拆的补拆。',
-        checks:['按图纸拆除到位','墙皮已铲除','拆除时未破坏承重结构','现场已基本清理'],
+        checks:['按图纸拆除到位','墙皮已铲除','拆除时未破坏承重结构','现场已基本清理','墙面空鼓已修补'],
         inputs:[{type:'text',label:'拆除完成日期',ph:'如：2026-09-08'},{type:'choice',label:'拆除垃圾量（车）',options:['1车','2车','3车','4车+']}]},
       { title:'清理垃圾', desc:'拆除产生的建筑垃圾要及时清运。提前和物业确认垃圾堆放点、清运方式和费用。有些小区物业指定清运队伍，费用包含在装修押金里。',
         warn:'垃圾堆满现场会影响后续施工，尤其是瓦工进场时地面要干净。',
@@ -1467,7 +1465,7 @@ steps:[
         warn:'没做水电交底就让水电工自己看着干，是最致命的错误。水电工不知道你的生活动线，点位必然不对，等发现时已封墙。',
         pass:'水电交底各方到场，所有点位在墙面弹线确认，自己已走一遍动线检查。',
         fix:'如果已开工但没做交底，暂停施工，立刻组织各方到场补做交底，重新弹线确认点位。',
-        checks:['设计师已到场','水电工已到场','橱柜师傅已到场','设备商家已到场','自己已走一遍生活动线','所有点位已在墙面弹线'],
+        checks:['设计师已到场','水电工已到场','橱柜师傅已到场','设备商家已到场','自己已走一遍生活动线','所有点位已在墙面弹线','木门、移门、淋浴房已下单（定制周期长，确定门套形式）'],
         inputs:[{type:'text',label:'水电交底日期',ph:'如：2026-09-15'},{type:'choice',label:'到场人数',options:['3人','4人','5人','6人+']},{type:'text',label:'临时增加的点位',ph:'如：电视墙+2、书桌+3'}]},
       { title:'弹线开槽，线管走向横平竖直', desc:'水电工按确认的点位弹线开槽。线管走向必须横平竖直，不能斜着走（后期打孔容易打到线管）。强弱电分管走线，间距至少30cm，避免信号干扰。',
         warn:'强弱电同管或间距不够，网络信号会被电力线干扰，WiFi和有线网络都不稳。',
@@ -1521,7 +1519,7 @@ steps:[
         warn:'全瓷砖用水泥砂浆上墙不涂背胶，三个月后空鼓率超50%，砖可能整片脱落砸人。',
         pass:'瓷砖无空鼓（地砖全检无空鼓、墙砖≤5%），铺贴平整，缝隙均匀，阴阳角方正。',
         fix:'空鼓砖必须返工重贴。空鼓率超标的，让师傅逐块检查返工。施工时就监督背胶和基层处理。',
-        checks:['先铺墙砖后铺地砖','大砖/全瓷砖用了瓷砖胶+背胶','缝隙均匀一致','砖面平整','预留伸缩缝'],
+        checks:['先铺墙砖后铺地砖','大砖/全瓷砖用了瓷砖胶+背胶','缝隙均匀一致','砖面平整','预留伸缩缝','瓷砖已进场（广东砖、优等品）','地漏、挡水条已准备'],
         inputs:[{type:'text',label:'铺砖开始日期',ph:'如：2026-09-28'},{type:'text',label:'铺砖完成日期',ph:'如：2026-10-05'},{type:'choice',label:'空鼓率检测',options:['地砖0% 墙砖<2%','地砖0% 墙砖2-5%','有超标需返工']}]},
       { title:'地面坡度测试', desc:'卫生间地面必须向地漏方向找坡，坡度≥1%。铺完砖后泼一盆水，看水流是否迅速流向地漏、不积水。这是检验瓦工水平的关键指标。',
         warn:'坡度不够导致积水，洗澡时脚泡在水里，长期积水还会渗入防水层以下的砂浆层。',
@@ -1533,7 +1531,7 @@ steps:[
         term:'<b>美缝/环氧彩砂</b>：瓷砖铺完后用填缝剂填充砖缝。美缝剂亮面，环氧彩砂哑光更有质感更耐磨。必须在贴砖后水泥干透再做。<br><b>过门石/门槛石</b>：铺在门口两空间交接处的小块石材，起防水挡水、过渡收口作用。卫生间门口必须用。',
         warn:'水泥没干透就做美缝，水汽被封在缝里，美缝剂会起泡脱落。',
         pass:'美缝在水泥干透后施工，密实无缺口，颜色均匀，过门石/窗台石已安装。',
-        checks:['已停够7天以上','美缝颜色已选定','美缝已施工完成','过门石/窗台石已安装'],
+        checks:['已停够7天以上','美缝颜色已选定','美缝已施工完成','过门石/窗台石已安装','确定木地板类型，为全屋定制量尺做准备'],
         inputs:[{type:'choice',label:'美缝颜色',options:['珍珠白','浅灰','深灰','金色','其他']},{type:'choice',label:'美缝品牌',options:['德高','马贝','皇氏工匠','其他']},{type:'text',label:'美缝完成日期',ph:'如：2026-10-15'}]}
     ]
   },
@@ -1552,7 +1550,7 @@ steps:[
         warn:'不复尺直接按初测尺寸下单，到安装时可能差几毫米，柜体和墙面/吊顶之间出现缝隙，既不美观又积灰。',
         pass:'定制商家已完成复尺，方案确认签字，下单生产，预计到货时间明确。',
         fix:'如果已按初测尺寸下单，赶紧联系商家看能否改单。已生产的只能到安装时用收边条弥补缝隙。',
-        checks:['定制商家已完成复尺','最终方案已确认签字','已下单生产','预计到货日期已明确'],
+        checks:['定制商家已完成复尺','最终方案已确认签字','已下单生产','预计到货日期已明确','水槽已选购（大单槽304不锈钢、深度20cm以上）'],
         inputs:[{type:'choice',label:'定制商家',options:['欧派','索菲亚','尚品宅配','其他']},{type:'text',label:'下单日期',ph:'如：2026-10-22'},{type:'text',label:'预计到货日期',ph:'如：2026-11-20'},{type:'choice',label:'柜体总价（元）',options:['<2万','2-3万','3-4万','4-5万','>5万']}]},
       { title:'柜体安装', desc:'定制柜体到货后安装。衣柜、橱柜、书柜等逐个安装，检查：与墙面/吊顶是否严丝合缝、门板是否平整、抽屉是否顺滑、铰链阻尼是否正常。',
         term:'<b>EVA封边/PUR/激光封边</b>：板材切边用胶带封住防潮防甲醛。激光封边最环保缝隙最细；PUR次之；EVA最普通但够用。看封边是否平整无溢胶。<br><b>颗粒板/欧松板/多层板</b>：颗粒板稳定性好性价比高（大牌环保达标）；欧松板更稳更高颜值；多层板防潮好。柜体首选颗粒板+ENF级，卫生间/阳台用多层板。',
@@ -1598,7 +1596,7 @@ steps:[
         warn:'只刷面漆不刷底漆，后期墙面容易返碱发花。色差和流坠（漆挂痕）是面漆施工最常见的质量问题。',
         pass:'底漆1遍+面漆2遍完成，无色差、无流坠、阴阳角垂直、开关插座周围修补细致。乳胶漆色号留档。',
         fix:'色差或流坠的补漆修正。只刷了面漆没刷底漆的，补刷底漆再刷一遍面漆。大面积返碱的铲掉重做。',
-        checks:['底漆已刷1遍','面漆已刷2遍','无色差、无流坠','阴阳角垂直','开关插座周围已细致修补','乳胶漆色号已留档'],
+        checks:['底漆已刷1遍','面漆已刷2遍','无色差、无流坠','阴阳角垂直','开关插座周围已细致修补','乳胶漆色号已留档','开关插座已选购（厨房带开关、卫生间防溅盒、斜五孔）','灯具已选购（提前想好射灯筒灯位置）','洁具、龙头、花洒已选购（不锈钢/白色、陶瓷阀芯）','玻璃胶、角阀等辅料已备齐'],
         inputs:[{type:'choice',label:'乳胶漆品牌/色号',options:['立邦 珍珠白','多乐士 暖白','PPG 浅灰','其他']},{type:'text',label:'面漆完成日期',ph:'如：2026-11-12'}]}
     ]
   },
@@ -1610,7 +1608,7 @@ steps:[
         warn:'安装顺序混乱是最常见的问题。先装柜再铺地板，地板塞不进柜脚；先装灯具再刷墙，灯具被污染。',
         pass:'安装顺序正确（先大后小、先里后外），大件安装到位，无交叉冲突。',
         fix:'安装顺序搞错的，协调各安装队伍重新安排时间。已造成冲突的局部返工修正。',
-        checks:['安装顺序已规划（先大后小、先里后外）','地板已铺装完成','木门已安装完成','柜体已安装完成','各队伍进场时间已协调无冲突'],
+        checks:['安装顺序已规划（先大后小、先里后外）','地板已铺装完成','木门已安装完成','柜体已安装完成','各队伍进场时间已协调无冲突','已预约保洁（硬装结束后、家具进场前）'],
         inputs:[{type:'text',label:'地板品牌/型号',ph:'如：三层实木橡木'},{type:'text',label:'地板安装日期',ph:'如：2026-12-01'}]},
       { title:'安装电器：烟机灶具、热水器', desc:'厨房电器（烟机、灶具、洗碗机）和热水器安装。注意烟机要装止逆阀，热水器如果卫生间距离远考虑零冷水方案。',
         term:'<b>止逆阀</b>：装在烟道口的单向阀门，防止公共烟道油烟倒灌（邻居炒菜你家闻到味）。务必安装，选镀锌钢、潜水艇等大牌。<br><b>零冷水</b>：热水器到水龙头之间的冷水管循环加热，打开龙头即热水。改造时多走一套回水管，成本+1-2千。热水器到卫生间超5米推荐。',
@@ -1671,7 +1669,7 @@ function renderOverview(area){
   var html = '';
 
   html += '<div class="stat-cards">';
-  html += '<div class="stat-card"><div class="st-label">整体完成度</div><div class="st-value accent">'+st.pct+'%</div><div class="st-sub">'+st.done+'/'+st.total+' 项任务</div></div>';
+  html += '<div class="stat-card"><div class="st-label">整体完成度</div><div class="st-value accent">'+st.pct+'%</div><div class="st-sub">'+st.done+'/'+st.total+' 步攻略</div></div>';
   var doneStages = 0; for(var i=0;i<STAGES.length;i++){ if(getStagePct(STAGES[i].id)===100) doneStages++; }
   html += '<div class="stat-card"><div class="st-label">已完成阶段</div><div class="st-value green">'+doneStages+'</div><div class="st-sub">共 '+STAGES.length+' 个阶段</div></div>';
   var cur = getCurrentStage();
@@ -1785,12 +1783,12 @@ function renderStage(area, stageId){
   html += '<div class="stage-hero">';
   html += '<div class="stage-badge">'+stage.icon+'</div>';
   html += '<div><h3>'+stage.name+'</h3><div class="stage-period">⏱ 参考工期：'+stage.period+'</div></div>';
-  html += '<div class="stage-pct"><div class="num">'+pct+'%</div><div class="lbl">'+done+'/'+total+' 项完成</div></div>';
+  html += '<div class="stage-pct"><div class="num">'+pct+'%</div><div class="lbl">'+done+'/'+total+' 步完成</div></div>';
   html += '</div>';
   html += '<div class="stage-bar"><i style="width:'+pct+'%"></i></div>';
   html += '</div>';
 
-  /* 阶段攻略（合并自监理指南：简介+全部步骤+阶段贴士） */
+  /* 阶段攻略（攻略步骤吸收了原任务清单的全部内容，作为唯一进度入口） */
   var gs = GUIDE_STEPS[stageId];
   if(gs){
     var gDone = getGuideStageDone(stageId), gTotal = getGuideStageTotal(stageId);
@@ -1802,50 +1800,6 @@ function renderStage(area, stageId){
     html += '</div>';
     html += '</div>';
   }
-
-  html += '<div class="bento-card">';
-  html += '<div class="card-title"><span class="card-icon">✅</span>本阶段任务清单<span class="card-subtitle">勾选完成 · 可展开记录采购或决策内容</span></div>';
-  html += '<div class="check-list">';
-  var list = CHECKLIST[stageId]||[];
-  for(var i=0;i<list.length;i++){
-    var item = list[i];
-    var isDone = !!progress[item.id];
-    var rec = progress['rec_'+item.id];
-    var hasRec = rec && rec.name;
-    var isPurchase = item.tag==='采购'||item.tag==='定制';
-    var btnText = isPurchase ? (hasRec?'¥'+(rec.total||0)+' ✎':'✎ 记采购') : (hasRec?'📝 '+rec.name+' ✎':'✎ 记一下');
-    html += '<div class="check-item '+(isDone?'done ':'')+(hasRec?'has-rec':'')+'" onclick="toggleCheck(\''+item.id+'\', event)">';
-    html += '<div class="checkbox"></div><div class="check-label">'+item.label+'</div>';
-    html += '<span class="check-tag">'+item.tag+'</span>';
-    html += '<span class="check-expand" title="'+(isPurchase?'填报采购信息（选填）':'记录决策内容（选填）')+'">'+btnText+'</span>';
-    html += '</div>';
-    /* 内嵌记录区：采购型显示采购表单，记录型显示文字 */
-    html += '<div class="rec-inline" id="rec-inline-'+item.id+'">';
-    if(isPurchase){
-      html += '<div class="rec-inline-grid">';
-      html += '<div class="rec-inline-field"><label>物品名称</label><input id="ri-name-'+item.id+'" placeholder="如：客厅瓷砖" value="'+(rec?esc(rec.name):'')+'"></div>';
-      html += '<div class="rec-inline-field"><label>品牌/型号</label><input id="ri-model-'+item.id+'" placeholder="如：东鹏 800×800" value="'+(rec?esc(rec.model):'')+'"></div>';
-      html += '<div class="rec-inline-field"><label>购买地点</label><input id="ri-place-'+item.id+'" placeholder="如：恒大建材市场" value="'+(rec?esc(rec.place):'')+'"></div>';
-      html += '<div class="rec-inline-field"><label>单价（元）</label><input id="ri-price-'+item.id+'" type="number" min="0" step="0.01" placeholder="0" value="'+(rec?rec.price:'')+'"></div>';
-      html += '<div class="rec-inline-field"><label>数量</label><input id="ri-qty-'+item.id+'" type="number" min="1" step="1" placeholder="1" value="'+(rec?rec.qty:'')+'"></div>';
-      html += '<div class="rec-inline-field"><label>备注</label><input id="ri-note-'+item.id+'" placeholder="如：含安装费" value="'+(rec?esc(rec.note):'')+'"></div>';
-      html += '</div>';
-      html += '<div class="rec-inline-actions">';
-      html += '<button class="btn" onclick="saveRecInline(\''+item.id+'\')">💾 保存</button>';
-      html += '<button class="btn btn-ghost" onclick="clearRecInline(\''+item.id+'\')">🗑️ 清除</button>';
-      if(hasRec) html += '<span class="rec-inline-summary">已记录：¥'+(rec.total||0).toLocaleString()+'</span>';
-      html += '</div>';
-    } else {
-      html += '<div class="rec-inline-note"><input id="rn-note-'+item.id+'" placeholder="记录决策内容，如：中古奶油风" value="'+(rec?esc(rec.name):'')+'" style="width:100%;"></div>';
-      html += '<div class="rec-inline-actions">';
-      html += '<button class="btn" onclick="saveNoteInline(\''+item.id+'\')">💾 保存</button>';
-      html += '<button class="btn btn-ghost" onclick="clearRecInline(\''+item.id+'\')">🗑️ 清除</button>';
-      if(hasRec) html += '<span class="rec-inline-summary">已记录：'+esc(rec.name)+'</span>';
-      html += '</div>';
-    }
-    html += '</div>';
-  }
-  html += '</div></div>';
 
   var stagePurchases = getStagePurchases(stageId);
   if(stagePurchases.length){
@@ -2643,7 +2597,7 @@ function renderRecap(area){
   html += '<div><div style="font-size:13px;opacity:0.85;">总记录</div><div style="font-size:24px;font-weight:700;margin-top:2px;">'+records.length+' 条</div></div>';
   html += '</div></div>';
   if(records.length===0){
-    html += '<div class="bento-card"><div style="text-align:center;padding:50px 0;color:var(--text-muted);"><div style="font-size:48px;margin-bottom:14px;">📋</div><div style="font-size:15px;">还没有任何记录</div><div style="font-size:13px;margin-top:6px;">在各阶段任务清单中勾选完成并填写记录后，这里会自动汇总</div></div></div>';
+    html += '<div class="bento-card"><div style="text-align:center;padding:50px 0;color:var(--text-muted);"><div style="font-size:48px;margin-bottom:14px;">📋</div><div style="font-size:15px;">还没有任何记录</div><div style="font-size:13px;margin-top:6px;">在各阶段攻略中勾选完成并填写记录后，这里会自动汇总</div></div></div>';
     area.innerHTML = html;
     return;
   }
@@ -3160,7 +3114,7 @@ function renderStats(){
   var el = document.getElementById('main-stats');
   var st = getAllStats();
   var cur = getCurrentStage();
-  el.innerHTML = '<span>整体进度 <span>'+st.pct+'%</span></span><span>已完成 <span style="color:#22c55e">'+st.done+'</span> 项</span><span>当前阶段 <span style="color:#f59e0b">'+(cur?cur.name:'全部完成')+'</span></span>';
+  el.innerHTML = '<span>整体进度 <span>'+st.pct+'%</span></span><span>已完成 <span style="color:#22c55e">'+st.done+'</span> 步</span><span>当前阶段 <span style="color:#f59e0b">'+(cur?cur.name:'全部完成')+'</span></span>';
 }
 
 function updateBadges(){
