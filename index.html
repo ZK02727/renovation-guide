@@ -1751,7 +1751,6 @@ function renderStage(area, stageId){
   var stage = null;
   for(var i=0;i<STAGES.length;i++){ if(STAGES[i].id===stageId) stage = STAGES[i]; }
   if(!stage) return;
-  var d = STAGE_DETAILS[stageId] || {what:'', why:'', how:[], pros:'', cons:'', focus:'', tip:''};
   var pct = getStagePct(stageId);
   var done = getStageDone(stageId), total = getStageTotal(stageId);
 
@@ -1763,28 +1762,6 @@ function renderStage(area, stageId){
   html += '<div class="stage-pct"><div class="num">'+pct+'%</div><div class="lbl">'+done+'/'+total+' 项完成</div></div>';
   html += '</div>';
   html += '<div class="stage-bar"><i style="width:'+pct+'%"></i></div>';
-  html += '</div>';
-
-  html += '<div class="bento-card">';
-  html += '<div class="card-title"><span class="card-icon">🎯</span>这个阶段做什么 · 为什么</div>';
-  html += '<div class="grid-2">';
-  html += '<div class="info-card"><h4>📌 做什么</h4><div style="font-size:13px;color:var(--text-secondary);line-height:1.7;">'+(d.what||'')+'</div></div>';
-  html += '<div class="info-card"><h4>❓ 为什么</h4><div style="font-size:13px;color:var(--text-secondary);line-height:1.7;">'+(d.why||'')+'</div></div>';
-  html += '</div>';
-  if(d.how && d.how.length){
-    html += '<div style="margin-top:12px;"><h4 style="font-size:14px;font-weight:700;margin-bottom:8px;">📋 怎么做（步骤）</h4><ol style="padding-left:20px;font-size:13.5px;color:var(--text-secondary);line-height:2;">';
-    for(var i=0;i<d.how.length;i++){ html += '<li>'+d.how[i]+'</li>'; }
-    html += '</ol></div>';
-  }
-  html += '</div>';
-
-  html += '<div class="bento-card">';
-  html += '<div class="card-title"><span class="card-icon">⚖️</span>优劣对比 · 关注点</div>';
-  html += '<div class="grid-2">';
-  if(d.pros) html += '<div class="info-card"><h4 style="color:#16a34a;">✅ 优势</h4><ul><li>'+d.pros.split('；').join('</li><li>')+'</li></ul></div>';
-  if(d.cons) html += '<div class="info-card"><h4 style="color:#dc2626;">⚠️ 劣势/风险</h4><ul><li>'+d.cons.split('；').join('</li><li>')+'</li></ul></div>';
-  html += '</div>';
-  if(d.tip) html += '<div class="tip-box tip-warn" style="margin-top:10px;"><span class="tip-ic">🔑</span><div>'+d.tip+'</div></div>';
   html += '</div>';
 
   html += '<div class="bento-card">';
