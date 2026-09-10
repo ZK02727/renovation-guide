@@ -85,6 +85,28 @@ body {
 .content-area::-webkit-scrollbar-thumb { background:rgba(148,163,184,0.3); border-radius:3px; }
 .content-area::-webkit-scrollbar-thumb:hover { background:rgba(148,163,184,0.5); }
 
+/* ===== 右侧速记栏（参考巡察工作记录台） ===== */
+.quick-notes { width:260px; min-width:260px; background:rgba(255,255,255,0.72); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-left:1px solid var(--glass-border); display:flex; flex-direction:column; height:100vh; z-index:10; position:relative; overflow:hidden; }
+.quick-notes::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background:var(--accent-grad); z-index:1; }
+.quick-notes-title { padding:22px 16px 6px; font-size:15px; font-weight:800; letter-spacing:.5px; background:var(--accent-grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; white-space:nowrap; }
+.quick-notes-sub { padding:0 16px 10px; font-size:10px; color:var(--text-muted); letter-spacing:1.5px; font-weight:600; white-space:nowrap; }
+.quick-notes-input-area { padding:8px 14px 12px; border-bottom:1px solid rgba(0,0,0,0.06); }
+.quick-notes-input { width:100%; border:1px solid rgba(0,0,0,0.1); border-radius:8px; padding:10px 12px; font-size:13px; font-family:inherit; color:var(--text-primary); background:rgba(255,255,255,0.9); resize:vertical; min-height:64px; line-height:1.6; transition:border-color .2s; box-sizing:border-box; }
+.quick-notes-input:focus { outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(99,102,241,.1); }
+.quick-notes-add { width:100%; margin-top:8px; padding:8px 14px; border:none; border-radius:6px; background:var(--accent-grad); color:#fff; font-size:13px; font-weight:500; cursor:pointer; transition:all .2s; font-family:inherit; }
+.quick-notes-add:hover { filter:brightness(1.1); }
+.quick-notes-list { flex:1; overflow-y:auto; padding:10px 12px; }
+.quick-notes-list::-webkit-scrollbar { width:4px; }
+.quick-notes-list::-webkit-scrollbar-thumb { background:rgba(148,163,184,.3); border-radius:2px; }
+.qn-item { background:rgba(255,255,255,0.9); border:1px solid rgba(0,0,0,0.06); border-radius:8px; padding:10px 12px; margin-bottom:8px; box-shadow:0 2px 8px rgba(0,0,0,0.04); position:relative; word-break:break-all; }
+.qn-item-text { font-size:13px; color:var(--text-primary); white-space:pre-wrap; line-height:1.6; margin-bottom:6px; }
+.qn-item-meta { display:flex; align-items:center; justify-content:space-between; gap:6px; }
+.qn-item-time { font-size:10px; color:var(--text-muted); }
+.qn-del { background:none; border:none; color:var(--text-muted); font-size:13px; cursor:pointer; padding:0 2px; line-height:1; transition:color .2s; }
+.qn-del:hover { color:var(--red); }
+.qn-empty { text-align:center; color:var(--text-muted); font-size:12px; padding:24px 10px; }
+@media (max-width:1100px){ .quick-notes { display:none; } }
+
 /* ===== Bento卡片 ===== */
 .bento-card { background:var(--glass-bg); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border:1px solid var(--glass-border); border-radius:var(--radius-lg); box-shadow:var(--glass-shadow); padding:20px 22px; margin-bottom:16px; transition:box-shadow .3s ease; }
 .bento-card:hover { box-shadow:0 12px 40px rgba(31,38,135,0.15); }
@@ -720,6 +742,17 @@ table.brand-table { width:100%; border-collapse:collapse; font-size:13px; min-wi
   </div>
   <div class="content-area" id="content-area"></div>
 </div>
+
+<!-- 右侧速记栏（所有页签可见） -->
+<aside class="quick-notes">
+  <div class="quick-notes-title">📌 速记栏</div>
+  <div class="quick-notes-sub">随时记录 · 所有页签可见</div>
+  <div class="quick-notes-input-area">
+    <textarea class="quick-notes-input" id="qnInput" placeholder="记点什么…（如：待跟进事项、临时想法）"></textarea>
+    <button class="quick-notes-add" onclick="addQuickNote()">＋ 添加速记</button>
+  </div>
+  <div class="quick-notes-list" id="qnList"></div>
+</aside>
 
 <!-- 导入文件输入 -->
 <input type="file" id="import-file" accept=".json" style="display:none" onchange="handleImport(event)">
@@ -2472,6 +2505,50 @@ function esc(s){
   return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
+/* ============ 右侧速记栏（参考巡察工作记录台） ============ */
+var QN_KEY = 'zx_guide_quicknotes_v1';
+var quickNotes = [];
+function loadQuickNotes(){
+  try{ var raw = localStorage.getItem(QN_KEY); if(raw) quickNotes = JSON.parse(raw); }catch(e){ quickNotes = []; }
+  if(!Array.isArray(quickNotes)) quickNotes = [];
+}
+function saveQuickNotes(){
+  try{ localStorage.setItem(QN_KEY, JSON.stringify(quickNotes)); }catch(e){}
+}
+function renderQuickNotes(){
+  var list = document.getElementById('qnList');
+  if(!list) return;
+  if(!quickNotes.length){ list.innerHTML = '<div class="qn-empty">暂无速记，输入内容后点「添加速记」</div>'; return; }
+  var html = '';
+  for(var i=0;i<quickNotes.length;i++){
+    var n = quickNotes[i];
+    html += '<div class="qn-item"><div class="qn-item-text">'+esc(n.text)+'</div><div class="qn-item-meta"><span class="qn-item-time">'+esc(n.time||'')+'</span><button class="qn-del" onclick="delQuickNote(\''+n.id+'\')" title="删除">✕</button></div></div>';
+  }
+  list.innerHTML = html;
+}
+function addQuickNote(){
+  var input = document.getElementById('qnInput');
+  var text = (input.value||'').trim();
+  if(!text){ input.focus(); return; }
+  var d = new Date();
+  var time = (d.getMonth()+1)+'月'+d.getDate()+'日 '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+  var id = Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+  quickNotes.unshift({id:id, text:text, time:time});
+  input.value = '';
+  saveQuickNotes();
+  renderQuickNotes();
+}
+function delQuickNote(id){
+  if(!confirm('删除这条速记？')) return;
+  quickNotes = quickNotes.filter(function(n){ return n.id!==id; });
+  saveQuickNotes();
+  renderQuickNotes();
+}
+function initQuickNotes(){
+  loadQuickNotes();
+  renderQuickNotes();
+}
+
 /* ============ 交互逻辑 ============ */
 function toggleCheck(id, event){
   /* 点击「✎ 记采购」区域 → 展开/收起采购记录 */
@@ -3181,6 +3258,7 @@ function initSidebarDate(){
 
 /* 初始化 */
 initSidebarDate();
+initQuickNotes();
 /* 登录后才会渲染主界面（登录逻辑在 hideLogin 中调用 renderContent） */
 if(getSession()){
   renderContent();
