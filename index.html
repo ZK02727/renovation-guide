@@ -637,6 +637,34 @@ table.brand-table { width:100%; border-collapse:collapse; font-size:13px; min-wi
 .dc-cmp-table td:first-child { text-align:left; }
 .dc-cmp-score { font-weight:700; font-size:14px; }
 .dc-cmp-score.best { color:#16a34a; }
+
+/* ===== 装修公司选择 ===== */
+.cc-top { display:flex; gap:14px; margin-bottom:14px; }
+.cc-progress-card { flex:1; background:var(--card-bg); border-radius:var(--radius-md); padding:16px 20px; border:1px solid rgba(0,0,0,0.06); }
+.cc-progress-num { font-size:30px; font-weight:800; color:var(--accent); line-height:1; }
+.cc-progress-label { font-size:12px; color:var(--text-muted); margin-top:4px; }
+.cc-bar { height:8px; background:#e2e8f0; border-radius:4px; overflow:hidden; margin-top:10px; }
+.cc-bar-fill { height:100%; background:var(--accent-grad); border-radius:4px; transition:width .3s; }
+.cc-group { background:var(--card-bg); border-radius:var(--radius-md); padding:18px 20px; margin-bottom:14px; border:1px solid rgba(0,0,0,0.06); }
+.cc-group-title { font-size:15px; font-weight:800; color:var(--text-primary); margin-bottom:4px; display:flex; align-items:center; gap:8px; }
+.cc-group-sub { font-size:12px; color:var(--text-muted); margin-bottom:12px; }
+.cc-item { display:flex; align-items:flex-start; gap:10px; padding:9px 10px; border-radius:8px; cursor:pointer; transition:background .15s; }
+.cc-item:hover { background:rgba(99,102,241,0.05); }
+.cc-item.checked { background:rgba(34,197,94,0.06); }
+.cc-box { width:18px; height:18px; min-width:18px; border:2px solid #cbd5e1; border-radius:5px; margin-top:1px; display:flex; align-items:center; justify-content:center; font-size:12px; color:#fff; transition:all .15s; }
+.cc-item.checked .cc-box { background:#22c55e; border-color:#22c55e; }
+.cc-item-text { flex:1; }
+.cc-item-title { font-size:13px; font-weight:600; color:var(--text-primary); }
+.cc-item-desc { font-size:12px; color:var(--text-muted); margin-top:2px; line-height:1.5; }
+.cc-item.checked .cc-item-title { color:#15803d; }
+.cc-badge { display:inline-flex; align-items:center; gap:4px; font-size:11px; padding:2px 10px; border-radius:20px; background:var(--accent-light); color:var(--accent-dark); font-weight:600; margin-left:8px; }
+.cc-badge.warn { background:#fef3c7; color:#b45309; }
+.cc-badge.danger { background:#fee2e2; color:#dc2626; }
+.cc-tip { display:flex; gap:8px; padding:10px 12px; border-radius:8px; font-size:12px; line-height:1.6; margin-bottom:8px; }
+.cc-tip.warn { background:#fffbeb; border:1px solid #fde68a; color:#92400e; }
+.cc-tip.danger { background:#fef2f2; border:1px solid #fecaca; color:#991b1b; }
+.cc-tip.ok { background:#f0fdf4; border:1px solid #bbf7d0; color:#166534; }
+.cc-chip { display:inline-block; font-size:11px; padding:2px 10px; border-radius:20px; background:#f1f5f9; color:var(--text-secondary); margin:3px 4px 0 0; }
 </style>
 </head>
 <body>
@@ -742,6 +770,9 @@ table.brand-table { width:100%; border-collapse:collapse; font-size:13px; min-wi
     </div>
     <div class="nav-item" data-tab="designcmp" onclick="switchTab('designcmp')">
       <span class="nav-icon">📐</span><span class="nav-label">设计比稿</span>
+    </div>
+    <div class="nav-item" data-tab="company" onclick="switchTab('company')">
+      <span class="nav-icon">🏢</span><span class="nav-label">选装修公司</span>
     </div>
   </div>
   <div class="sidebar-footer">
@@ -1235,7 +1266,7 @@ function switchTab(tab){
     if(items[i].getAttribute('data-tab')===tab) items[i].classList.add('active');
     else items[i].classList.remove('active');
   }
-  var titles = {overview:'装修进度总览', floorplan:'户型图 · 效果图', stage1:'① 准备阶段', 'stage1.5':'② 设计阶段', stage2:'③ 拆改封窗', stage3:'④ 水电改造', stage4:'⑤ 瓦工阶段', stage5:'⑥ 木工阶段', stage6:'⑦ 油工阶段', stage7:'⑧ 安装阶段', stage8:'⑨ 软装收尾', purchase:'采购时间表', guide:'阶段总览', checklist:'验收检查表', shops:'上海采购地图', brands:'品牌推荐', recap:'采购统计', designcmp:'设计比稿'};
+  var titles = {overview:'装修进度总览', floorplan:'户型图 · 效果图', stage1:'① 准备阶段', 'stage1.5':'② 设计阶段', stage2:'③ 拆改封窗', stage3:'④ 水电改造', stage4:'⑤ 瓦工阶段', stage5:'⑥ 木工阶段', stage6:'⑦ 油工阶段', stage7:'⑧ 安装阶段', stage8:'⑨ 软装收尾', purchase:'采购时间表', guide:'阶段总览', checklist:'验收检查表', shops:'上海采购地图', brands:'品牌推荐', recap:'采购统计', designcmp:'设计比稿', company:'选装修公司'};
   document.getElementById('main-title').textContent = titles[tab];
   renderContent();
 }
@@ -1253,6 +1284,7 @@ function renderContent(){
   else if(currentTab==='brands') renderBrands(area);
   else if(currentTab==='recap') renderRecap(area);
   else if(currentTab==='designcmp') renderDesignCompare(area);
+  else if(currentTab==='company') renderCompany(area);
   renderStats();
   updateBadges();
 }
@@ -3448,6 +3480,148 @@ function dcScrollToTable(){
   if(tbl && tbl.scrollIntoView){ tbl.scrollIntoView({behavior:'smooth', block:'start'}); }
 }
 loadDCData();
+
+/* ===== 装修公司选择 ===== */
+var CC_KEY = 'zx_guide_company_v1';
+var ccChecks = {};
+/* 选择标准分类 */
+var CC_GROUPS = [
+  {key:'qual', icon:'📋', title:'资质与实力', desc:'先筛掉不合格的，再谈别的',
+   items:[
+     {key:'license', title:'营业执照与资质齐全', desc:'正规公司必须有营业执照，装修资质（施工/设计资质）在有效期内，可上「国家企业信用信息公示系统」查工商信息、经营异常、行政处罚记录'},
+     {key:'scale', title:'经营规模与年限匹配', desc:'成立时间建议 3 年以上；看办公地址是写字楼还是民宅（正规公司通常有固定办公场所）；查询公司规模与人员数量是否与承诺匹配'},
+     {key:'insurance', title:'人员保险与安全责任', desc:'问清施工人员是否有意外险/工伤保险，施工期间发生事故的责任划分要写进合同，避免业主担责'},
+     {key:'samples', title:'在建工地可参观', desc:'要求看 2-3 个正在施工的工地，看现场管理（材料堆放、成品保护、卫生情况），比看效果图靠谱得多'}
+  ]},
+  {key:'grp2', icon:'💰', title:'报价与合同', desc:'报价单越细，后期越少扯皮', items:[
+      {key:'detail', title:'报价单项目明细完整', desc:'报价单应按空间分项列出：材料品牌型号、规格数量、单价、人工费、辅料费，缺一项后期就可能变成增项'},
+      {key:'material', title:'材料品牌型号写进合同', desc:'主材辅材的品牌、型号、规格必须写进合同，不能用"优质""高档"等模糊词；现场验收时对照合同核对'},
+      {key:'scope', title:'明确工程范围与包含项', desc:'合同中写明施工范围（含哪些项目、不含哪些），拆改、垃圾清运、材料上楼费、成品保护等费用提前约定'},
+      {key:'additem', title:'增项规则与上限约定', desc:'口头承诺"零增项"不可信；约定增项必须提前书面确认、增项比例上限（通常不超过总价5-8%）、未经确认不得施工'},
+      {key:'pay', title:'付款节点与比例合理', desc:'常见的合理付款：开工30%→水电验收30%→中期30%→竣工10%（留尾款压质保）；警惕首付比例过高（≥50%为高危）'},
+      {key:'tax', title:'发票与税费明确', desc:'确认能否开具正规发票、税率多少、是否含在报价内；合同价与实际发票金额要一致，避免后续维权无凭证'}
+  ]},
+  {key:'grp3', icon:'🎨', title:'设计与施工', desc:'设计和施工要匹配', items:[
+      {key:'designer', title:'设计师经验与工地跟进', desc:'确认设计师是否全程跟进施工（很多公司签单后设计师就不出现了）；问清设计费是否独立、效果图与实际是否一致'},
+      {key:'site', title:'项目经理/工长责任制', desc:'问清由谁负责现场管理（项目经理/工长），是否公司员工还是外包；项目经理的沟通效率直接影响工期和质量'},
+      {key:'process', title:'施工工艺标准明确', desc:'水电走线、防水高度、瓷砖空鼓率、墙面平整度等工艺标准写进合同附件；可对照「验收检查表」页签逐项验收'},
+      {key:'schedule', title:'工期节点写进合同', desc:'开工日期、每阶段完工时间、总工期天数都写进合同；约定延期违约金（一般每日按总价万分之五）'},
+      {key:'subcontract', title:'是否分包与转包', desc:'水电、木工、瓦工等是否本公司自有工人还是分包；分包转包是质量不稳定和扯皮的重灾区，务必问清'}
+  ]},
+  {key:'grp4', icon:'🗣️', title:'口碑与服务', desc:'别人踩过的坑要提前知道', items:[
+      {key:'reputation', title:'多渠道口碑核实', desc:'大众点评、小红书、知乎、本地业主群多渠道搜公司名字，重点看差评内容（是否集中在增项、拖延、质量问题）'},
+      {key:'community', title:'同小区/同户型案例', desc:'询问是否装修过本小区或同户型，可参观已完工业主家；已入住业主的反馈比公司自夸可信'},
+      {key:'responsetime', title:'售后响应机制', desc:'问清质保期内报修流程：对接人是谁、多久上门、维修是否收费；公司消失跑路是最常见风险'}
+  ]},
+  {key:'grp5', icon:'🛡️', title:'签约前必问', desc:'签合同前逐项过一遍', items:[
+      {key:'contract', title:'合同用官方范本', desc:'用《住宅室内装饰装修工程施工合同》示范文本，不签公司自制小合同；一式两份盖公章'},
+      {key:'validity', title:'合同金额与实际一致', desc:'合同金额=报价单合计，不含口头承诺；所有优惠、赠送、口头承诺都以书面补充协议为准'},
+      {key:'warranty', title:'质保条款明确', desc:'隐蔽工程质保（水电防水建议≥5年）、整体质保（≥2年）写进合同；质保金/押金比例和返还时间约定清楚'},
+      {key:'vacate', title:'验收标准与流程', desc:'分阶段验收节点、验收标准、不合格整改时限写清楚；验收通过后才付下一笔款'},
+      {key:'dispute', title:'违约责任与争议解决', desc:'延期赔付、质量不达标处理方式、退定金条件写进合同；争议解决选甲方所在地法院或仲裁'}
+  ]}
+];
+/* 避坑要点 */
+var CC_PITFALLS = [
+  {title:'低报价钓鱼', desc:'报价明显低于市场价，后面靠增项找补回来。市场行情：半包约 600-1000元/㎡，全包约 1200-2000元/㎡（上海2025参考）'},
+  {title:'"零增项"口头承诺', desc:'口头承诺零增项的一律当没听过。增项必须书面确认，比例上限写进合同'},
+  {title:'先交定金再出设计', desc:'让交大额定金才给出效果图的要警惕；设计阶段费用应先谈清楚（免费/收费/可抵扣施工款）'},
+  {title:'合同签字页是空白', desc:'合同金额、材料清单、工期、质保未填就让你签字的，坚决不签'},
+  {title:'游击队冒充正规公司', desc:'报价单上挂着公司名，实际施工是游击队。查资质、看工地、认工长三管齐下'},
+  {title:'增项无限追加', desc:'开工后各种"这里需要加钱"，总量失控。应对：合同锁增项比例，超5%可拒付并要求原价返工'}
+];
+/* 筛选流程 */
+var CC_STEPS = [
+  {n:'01', t:'初筛资质', d:'圈定 3-5 家候选，先查营业执照/资质/口碑，刷掉明显不合格的'},
+  {n:'02', t:'实地考察', d:'看在建工地 + 门店/办公地，聊设计需求和预算，感受沟通是否顺畅'},
+  {n:'03', t:'比稿比价', d:'让 2-3 家出方案和报价，用「设计比稿」页签逐项打分对比'},
+  {n:'04', t:'签约定心', d:'核对「签约前必问」清单，把口头承诺全部落纸，再签字付款'}
+];
+function loadCCData(){
+  try{ var raw = localStorage.getItem(CC_KEY); if(raw) ccChecks = JSON.parse(raw); }catch(e){ ccChecks = {}; }
+  if(!ccChecks || typeof ccChecks !== 'object') ccChecks = {};
+}
+function saveCCData(){
+  try{ localStorage.setItem(CC_KEY, JSON.stringify(ccChecks)); }catch(e){}
+}
+function ccToggle(key){
+  ccChecks[key] = !ccChecks[key];
+  saveCCData();
+  renderCompany(document.getElementById('content-area'));
+}
+function ccTotalItems(){
+  var n = 0;
+  for(var i=0;i<CC_GROUPS.length;i++){ n += CC_GROUPS[i].items.length; }
+  return n;
+}
+function ccCount(){
+  var n = 0;
+  for(var g=0;g<CC_GROUPS.length;g++){
+    for(var i=0;i<CC_GROUPS[g].items.length;i++){ if(ccChecks[CC_GROUPS[g].items[i].key]) n++; }
+  }
+  return n;
+}
+function renderCompany(area){
+  var total = ccTotalItems();
+  var done = ccCount();
+  var pct = total ? Math.round(done/total*100) : 0;
+  var html = '';
+  html += '<div class="bento-card">';
+  html += '<div class="card-title"><span class="card-icon">🏢</span>装修公司选择<span class="card-subtitle">资质核实 · 报价合同 · 避坑要点 · 签约确认</span></div>';
+  html += '<div class="tip-box tip-info"><span class="tip-ic">💡</span><div>挑选装修公司是整个装修最重要的一步。按下面「4步筛选流程」走，逐项勾选核对清单（自动保存本地），全部完成后再签合同，能避开绝大多数坑。</div></div>';
+  html += '</div>';
+
+  /* 进度条 */
+  html += '<div class="cc-progress-card"><div style="display:flex;align-items:center;justify-content:space-between;">';
+  html += '<div><div class="cc-progress-num">'+done+'/'+total+'</div><div class="cc-progress-label">核对清单进度</div></div>';
+  html += '<div style="font-size:14px;font-weight:700;color:var(--accent);">'+pct+'%</div></div>';
+  html += '<div class="cc-bar"><div class="cc-bar-fill" style="width:'+pct+'%"></div></div>';
+  html += '<div style="font-size:12px;color:var(--text-muted);margin-top:8px;">'+(pct===100?'全部达标，可以放心签合同了 🎉':pct>=50?'进度过半，继续加油':'建议逐一核对，别跳过任何一项')+'</div>';
+  html += '</div>';
+
+  /* 筛选流程 */
+  html += '<div class="bento-card"><div class="card-title"><span class="card-icon">🧭</span>4步筛选流程<span class="card-subtitle">按顺序走，别跳步</span></div>';
+  html += '<div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;">';
+  for(var s=0;s<CC_STEPS.length;s++){
+    var st = CC_STEPS[s];
+    html += '<div style="flex:1;min-width:200px;background:#f8fafc;border-radius:10px;padding:12px 14px;border:1px solid rgba(0,0,0,0.05);">';
+    html += '<div style="font-size:11px;font-weight:800;color:var(--accent);letter-spacing:1px;">STEP '+st.n+'</div>';
+    html += '<div style="font-size:14px;font-weight:700;margin-top:4px;">'+st.t+'</div>';
+    html += '<div style="font-size:12px;color:var(--text-muted);margin-top:4px;line-height:1.5;">'+st.d+'</div>';
+    html += '</div>';
+  }
+  html += '</div></div>';
+
+  /* 核对清单分组 */
+  for(var g=0;g<CC_GROUPS.length;g++){
+    var grp = CC_GROUPS[g];
+    var grpDone = 0;
+    for(var i=0;i<grp.items.length;i++){ if(ccChecks[grp.items[i].key]) grpDone++; }
+    html += '<div class="cc-group">';
+    html += '<div class="cc-group-title">'+grp.icon+' '+grp.title+'<span class="cc-badge">'+grpDone+'/'+grp.items.length+'</span></div>';
+    html += '<div class="cc-group-sub">'+grp.desc+'</div>';
+    for(var i=0;i<grp.items.length;i++){
+      var it = grp.items[i];
+      var checked = !!ccChecks[it.key];
+      html += '<div class="cc-item'+(checked?' checked':'')+'" onclick="ccToggle(\''+it.key+'\')">';
+      html += '<div class="cc-box">'+(checked?'✓':'')+'</div>';
+      html += '<div class="cc-item-text"><div class="cc-item-title">'+it.title+'</div><div class="cc-item-desc">'+it.desc+'</div></div>';
+      html += '</div>';
+    }
+    html += '</div>';
+  }
+
+  /* 避坑要点 */
+  html += '<div class="bento-card"><div class="card-title"><span class="card-icon">⚠️</span>避坑要点<span class="card-subtitle">高发套路，提前看</span></div>';
+  for(var p=0;p<CC_PITFALLS.length;p++){
+    var pf = CC_PITFALLS[p];
+    html += '<div class="cc-tip warn"><div>⚠️</div><div><b>'+pf.title+'：</b>'+pf.desc+'</div></div>';
+  }
+  html += '</div>';
+
+  area.innerHTML = html;
+}
+loadCCData();
 
 function renderStats(){
   var el = document.getElementById('main-stats');
