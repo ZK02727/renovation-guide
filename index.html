@@ -3262,6 +3262,88 @@ var DC_DIMS = [
   {key:'timelinePromise', name:'工期承诺', desc:'量房→初稿→定稿→效果图的整体周期'},
   {key:'afterService', name:'售后服务', desc:'施工期间图纸变更、现场跟进、问题响应速度'}
 ];
+/* ===== 设计师选取标准 ===== */
+var DC_CRIT_KEY = 'zx_guide_dccrit_v1';
+var dcCritChecks = {};
+var DC_CRIT_GROUPS = [
+  {key:'dqual', icon:'🎓', title:'资质与经验', desc:'设计师的专业背景和实战经验',
+   items:[
+     {key:'degree', title:'正规院校设计专业出身', desc:'环艺/室内设计/建筑学等相关专业毕业，有系统训练基础，不是半路转行的"画图员"'},
+     {key:'years3', title:'3年以上独立设计经验', desc:'至少3年独立全案设计经验（非助理/画图员），能独立完成从量房到施工图的全流程'},
+     {key:'license', title:'持有相关资质证书', desc:'室内设计师资格证/注册建筑师等；有证书不代表一切，但说明经过了系统学习和考核'},
+     {key:'casecount', title:'同户型/同面积档位案例≥5套', desc:'做过类似面积和户型的完整落地案例，知道这类户型的常见痛点和优化思路'}
+   ]},
+  {key:'dability', icon:'💡', title:'设计能力', desc:'方案好不好，看这几点',
+   items:[
+     {key:'layout', title:'户型改造有思路', desc:'能指出原户型的不合理之处并给出优化方案（动线、采光、收纳、空间利用率），而不是只刷墙换地板'},
+     {key:'stylematch', title:'能理解并还原你的风格偏好', desc:'给你看几张参考图，设计师能提炼出风格关键词并融入方案，而不是套模板做自己擅长的风格'},
+     {key:'detail', title:'施工图和节点详图完整', desc:'不止有效果图，还有详细的施工图、水电定位图、定制柜内部结构图、节点大样图，施工队照着就能做'},
+     {key:'material', title:'熟悉主材辅材选型', desc:'能根据预算推荐合适的材料品牌和型号，知道材料的施工工艺和收口方式，不只是画完图就完事'}
+   ]},
+  {key:'dservice', icon:'🤝', title:'服务与跟进', desc:'签了合同设计师还在不在，很关键',
+   items:[
+     {key:'followup', title:'施工期间现场跟进≥3次', desc:'关键节点（水电交底、瓦工交底、木工交底）到现场跟工长交底，不是签完单就消失'},
+     {key:'revisions', title:'效果图修改次数明确写进合同', desc:'约定免费修改次数（通常初稿+2次修改），超出的修改费用标准提前说清'},
+     {key:'response', title:'日常沟通响应≤24小时', desc:'微信/电话能及时联系上，方案修改和图纸确认在合理时间内回复'},
+     {key:'softdecor', title:'软装搭配建议', desc:'设计范围包含家具/灯具/窗帘/饰品选购建议，不是只管硬装不管软装'},
+     {key:'budgetctrl', title:'帮控预算不超标', desc:'选材时主动帮你控制在预算范围内，推荐性价比方案，不一味推荐贵的'}
+   ]},
+  {key:'dprice', icon:'💰', title:'费用与合同', desc:'设计费怎么收、怎么付',
+   items:[
+     {key:'feerange', title:'设计费在合理区间', desc:'上海2025参考：独立设计师80-300元/㎡，设计工作室150-400元/㎡，全案公司200-500元/㎡；过低可能是拿施工回扣'},
+     {key:'feeclause', title:'设计费付款节点合理', desc:'常见：签约50%→初稿确认30%→定稿20%；警惕要求全款预付或首付超70%的'},
+     {key:'contract', title:'签正规设计合同', desc:'用《室内设计服务合同》范本，约定设计范围、交付物清单、修改次数、知识产权归属'},
+     {key:'refund', title:'退费条款明确', desc:'不满意能退多少、已出图纸怎么算费用、违约责任写清，别交了钱就没主动权了'}
+   ]},
+  {key:'dredflag', icon:'🚩', title:'红灯信号（出现就慎选）', desc:'出现以下任何一条，建议慎重考虑',
+   items:[
+     {key:'nocontract', title:'不签合同只口头约定', desc:'设计范围、费用、修改次数全靠嘴说，出了问题无据可依'},
+     {key:'noprice', title:'拒绝报价直接要定金', desc:'不说清设计费总价和付款方式，先让交"意向金""诚意金"'},
+     {key:'noportfolio', title:'拿不出完整落地案例', desc:'只有效果图没有实拍照片，或案例不是自己做的（盗图）；要求看实拍+带业主联系方式'},
+     {key:'noplan', title:'量房后没有改造建议', desc:'只量尺寸不提任何户型优化建议，说明只是量房员不是设计师'},
+     {key:'pushmaterial', title:'强烈推荐指定商家', desc:'指定去某家买主材/定制柜，可能是回扣渠道；好的设计师应推荐2-3家让你比选'}
+   ]}
+];
+var DC_PITFALLS = [
+  {title:'免费设计陷阱', desc:'"免费设计"通常设计费从施工款里出，设计师收入靠施工回扣，方案会刻意增加施工量（拆墙、做造型）'},
+  {title:'效果图≠实际', desc:'效果图用3D渲染做得很美，实际材料和工艺可能完全不同。要求出施工图和材料清单，按图验收'},
+  {title:'盗用他人案例', desc:'展示的效果图/实拍可能是别人的作品。要求设计师提供自己做的完整案例（含原始CAD文件或现场施工过程照）'},
+  {title:'签单后设计师消失', desc:'很多公司签单后设计师就交给助理跟进，甚至换人。合同里写明"设计师姓名+现场跟进次数"'},
+  {title:'设计费变施工回扣', desc:'设计费远低于市场价（如30元/㎡），实际靠推你做施工赚钱。选纯设计收费的设计师，施工另找装修公司'}
+];
+var DC_REF = [
+  {label:'独立设计师', range:'80-300元/㎡', note:'价格低但需自行协调施工，适合预算有限、有精力跟进的人'},
+  {label:'设计工作室', range:'150-400元/㎡', note:'团队协作、出图规范，通常含施工跟进，性价比高'},
+  {label:'全案公司', range:'200-500元/㎡', note:'设计+施工一站式，省心但总价高，注意设计费和施工费是否捆绑'},
+  {label:'装修公司附赠设计', range:'0-100元/㎡', note:'"免费设计"需警惕，设计方案可能偏向增加施工量'}
+];
+function loadDCCrit(){
+  try{ var raw = localStorage.getItem(DC_CRIT_KEY); if(raw) dcCritChecks = JSON.parse(raw); }catch(e){ dcCritChecks = {}; }
+  if(!dcCritChecks || typeof dcCritChecks !== 'object') dcCritChecks = {};
+}
+function saveDCCrit(){
+  try{ localStorage.setItem(DC_CRIT_KEY, JSON.stringify(dcCritChecks)); }catch(e){}
+}
+function dcCritToggle(key){
+  dcCritChecks[key] = !dcCritChecks[key];
+  saveDCCrit();
+  renderDesignCompare(document.getElementById('content-area'));
+  /* 滚动回标准区，避免跳到顶部 */
+  setTimeout(function(){ var el = document.getElementById('dc-crit-section'); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }, 50);
+}
+function dcCritTotal(){
+  var n = 0;
+  for(var i=0;i<DC_CRIT_GROUPS.length;i++){ n += DC_CRIT_GROUPS[i].items.length; }
+  return n;
+}
+function dcCritCount(){
+  var n = 0;
+  for(var g=0;g<DC_CRIT_GROUPS.length;g++){
+    for(var i=0;i<DC_CRIT_GROUPS[g].items.length;i++){ if(dcCritChecks[DC_CRIT_GROUPS[g].items[i].key]) n++; }
+  }
+  return n;
+}
+loadDCCrit();
 var dcData = [];
 function loadDCData(){
   try{ var raw = localStorage.getItem(DC_KEY); if(raw) dcData = JSON.parse(raw); }catch(e){ dcData = []; }
@@ -3291,6 +3373,63 @@ function renderDesignCompare(area){
   if(dcData.length>=2){ html += '<button class="btn btn-ghost" onclick="dcScrollToTable()">↓ 查看对比汇总</button>'; }
   html += '</div>';
   html += '</div>';
+
+  /* ===== 设计师选取标准 ===== */
+  var cTotal = dcCritTotal();
+  var cDone = dcCritCount();
+  var cPct = cTotal ? Math.round(cDone/cTotal*100) : 0;
+  html += '<div id="dc-crit-section">';
+  html += '<div class="cc-progress-card"><div style="display:flex;align-items:center;justify-content:space-between;">';
+  html += '<div><div class="cc-progress-num">'+cDone+'/'+cTotal+'</div><div class="cc-progress-label">选取标准核对进度</div></div>';
+  html += '<div style="font-size:14px;font-weight:700;color:var(--accent);">'+cPct+'%</div></div>';
+  html += '<div class="cc-bar"><div class="cc-bar-fill" style="width:'+cPct+'%"></div></div>';
+  html += '<div style="font-size:12px;color:var(--text-muted);margin-top:8px;">'+(cPct===100?'标准全部核对完毕，可以放心选择设计师了 🎉':cPct>=50?'进度过半，继续核对':'选设计师前先看这5组标准，逐项核对更靠谱')+'</div>';
+  html += '</div>';
+
+  /* 设计费参考区间 */
+  html += '<div class="bento-card"><div class="card-title"><span class="card-icon">💰</span>设计费参考区间<span class="card-subtitle">上海2025参考价</span></div>';
+  html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:10px;">';
+  for(var r=0;r<DC_REF.length;r++){
+    var ref = DC_REF[r];
+    html += '<div style="background:#f8fafc;border-radius:10px;padding:12px 14px;border:1px solid rgba(0,0,0,0.05);">';
+    html += '<div style="font-size:13px;font-weight:700;color:var(--accent-dark);">'+ref.label+'</div>';
+    html += '<div style="font-size:15px;font-weight:800;margin-top:4px;">'+ref.range+'</div>';
+    html += '<div style="font-size:11px;color:var(--text-muted);margin-top:4px;line-height:1.5;">'+ref.note+'</div>';
+    html += '</div>';
+  }
+  html += '</div>';
+  html += '<div style="margin-top:10px;font-size:11px;color:var(--text-muted);">💡 设计费过低要警惕（可能靠施工回扣赚钱），过高要看是否有实际落地能力。选纯设计收费的设计师，施工另找装修公司，利益不绑定更客观。</div>';
+  html += '</div>';
+
+  /* 选取标准核对清单 */
+  for(var g=0;g<DC_CRIT_GROUPS.length;g++){
+    var grp = DC_CRIT_GROUPS[g];
+    var isRed = (grp.key==='dredflag');
+    var grpDone = 0;
+    for(var i=0;i<grp.items.length;i++){ if(dcCritChecks[grp.items[i].key]) grpDone++; }
+    html += '<div class="cc-group">';
+    html += '<div class="cc-group-title">'+grp.icon+' '+grp.title+'<span class="cc-badge'+(isRed?' warn':'')+'">'+grpDone+'/'+grp.items.length+'</span></div>';
+    html += '<div class="cc-group-sub">'+grp.desc+'</div>';
+    for(var i=0;i<grp.items.length;i++){
+      var it = grp.items[i];
+      var checked = !!dcCritChecks[it.key];
+      html += '<div class="cc-item'+(checked?' checked':'')+'" onclick="dcCritToggle(\''+it.key+'\')">';
+      html += '<div class="cc-box">'+(checked?'✓':'')+'</div>';
+      html += '<div class="cc-item-text"><div class="cc-item-title">'+it.title+'</div><div class="cc-item-desc">'+it.desc+'</div></div>';
+      html += '</div>';
+    }
+    html += '</div>';
+  }
+
+  /* 避坑要点 */
+  html += '<div class="bento-card"><div class="card-title"><span class="card-icon">⚠️</span>设计师避坑要点<span class="card-subtitle">高发套路，提前看</span></div>';
+  for(var p=0;p<DC_PITFALLS.length;p++){
+    var pf = DC_PITFALLS[p];
+    html += '<div class="cc-tip warn"><div>⚠️</div><div><b>'+pf.title+'：</b>'+pf.desc+'</div></div>';
+  }
+  html += '</div>';
+  html += '</div>';
+  /* ===== 选取标准 END ===== */
 
   for(var i=0;i<dcData.length;i++){
     var item = dcData[i];
