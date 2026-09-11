@@ -3700,22 +3700,201 @@ function ccCount(){
   }
   return n;
 }
+/* ===== 装修公司评价对比 ===== */
+var CC_EVAL_KEY = 'zx_guide_cc_eval_v1';
+var CC_EVAL_DIMS = [
+  {key:'qualScore', name:'资质与规模', desc:'营业执照、资质等级、办公规模、成立年限'},
+  {key:'priceScore', name:'报价透明度', desc:'报价单详细程度、有无增项、单价是否合理'},
+  {key:'qualityScore', name:'施工质量', desc:'工地管理、工艺标准、材料品质、成品保护'},
+  {key:'commScore', name:'沟通与服务', desc:'沟通效率、需求理解、态度、售后响应'},
+  {key:'scheduleScore', name:'工期与信誉', desc:'工期承诺合理性、延期赔付、口碑评价、合同规范'}
+];
+var ccEvalData = [];
+function loadCCEval(){
+  try{ var raw = localStorage.getItem(CC_EVAL_KEY); if(raw) ccEvalData = JSON.parse(raw); }catch(e){ ccEvalData = []; }
+  if(!Array.isArray(ccEvalData)) ccEvalData = [];
+  var dirty = false;
+  for(var i=0;i<ccEvalData.length;i++){ if(ccEvalData[i]._isNew){ delete ccEvalData[i]._isNew; dirty = true; } }
+  if(dirty) saveCCEval();
+}
+function saveCCEval(){
+  try{ localStorage.setItem(CC_EVAL_KEY, JSON.stringify(ccEvalData)); }catch(e){}
+}
+function ccEvalUid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+function ccEvalTotal(item){
+  var sum=0;
+  for(var i=0;i<CC_EVAL_DIMS.length;i++){ sum += (item.scores&&item.scores[CC_EVAL_DIMS[i].key])||0; }
+  return sum;
+}
+function ccEvalAvg(item){
+  return (ccEvalTotal(item)/CC_EVAL_DIMS.length).toFixed(1);
+}
+function ccEvalAdd(){
+  var item = { id:ccEvalUid(), name:'', mode:'', contact:'', phone:'', areaPrice:'', totalQuote:'', startDate:'', endDate:'', warranty:'', notes:'', scores:{}, _isNew:true };
+  ccEvalData.push(item);
+  saveCCEval();
+  renderCompany(document.getElementById('content-area'));
+}
+function ccEvalDel(id){
+  if(!confirm('确定删除这家公司？删除后无法恢复。')) return;
+  ccEvalData = ccEvalData.filter(function(d){ return d.id!==id; });
+  saveCCEval();
+  renderCompany(document.getElementById('content-area'));
+}
+function ccEvalSaveField(el){
+  var id = el.getAttribute('data-id');
+  var field = el.getAttribute('data-field');
+  var val = el.value;
+  for(var i=0;i<ccEvalData.length;i++){ if(ccEvalData[i].id===id){ ccEvalData[i][field]=val; break; } }
+  saveCCEval();
+}
+function ccEvalStar(el){
+  var id = el.getAttribute('data-cc');
+  var dim = el.getAttribute('data-dim');
+  var val = parseInt(el.getAttribute('data-val'));
+  for(var i=0;i<ccEvalData.length;i++){
+    if(ccEvalData[i].id===id){
+      if(!ccEvalData[i].scores) ccEvalData[i].scores = {};
+      if(ccEvalData[i].scores[dim]===val){ ccEvalData[i].scores[dim]=0; }
+      else { ccEvalData[i].scores[dim]=val; }
+      break;
+    }
+  }
+  saveCCEval();
+  renderCompany(document.getElementById('content-area'));
+}
+function ccEvalField(id, label, field, val, type, ph){
+  return '<div class="dc-field"><label>'+label+'</label><input type="'+type+'" value="'+esc(val||'')+'" placeholder="'+(ph||'')+'" onblur="ccEvalSaveField(this)" data-id="'+id+'" data-field="'+field+'" id="'+(field==='name'?'ccEval-name-'+id:'')+'"></div>';
+}
+function ccEvalSelect(id, label, field, val, options){
+  var opts = '';
+  for(var i=0;i<options.length;i++){ opts += '<option value="'+options[i].v+'"'+(options[i].v===val?' selected':'')+'>'+options[i].t+'</option>'; }
+  return '<div class="dc-field"><label>'+label+'</label><select onchange="ccEvalSaveField(this)" data-id="'+id+'" data-field="'+field+'">'+opts+'</select></div>';
+}
+function ccEvalBuildCard(item, idx){
+  var total = ccEvalTotal(item);
+  var avg = ccEvalAvg(item);
+  var maxTotal = CC_EVAL_DIMS.length * 5;
+  var pct = total ? Math.round(total/maxTotal*100) : 0;
+  var isBest = false;
+  if(ccEvalData.length>=2){
+    var maxScore = 0;
+    for(var j=0;j<ccEvalData.length;j++){ if(ccEvalTotal(ccEvalData[j])>maxScore) maxScore=ccEvalTotal(ccEvalData[j]); }
+    isBest = (total===maxScore && total>0);
+  }
+  var html = '';
+  html += '<div class="dc-card'+(isBest?' best':'')+'">';
+  html += '<div class="dc-head">';
+  html += '<div style="flex:1;"><div class="dc-name">'+(item.name||'未命名公司')+'</div>';
+  html += '<div style="font-size:11px;color:var(--text-muted);margin-top:3px;">序号 #'+(idx+1)+'</div></div>';
+  if(total>0){
+    html += '<div style="text-align:center;"><div class="dc-score-big">'+avg+'</div><div class="dc-score-label">总分 '+total+'/'+maxTotal+' · '+pct+'%</div></div>';
+  }
+  html += '<button class="dc-del" onclick="ccEvalDel(\''+item.id+'\')">🗑 删除</button>';
+  html += '</div>';
+
+  html += '<div class="dc-grid">';
+  html += ccEvalField(item.id,'名称','name', item.name, 'text', '如：XX装饰');
+  html += ccEvalSelect(item.id,'装修方式','mode', item.mode, [{v:'full',t:'全包'},{v:'half',t:'半包'},{v:'clear',t:'清包'}]);
+  html += ccEvalField(item.id,'联系人','contact', item.contact, 'text', '项目经理/工长');
+  html += ccEvalField(item.id,'电话','phone', item.phone, 'text', '联系方式');
+  html += ccEvalField(item.id,'单价(元/㎡)','areaPrice', item.areaPrice, 'number', '如：800');
+  html += ccEvalField(item.id,'报价总额(元)','totalQuote', item.totalQuote, 'number', '如：150000');
+  html += ccEvalField(item.id,'计划开工','startDate', item.startDate, 'date');
+  html += ccEvalField(item.id,'计划竣工','endDate', item.endDate, 'date');
+  html += ccEvalField(item.id,'质保年限','warranty', item.warranty, 'number', '如：5');
+  html += '</div>';
+
+  html += '<div style="margin-top:10px;"><div style="font-size:12px;font-weight:700;color:var(--text-muted);margin-bottom:6px;">📋 5维度评分（点星星打分）</div>';
+  for(var d=0;d<CC_EVAL_DIMS.length;d++){
+    var dim = CC_EVAL_DIMS[d];
+    var val = (item.scores && item.scores[dim.key]) || 0;
+    html += '<div class="dc-score-row">';
+    html += '<div class="dc-score-name">'+dim.name+'<span style="font-size:11px;color:var(--text-muted);margin-left:6px;">'+dim.desc+'</span></div>';
+    html += '<div class="dc-stars">';
+    for(var s=1;s<=5;s++){
+      html += '<span class="dc-star'+(s<=val?' on':'')+'" data-cc="'+item.id+'" data-dim="'+dim.key+'" data-val="'+s+'" onclick="ccEvalStar(this)">★</span>';
+    }
+    html += '</div><div class="dc-score-val">'+val+'/5</div>';
+    html += '</div>';
+  }
+  html += '</div>';
+
+  html += '<div class="dc-notes dc-grid" style="grid-template-columns:1fr;">';
+  html += '<div class="dc-field"><label>备注（优缺点、感受、待确认项）</label><textarea id="ccEval-notes-'+item.id+'" placeholder="如：工地管理规范，报价透明；但工期偏长，需确认增项上限" onblur="ccEvalSaveField(this)" data-id="'+item.id+'" data-field="notes">'+esc(item.notes||'')+'</textarea></div>';
+  html += '</div>';
+
+  html += '</div>';
+  return html;
+}
+function ccEvalBuildTable(){
+  var rows = [
+    {label:'装修方式', get:function(d){ var map={full:'全包',half:'半包',clear:'清包'}; return map[d.mode]||'—'; }},
+    {label:'联系人', get:function(d){ return d.contact||'—'; }},
+    {label:'单价(元/㎡)', get:function(d){ return d.areaPrice||'—'; }},
+    {label:'报价总额(元)', get:function(d){ return d.totalQuote?parseInt(d.totalQuote).toLocaleString():'—'; }},
+    {label:'计划开工', get:function(d){ return d.startDate||'—'; }},
+    {label:'计划竣工', get:function(d){ return d.endDate||'—'; }},
+    {label:'质保年限', get:function(d){ return d.warranty?d.warranty+'年':'—'; }}
+  ];
+  for(var d=0;d<CC_EVAL_DIMS.length;d++){
+    var dim = CC_EVAL_DIMS[d];
+    rows.push({label:dim.name, get:(function(dimKey){ return function(item){ return (item.scores&&item.scores[dimKey]) ? item.scores[dimKey]+'/5' : '—'; }; })(dim.key)});
+  }
+  var maxTotal = 0;
+  for(var i=0;i<ccEvalData.length;i++){ var t=ccEvalTotal(ccEvalData[i]); if(t>maxTotal) maxTotal=t; }
+  var html = '<div class="bento-card">';
+  html += '<div class="card-title"><span class="card-icon">📊</span>装修公司横向对比<span class="card-subtitle">高分自动高亮</span></div>';
+  html += '<div style="overflow-x:auto;"><table class="dc-cmp-table"><thead><tr><th>对比项</th>';
+  for(var i=0;i<ccEvalData.length;i++){ html += '<th>'+(ccEvalData[i].name||'公司'+(i+1))+'</th>'; }
+  html += '</tr></thead><tbody>';
+  for(var r=0;r<rows.length;r++){
+    html += '<tr><td style="font-weight:600;color:var(--text-secondary);">'+rows[r].label+'</td>';
+    for(var i=0;i<ccEvalData.length;i++){ html += '<td>'+rows[r].get(ccEvalData[i])+'</td>'; }
+    html += '</tr>';
+  }
+  html += '<tr style="border-top:2px solid rgba(99,102,241,0.15);"><td style="font-weight:700;">总分</td>';
+  for(var i=0;i<ccEvalData.length;i++){
+    var t = ccEvalTotal(ccEvalData[i]);
+    var isBest = (t===maxTotal && t>0);
+    html += '<td class="dc-cmp-score'+(isBest?' best':'')+'">'+t+'/'+CC_EVAL_DIMS.length*5+(isBest?' ★':'')+'</td>';
+  }
+  html += '</tr>';
+  html += '<tr><td style="font-weight:700;">平均分</td>';
+  for(var i=0;i<ccEvalData.length;i++){
+    var a = ccEvalAvg(ccEvalData[i]);
+    var isBest = (ccEvalTotal(ccEvalData[i])===maxTotal && maxTotal>0);
+    html += '<td class="dc-cmp-score'+(isBest?' best':'')+'">'+a+(isBest?' ★':'')+'</td>';
+  }
+  html += '</tr>';
+  html += '</tbody></table></div>';
+  html += '<div style="margin-top:12px;font-size:12px;color:var(--text-muted);">💡 建议：不要只看总分高低，结合报价、工期、质保、沟通感受综合判断。建议至少对比3家后再做决定。</div>';
+  html += '</div>';
+  return html;
+}
+function ccEvalScrollToTable(){
+  var tbl = document.querySelectorAll('.dc-cmp-table');
+  /* 选取第二个cmp-table（第一个在设计比稿页签） */
+  if(tbl.length>=2 && tbl[1].scrollIntoView){ tbl[1].scrollIntoView({behavior:'smooth', block:'start'}); }
+}
+loadCCEval();
+
 function renderCompany(area){
   var total = ccTotalItems();
   var done = ccCount();
   var pct = total ? Math.round(done/total*100) : 0;
   var html = '';
   html += '<div class="bento-card">';
-  html += '<div class="card-title"><span class="card-icon">🏢</span>装修公司选择<span class="card-subtitle">资质核实 · 报价合同 · 避坑要点 · 签约确认</span></div>';
-  html += '<div class="tip-box tip-info"><span class="tip-ic">💡</span><div>挑选装修公司是整个装修最重要的一步。按下面「4步筛选流程」走，逐项勾选核对清单（自动保存本地），全部完成后再签合同，能避开绝大多数坑。</div></div>';
+  html += '<div class="card-title"><span class="card-icon">🏢</span>装修公司选择<span class="card-subtitle">选取标准 · 多家评价 · 横向对比 · 辅助决策</span></div>';
+  html += '<div class="tip-box tip-info"><span class="tip-ic">💡</span><div>挑选装修公司是整个装修最重要的一步。先看下方「选取标准」和「避坑要点」了解关注什么，再用「公司评价对比」逐家打分，至少对比3家后再签合同。</div></div>';
   html += '</div>';
 
   /* 进度条 */
   html += '<div class="cc-progress-card"><div style="display:flex;align-items:center;justify-content:space-between;">';
-  html += '<div><div class="cc-progress-num">'+done+'/'+total+'</div><div class="cc-progress-label">核对清单进度</div></div>';
+  html += '<div><div class="cc-progress-num">'+done+'/'+total+'</div><div class="cc-progress-label">选取标准核对进度</div></div>';
   html += '<div style="font-size:14px;font-weight:700;color:var(--accent);">'+pct+'%</div></div>';
   html += '<div class="cc-bar"><div class="cc-bar-fill" style="width:'+pct+'%"></div></div>';
-  html += '<div style="font-size:12px;color:var(--text-muted);margin-top:8px;">'+(pct===100?'全部达标，可以放心签合同了 🎉':pct>=50?'进度过半，继续加油':'建议逐一核对，别跳过任何一项')+'</div>';
+  html += '<div style="font-size:12px;color:var(--text-muted);margin-top:8px;">'+(pct===100?'标准全部核对完毕，可以放心评价了 🎉':pct>=50?'进度过半，继续核对':'建议逐一核对，别跳过任何一项')+'</div>';
   html += '</div>';
 
   /* 筛选流程 */
@@ -3758,7 +3937,38 @@ function renderCompany(area){
   }
   html += '</div>';
 
+  /* ===== 公司评价对比 ===== */
+  var ccNewFlag = false;
+  html += '<div class="bento-card">';
+  html += '<div class="card-title"><span class="card-icon">📊</span>装修公司评价对比<span class="card-subtitle">添加公司 · 5维度打分 · 横向对比 · 辅助决策</span></div>';
+  html += '<div class="tip-box tip-info"><span class="tip-ic">💡</span><div>每接触一家就点「+ 添加公司」录入。了解后给5个维度打1-5星，系统自动算总分和平均分，高亮最高分公司。数据自动保存在浏览器本地。</div></div>';
+  html += '<div style="display:flex;gap:8px;margin-top:12px;"><button class="btn" onclick="ccEvalAdd()">+ 添加公司</button>';
+  if(ccEvalData.length>=2){ html += '<button class="btn btn-ghost" onclick="ccEvalScrollToTable()">↓ 查看对比汇总</button>'; }
+  html += '</div>';
+  html += '</div>';
+
+  for(var i=0;i<ccEvalData.length;i++){
+    var item = ccEvalData[i];
+    if(item._isNew){ ccNewFlag = true; delete item._isNew; }
+    html += ccEvalBuildCard(item, i);
+  }
+
+  if(ccEvalData.length>=2){
+    html += ccEvalBuildTable();
+  }
+
+  if(ccEvalData.length===0){
+    html += '<div class="bento-card"><div style="text-align:center;padding:50px 0;color:var(--text-muted);"><div style="font-size:48px;margin-bottom:14px;">🏢</div><div style="font-size:15px;">还没有添加装修公司</div><div style="font-size:13px;margin-top:6px;">点上方「+ 添加公司」开始记录第一家</div></div></div>';
+  }
+
   area.innerHTML = html;
+
+  if(ccNewFlag){
+    setTimeout(function(){
+      var el = document.getElementById('ccEval-name-'+ccEvalData[ccEvalData.length-1].id);
+      if(el) el.focus();
+    }, 100);
+  }
 }
 loadCCData();
 
