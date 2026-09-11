@@ -3884,20 +3884,25 @@ function renderCompany(area){
   var done = ccCount();
   var pct = total ? Math.round(done/total*100) : 0;
   var html = '';
+  /* ===== 标题卡 + 添加按钮（与设计比稿对齐） ===== */
   html += '<div class="bento-card">';
-  html += '<div class="card-title"><span class="card-icon">🏢</span>装修公司选择<span class="card-subtitle">选取标准 · 多家评价 · 横向对比 · 辅助决策</span></div>';
-  html += '<div class="tip-box tip-info"><span class="tip-ic">💡</span><div>挑选装修公司是整个装修最重要的一步。先看下方「选取标准」和「避坑要点」了解关注什么，再用「公司评价对比」逐家打分，至少对比3家后再签合同。</div></div>';
+  html += '<div class="card-title"><span class="card-icon">🏢</span>装修公司比稿<span class="card-subtitle">录入多家装修公司信息 · 5维度打分 · 横向对比 · 辅助决策</span></div>';
+  html += '<div class="tip-box tip-info"><span class="tip-ic">💡</span><div>每接触一家装修公司就点「+ 添加公司」录入。了解后给各维度打1-5星，系统自动算总分和平均分，高亮最高分公司。数据自动保存在浏览器本地。</div></div>';
+  html += '<div style="display:flex;gap:8px;margin-top:12px;"><button class="btn" onclick="ccEvalAdd()">+ 添加公司</button>';
+  if(ccEvalData.length>=2){ html += '<button class="btn btn-ghost" onclick="ccEvalScrollToTable()">↓ 查看对比汇总</button>'; }
+  html += '</div>';
   html += '</div>';
 
-  /* 进度条 */
+  /* ===== 选取标准区（与设计比稿的 dc-crit-section 对齐） ===== */
+  html += '<div id="cc-crit-section">';
   html += '<div class="cc-progress-card"><div style="display:flex;align-items:center;justify-content:space-between;">';
   html += '<div><div class="cc-progress-num">'+done+'/'+total+'</div><div class="cc-progress-label">选取标准核对进度</div></div>';
   html += '<div style="font-size:14px;font-weight:700;color:var(--accent);">'+pct+'%</div></div>';
   html += '<div class="cc-bar"><div class="cc-bar-fill" style="width:'+pct+'%"></div></div>';
-  html += '<div style="font-size:12px;color:var(--text-muted);margin-top:8px;">'+(pct===100?'标准全部核对完毕，可以放心评价了 🎉':pct>=50?'进度过半，继续核对':'建议逐一核对，别跳过任何一项')+'</div>';
+  html += '<div style="font-size:12px;color:var(--text-muted);margin-top:8px;">'+(pct===100?'标准全部核对完毕，可以放心选择了 🎉':pct>=50?'进度过半，继续核对':'选装修公司前先看这5组标准，逐项核对更靠谱')+'</div>';
   html += '</div>';
 
-  /* 筛选流程 */
+  /* 4步筛选流程 */
   html += '<div class="bento-card"><div class="card-title"><span class="card-icon">🧭</span>4步筛选流程<span class="card-subtitle">按顺序走，别跳步</span></div>';
   html += '<div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;">';
   for(var s=0;s<CC_STEPS.length;s++){
@@ -3930,23 +3935,17 @@ function renderCompany(area){
   }
 
   /* 避坑要点 */
-  html += '<div class="bento-card"><div class="card-title"><span class="card-icon">⚠️</span>避坑要点<span class="card-subtitle">高发套路，提前看</span></div>';
+  html += '<div class="bento-card"><div class="card-title"><span class="card-icon">⚠️</span>装修公司避坑要点<span class="card-subtitle">高发套路，提前看</span></div>';
   for(var p=0;p<CC_PITFALLS.length;p++){
     var pf = CC_PITFALLS[p];
     html += '<div class="cc-tip warn"><div>⚠️</div><div><b>'+pf.title+'：</b>'+pf.desc+'</div></div>';
   }
   html += '</div>';
+  html += '</div>';
+  /* ===== 选取标准 END ===== */
 
-  /* ===== 公司评价对比 ===== */
+  /* ===== 公司卡片 + 对比表 + 空状态（与设计比稿对齐） ===== */
   var ccNewFlag = false;
-  html += '<div class="bento-card">';
-  html += '<div class="card-title"><span class="card-icon">📊</span>装修公司评价对比<span class="card-subtitle">添加公司 · 5维度打分 · 横向对比 · 辅助决策</span></div>';
-  html += '<div class="tip-box tip-info"><span class="tip-ic">💡</span><div>每接触一家就点「+ 添加公司」录入。了解后给5个维度打1-5星，系统自动算总分和平均分，高亮最高分公司。数据自动保存在浏览器本地。</div></div>';
-  html += '<div style="display:flex;gap:8px;margin-top:12px;"><button class="btn" onclick="ccEvalAdd()">+ 添加公司</button>';
-  if(ccEvalData.length>=2){ html += '<button class="btn btn-ghost" onclick="ccEvalScrollToTable()">↓ 查看对比汇总</button>'; }
-  html += '</div>';
-  html += '</div>';
-
   for(var i=0;i<ccEvalData.length;i++){
     var item = ccEvalData[i];
     if(item._isNew){ ccNewFlag = true; delete item._isNew; }
