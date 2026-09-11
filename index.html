@@ -608,6 +608,35 @@ table.brand-table { width:100%; border-collapse:collapse; font-size:13px; min-wi
 .fp-badge { display:inline-flex; align-items:center; gap:4px; font-size:11px; padding:3px 10px; border-radius:20px; background:var(--accent-light); color:var(--accent-dark); font-weight:600; }
 .fp-badge.green { background:#dcfce7; color:#16a34a; }
 .fp-badge.orange { background:#ffedd5; color:#ea580c; }
+
+/* ===== 设计比稿 ===== */
+.dc-card { background:var(--card-bg); border-radius:var(--radius-md); padding:18px 20px; margin-bottom:14px; border:1px solid rgba(0,0,0,0.06); position:relative; transition:var(--transition); }
+.dc-card.best { border-color:#22c55e; box-shadow:0 4px 20px rgba(34,197,94,0.12); }
+.dc-card.best::before { content:'★ 总分最高'; position:absolute; top:-10px; left:16px; background:#22c55e; color:#fff; font-size:11px; font-weight:700; padding:3px 12px; border-radius:20px; box-shadow:0 2px 8px rgba(34,197,94,0.3); }
+.dc-head { display:flex; align-items:flex-start; gap:12px; margin-bottom:14px; }
+.dc-name { font-size:16px; font-weight:700; color:var(--text-primary); }
+.dc-score-big { font-size:28px; font-weight:800; color:var(--accent); line-height:1; }
+.dc-score-label { font-size:11px; color:var(--text-muted); margin-top:2px; }
+.dc-del { flex-shrink:0; padding:5px 12px; font-size:12px; border:1px solid #fecaca; background:#fef2f2; color:#dc2626; border-radius:6px; cursor:pointer; transition:var(--transition); }
+.dc-del:hover { background:#fee2e2; }
+.dc-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px 16px; }
+.dc-field { display:flex; flex-direction:column; gap:3px; }
+.dc-field label { font-size:11px; font-weight:600; color:var(--text-secondary); }
+.dc-field input, .dc-field select, .dc-field textarea { border:1px solid rgba(0,0,0,0.1); border-radius:6px; padding:7px 10px; font-size:13px; font-family:inherit; color:var(--text-primary); background:rgba(255,255,255,0.9); transition:border-color .2s; }
+.dc-field input:focus, .dc-field select:focus, .dc-field textarea:focus { outline:none; border-color:var(--accent); box-shadow:0 0 0 2px rgba(99,102,241,.1); }
+.dc-score-row { display:flex; align-items:center; gap:10px; padding:7px 0; border-bottom:1px dashed rgba(0,0,0,0.05); }
+.dc-score-name { flex:1; font-size:13px; font-weight:600; color:var(--text-primary); }
+.dc-stars { display:flex; gap:2px; }
+.dc-star { font-size:18px; cursor:pointer; color:#d1d5db; transition:color .15s; user-select:none; }
+.dc-star.on { color:#f59e0b; }
+.dc-star:hover { color:#fbbf24; }
+.dc-score-val { font-size:12px; color:var(--text-muted); min-width:30px; text-align:right; }
+.dc-cmp-table { width:100%; border-collapse:collapse; font-size:13px; }
+.dc-cmp-table th, .dc-cmp-table td { padding:8px 10px; text-align:center; border-bottom:1px solid rgba(0,0,0,0.06); }
+.dc-cmp-table th { background:var(--accent-light); color:var(--accent-dark); font-weight:700; }
+.dc-cmp-table td:first-child { text-align:left; }
+.dc-cmp-score { font-weight:700; font-size:14px; }
+.dc-cmp-score.best { color:#16a34a; }
 </style>
 </head>
 <body>
@@ -710,6 +739,9 @@ table.brand-table { width:100%; border-collapse:collapse; font-size:13px; min-wi
     </div>
     <div class="nav-item" data-tab="recap" onclick="switchTab('recap')">
       <span class="nav-icon">📊</span><span class="nav-label">采购统计</span>
+    </div>
+    <div class="nav-item" data-tab="designcmp" onclick="switchTab('designcmp')">
+      <span class="nav-icon">📐</span><span class="nav-label">设计比稿</span>
     </div>
   </div>
   <div class="sidebar-footer">
@@ -1203,7 +1235,7 @@ function switchTab(tab){
     if(items[i].getAttribute('data-tab')===tab) items[i].classList.add('active');
     else items[i].classList.remove('active');
   }
-  var titles = {overview:'装修进度总览', floorplan:'户型图 · 效果图', stage1:'① 准备阶段', 'stage1.5':'② 设计阶段', stage2:'③ 拆改封窗', stage3:'④ 水电改造', stage4:'⑤ 瓦工阶段', stage5:'⑥ 木工阶段', stage6:'⑦ 油工阶段', stage7:'⑧ 安装阶段', stage8:'⑨ 软装收尾', purchase:'采购时间表', guide:'阶段总览', checklist:'验收检查表', shops:'上海采购地图', brands:'品牌推荐', recap:'采购统计'};
+  var titles = {overview:'装修进度总览', floorplan:'户型图 · 效果图', stage1:'① 准备阶段', 'stage1.5':'② 设计阶段', stage2:'③ 拆改封窗', stage3:'④ 水电改造', stage4:'⑤ 瓦工阶段', stage5:'⑥ 木工阶段', stage6:'⑦ 油工阶段', stage7:'⑧ 安装阶段', stage8:'⑨ 软装收尾', purchase:'采购时间表', guide:'阶段总览', checklist:'验收检查表', shops:'上海采购地图', brands:'品牌推荐', recap:'采购统计', designcmp:'设计比稿'};
   document.getElementById('main-title').textContent = titles[tab];
   renderContent();
 }
@@ -1220,6 +1252,7 @@ function renderContent(){
   else if(currentTab==='shops') renderShops(area);
   else if(currentTab==='brands') renderBrands(area);
   else if(currentTab==='recap') renderRecap(area);
+  else if(currentTab==='designcmp') renderDesignCompare(area);
   renderStats();
   updateBadges();
 }
@@ -3187,6 +3220,235 @@ function fpLinkSave(markerId){
   renderFloorplan();
 }
 
+/* ============ 设计比稿 ============ */
+var DC_KEY = 'zx_guide_designcmp_v1';
+var DC_DIMS = [
+  {key:'planQuality', name:'方案质量', desc:'户型改造合理性、动线流畅度、空间利用率'},
+  {key:'priceReasonable', name:'报价合理性', desc:'设计费单价、透明度、有无隐形增项'},
+  {key:'communication', name:'沟通理解', desc:'是否倾听需求、能否快速理解风格偏好'},
+  {key:'pastCases', name:'往期案例', desc:'同户型/同风格落地案例数量与完成度'},
+  {key:'timelinePromise', name:'工期承诺', desc:'量房→初稿→定稿→效果图的整体周期'},
+  {key:'afterService', name:'售后服务', desc:'施工期间图纸变更、现场跟进、问题响应速度'}
+];
+var dcData = [];
+function loadDCData(){
+  try{ var raw = localStorage.getItem(DC_KEY); if(raw) dcData = JSON.parse(raw); }catch(e){ dcData = []; }
+  if(!Array.isArray(dcData)) dcData = [];
+  var dirty = false;
+  for(var i=0;i<dcData.length;i++){ if(dcData[i]._isNew){ delete dcData[i]._isNew; dirty = true; } }
+  if(dirty) saveDCData();
+}
+function saveDCData(){
+  try{ localStorage.setItem(DC_KEY, JSON.stringify(dcData)); }catch(e){}
+}
+function dcUid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+function dcTotalScore(item){
+  var sum=0;
+  for(var i=0;i<DC_DIMS.length;i++){ sum += (item.scores&&item.scores[DC_DIMS[i].key])||0; }
+  return sum;
+ }
+function dcAvgScore(item){
+  return (dcTotalScore(item)/DC_DIMS.length).toFixed(1);
+}
+function renderDesignCompare(area){
+  var html = '';
+  html += '<div class="bento-card">';
+  html += '<div class="card-title"><span class="card-icon">📐</span>设计公司比稿<span class="card-subtitle">录入多家设计公司信息 · 6维度打分 · 横向对比 · 辅助决策</span></div>';
+  html += '<div class="tip-box tip-info"><span class="tip-ic">💡</span><div>每找一家设计公司就点「+ 添加公司」录入。量房结束后给各维度打1-5星，系统自动算总分和平均分，高亮最高分公司。数据自动保存在浏览器本地。</div></div>';
+  html += '<div style="display:flex;gap:8px;margin-top:12px;"><button class="btn" onclick="dcAdd()">+ 添加公司</button>';
+  if(dcData.length>=2){ html += '<button class="btn btn-ghost" onclick="dcScrollToTable()">↓ 查看对比汇总</button>'; }
+  html += '</div>';
+  html += '</div>';
+
+  for(var i=0;i<dcData.length;i++){
+    var item = dcData[i];
+    var isNew = item._isNew; delete item._isNew;
+    html += dcBuildCard(item, i);
+  }
+
+  if(dcData.length>=2){
+    html += dcBuildCompareTable();
+  }
+
+  if(dcData.length===0){
+    html += '<div class="bento-card"><div style="text-align:center;padding:50px 0;color:var(--text-muted);"><div style="font-size:48px;margin-bottom:14px;">📐</div><div style="font-size:15px;">还没有添加设计公司</div><div style="font-size:13px;margin-top:6px;">点上方「+ 添加公司」开始记录第一家</div></div></div>';
+  }
+
+  area.innerHTML = html;
+
+  if(isNew){
+    setTimeout(function(){
+      var el = document.getElementById('dc-name-'+dcData[dcData.length-1].id);
+      if(el) el.focus();
+    }, 100);
+  }
+}
+function dcBuildCard(item, idx){
+  var total = dcTotalScore(item);
+  var avg = dcAvgScore(item);
+  var maxTotal = DC_DIMS.length * 5;
+  var pct = total ? Math.round(total/maxTotal*100) : 0;
+  var isBest = false;
+  if(dcData.length>=2){
+    var maxScore = 0;
+    for(var j=0;j<dcData.length;j++){ if(dcTotalScore(dcData[j])>maxScore) maxScore=dcTotalScore(dcData[j]); }
+    isBest = (total===maxScore && total>0);
+  }
+  var html = '';
+  html += '<div class="dc-card'+(isBest?' best':'')+'">';
+  html += '<div class="dc-head">';
+  html += '<div style="flex:1;"><div class="dc-name">'+(item.name||'未命名公司')+'</div>';
+  html += '<div style="font-size:11px;color:var(--text-muted);margin-top:3px;">序号 #'+(idx+1)+'</div></div>';
+  if(total>0){
+    html += '<div style="text-align:center;"><div class="dc-score-big">'+avg+'</div><div class="dc-score-label">总分 '+total+'/'+maxTotal+' · '+pct+'%</div></div>';
+  }
+  html += '<button class="dc-del" onclick="dcDel(\''+item.id+'\')">🗑 删除</button>';
+  html += '</div>';
+
+  html += '<div class="dc-grid">';
+  html += dcField(item.id,'名称','name', item.name, 'text', '如：XX设计');
+  html += dcSelect(item.id,'类型','type', item.type, [{v:'full',t:'全案公司'},{v:'half',t:'装修公司设计'},{v:'studio',t:'设计工作室'},{v:'indie',t:'独立设计师'}]);
+  html += dcField(item.id,'联系人','contact', item.contact, 'text', '设计师姓名');
+  html += dcField(item.id,'电话','phone', item.phone, 'text', '联系方式');
+  html += dcField(item.id,'设计费(元/㎡)','price', item.price, 'number', '如：200');
+  html += dcField(item.id,'量房日期','measureDate', item.measureDate, 'date');
+  html += dcField(item.id,'初稿日期','draftDate', item.draftDate, 'date');
+  html += dcField(item.id,'定稿日期','finalDate', item.finalDate, 'date');
+  html += dcField(item.id,'效果图日期','renderDate', item.renderDate, 'date');
+  html += dcField(item.id,'报价总额(元)','totalQuote', item.totalQuote, 'number', '如：50000');
+  html += dcField(item.id,'预计工期(天)','duration', item.duration, 'number', '从签约到效果图交付');
+  html += '</div>';
+
+  html += '<div style="margin-top:10px;"><div style="font-size:12px;font-weight:700;color:var(--text-muted);margin-bottom:6px;">📋 6维度评分（点星星打分）</div>';
+  for(var d=0;d<DC_DIMS.length;d++){
+    var dim = DC_DIMS[d];
+    var val = (item.scores && item.scores[dim.key]) || 0;
+    html += '<div class="dc-score-row">';
+    html += '<div class="dc-score-name">'+dim.name+'<span style="font-size:11px;color:var(--text-muted);margin-left:6px;">'+dim.desc+'</span></div>';
+    html += '<div class="dc-stars">';
+    for(var s=1;s<=5;s++){
+      html += '<span class="dc-star'+(s<=val?' on':'')+'" data-dc="'+item.id+'" data-dim="'+dim.key+'" data-val="'+s+'" onclick="dcStar(this)">★</span>';
+    }
+    html += '</div><div class="dc-score-val">'+val+'/5</div>';
+    html += '</div>';
+  }
+  html += '</div>';
+
+  html += '<div class="dc-notes dc-grid" style="grid-template-columns:1fr;">';
+  html += '<div class="dc-field"><label>备注（优缺点、感受、待确认项）</label><textarea id="dc-notes-'+item.id+'" placeholder="如：设计师沟通顺畅，方案修改积极；但设计费偏高，需确认效果图修改次数" onblur="dcSaveField(this)" data-id="'+item.id+'" data-field="notes">'+esc(item.notes||'')+'</textarea></div>';
+  html += '</div>';
+
+  html += '</div>';
+  return html;
+}
+function dcField(id, label, field, val, type, ph){
+  return '<div class="dc-field"><label>'+label+'</label><input type="'+type+'" value="'+esc(val||'')+'" placeholder="'+(ph||'')+'" onblur="dcSaveField(this)" data-id="'+id+'" data-field="'+field+'" id="'+(field==='name'?'dc-name-'+id:'')+'"></div>';
+}
+function dcSelect(id, label, field, val, options){
+  var opts = '';
+  for(var i=0;i<options.length;i++){ opts += '<option value="'+options[i].v+'"'+(options[i].v===val?' selected':'')+'>'+options[i].t+'</option>'; }
+  return '<div class="dc-field"><label>'+label+'</label><select onchange="dcSaveField(this)" data-id="'+id+'" data-field="'+field+'">'+opts+'</select></div>';
+}
+function dcSaveField(el){
+  var id = el.getAttribute('data-id');
+  var field = el.getAttribute('data-field');
+  var val = el.value;
+  for(var i=0;i<dcData.length;i++){
+    if(dcData[i].id===id){
+      dcData[i][field] = val;
+      break;
+    }
+  }
+  saveDCData();
+}
+function dcStar(el){
+  var id = el.getAttribute('data-dc');
+  var dim = el.getAttribute('data-dim');
+  var val = parseInt(el.getAttribute('data-val'));
+  for(var i=0;i<dcData.length;i++){
+    if(dcData[i].id===id){
+      if(!dcData[i].scores) dcData[i].scores = {};
+      if(dcData[i].scores[dim]===val){ dcData[i].scores[dim] = 0; }
+      else { dcData[i].scores[dim] = val; }
+      break;
+    }
+  }
+  saveDCData();
+  renderDesignCompare(document.getElementById('content-area'));
+}
+function dcAdd(){
+  var item = { id:dcUid(), name:'', type:'', contact:'', phone:'', price:'', measureDate:'', draftDate:'', finalDate:'', renderDate:'', totalQuote:'', duration:'', notes:'', scores:{}, _isNew:true };
+  dcData.push(item);
+  saveDCData();
+  renderDesignCompare(document.getElementById('content-area'));
+}
+function dcDel(id){
+  if(!confirm('确定删除这家公司？删除后无法恢复。')) return;
+  dcData = dcData.filter(function(d){ return d.id!==id; });
+  saveDCData();
+  renderDesignCompare(document.getElementById('content-area'));
+}
+function dcBuildCompareTable(){
+  var rows = [
+    {label:'类型', get:function(d){ var map={full:'全案公司',half:'装修公司设计',studio:'设计工作室',indie:'独立设计师'}; return map[d.type]||'—'; }},
+    {label:'联系人', get:function(d){ return d.contact||'—'; }},
+    {label:'设计费(元/㎡)', get:function(d){ return d.price||'—'; }},
+    {label:'报价总额(元)', get:function(d){ return d.totalQuote?parseInt(d.totalQuote).toLocaleString():'—'; }},
+    {label:'预计工期(天)', get:function(d){ return d.duration||'—'; }},
+    {label:'量房日期', get:function(d){ return d.measureDate||'—'; }},
+    {label:'初稿日期', get:function(d){ return d.draftDate||'—'; }},
+    {label:'定稿日期', get:function(d){ return d.finalDate||'—'; }},
+    {label:'效果图日期', get:function(d){ return d.renderDate||'—'; }}
+  ];
+  for(var d=0;d<DC_DIMS.length;d++){
+    var dim = DC_DIMS[d];
+    rows.push({label:dim.name, get:(function(dimKey){ return function(item){ return (item.scores&&item.scores[dimKey]) ? item.scores[dimKey]+'/5' : '—'; }; })(dim.key)});
+  }
+
+  var maxTotal = 0;
+  for(var i=0;i<dcData.length;i++){ var t=dcTotalScore(dcData[i]); if(t>maxTotal) maxTotal=t; }
+
+  var html = '<div class="bento-card">';
+  html += '<div class="card-title"><span class="card-icon">📊</span>横向对比汇总<span class="card-subtitle">高分自动高亮</span></div>';
+  html += '<div style="overflow-x:auto;"><table class="dc-cmp-table"><thead><tr><th>对比项</th>';
+  for(var i=0;i<dcData.length;i++){ html += '<th>'+(dcData[i].name||'公司'+(i+1))+'</th>'; }
+  html += '</tr></thead><tbody>';
+
+  for(var r=0;r<rows.length;r++){
+    html += '<tr><td style="font-weight:600;color:var(--text-secondary);">'+rows[r].label+'</td>';
+    for(var i=0;i<dcData.length;i++){
+      html += '<td>'+rows[r].get(dcData[i])+'</td>';
+    }
+    html += '</tr>';
+  }
+
+  html += '<tr style="border-top:2px solid rgba(99,102,241,0.15);"><td style="font-weight:700;">总分</td>';
+  for(var i=0;i<dcData.length;i++){
+    var t = dcTotalScore(dcData[i]);
+    var isBest = (t===maxTotal && t>0);
+    html += '<td class="dc-cmp-score'+(isBest?' best':'')+'">'+t+'/'+DC_DIMS.length*5+(isBest?' ★':'')+'</td>';
+  }
+  html += '</tr>';
+
+  html += '<tr><td style="font-weight:700;">平均分</td>';
+  for(var i=0;i<dcData.length;i++){
+    var a = dcAvgScore(dcData[i]);
+    var isBest = (dcTotalScore(dcData[i])===maxTotal && maxTotal>0);
+    html += '<td class="dc-cmp-score'+(isBest?' best':'')+'">'+a+(isBest?' ★':'')+'</td>';
+  }
+  html += '</tr>';
+
+  html += '</tbody></table></div>';
+  html += '<div style="margin-top:12px;font-size:12px;color:var(--text-muted);">💡 建议：不要只看总分高低，结合报价、工期、沟通感受综合判断。建议至少对比2-3家后再做决定。</div>';
+  html += '</div>';
+  return html;
+}
+function dcScrollToTable(){
+  var tbl = document.querySelector('.dc-cmp-table');
+  if(tbl && tbl.scrollIntoView){ tbl.scrollIntoView({behavior:'smooth', block:'start'}); }
+}
+loadDCData();
+
 function renderStats(){
   var el = document.getElementById('main-stats');
   var st = getAllStats();
@@ -3267,6 +3529,7 @@ if(getSession()){
 document.getElementById('login-pass').addEventListener('keydown', function(e){
   if(e.key==='Enter') doLogin();
 });
+
 </script>
 </body>
 </html>
