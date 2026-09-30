@@ -104,6 +104,8 @@ main{max-width:860px;margin:0 auto;padding:14px 12px}
 .btn.gray{background:#fff;color:var(--muted);border:1.5px solid var(--line)}
 .btn.sm{padding:6px 12px;font-size:12.5px;border-radius:8px}
 .btn.danger{background:#fff;color:var(--bad);border:1.5px solid var(--bad)}
+.save-btn{background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;box-shadow:0 2px 8px rgba(22,163,74,.3)}
+.save-btn:active{opacity:.85}
 
 /* 对比表 */
 .cmp-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:10px;border:1px solid var(--line)}
@@ -428,8 +430,8 @@ function renderScore(){
   var total = sumScore(d), rated = ratedCount(d), v = verdict(d);
   var bb = '<div class="bb-left"><div class="bb-score">总分 <b>'+total+'</b>/90 · 已评'+rated+'/18题</div>'
     + '<div class="badge '+v.cls+'">'+v.label+'</div></div>'
-    + '<div class="bb-right"><button class="btn ghost sm" onclick="openIO()">备份</button>'
-    + '<button class="btn sm" onclick="switchView(\'compare\')">看对比 →</button></div>';
+    + '<div class="bb-right"><button class="btn save-btn sm" onclick="quickSave()">💾 保存数据</button>'
+    + '<button class="btn ghost sm" onclick="openIO()">备份/恢复</button></div>';
   if(isVeto(d)){
     bb += '<div class="veto-strip">⚠️ 一票否决已触发'+(d.manualVeto?'（手动标记）':'（第5题或第12题打了1分）')+'——安全/立场红线，建议淘汰'
       + (d.manualVeto ? '<button onclick="toggleManualVeto()">取消手动标记</button>' : '') + '</div>';
@@ -476,6 +478,7 @@ function renderCompare(){
   }
   html += '</tr></table></div>';
   html += '<div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap"><button class="btn sm" onclick="switchView(\'score\')">← 返回评分</button>'
+    + '<button class="btn save-btn sm" onclick="quickSave()">💾 保存数据</button>'
     + '<button class="btn ghost sm" onclick="openIO()">备份/恢复</button></div>';
   html += '</div>';
   document.getElementById("main").innerHTML = html;
@@ -490,6 +493,26 @@ function render(){
 }
 
 /* ============ 导出导入 ============ */
+function quickSave(){
+  var json = JSON.stringify(DB);
+  var t = new Date(), p = function(n){ return (n<10?"0":"")+n; };
+  var fname = "评分卡备份-"+t.getFullYear()+p(t.getMonth()+1)+p(t.getDate())+"-"+p(t.getHours())+p(t.getMinutes())+".json";
+  try{
+    var blob = new Blob([json], {type:"application/json"});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url; a.download = fname;
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){ document.body.removeChild(a); URL.revokeObjectURL(url); }, 400);
+  }catch(e){}
+  var copied = false;
+  try{
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(json).then(function(){ copied = true; toast("✅ 数据已保存：备份文件已下载，并已复制到剪贴板"); },
+        function(){ toast("✅ 数据已保存：备份文件已下载（"+fname+"）"); });
+    }else{ copied = true; toast("✅ 数据已保存：备份文件已下载（"+fname+"）"); }
+  }catch(e){ toast("✅ 数据已保存：备份文件已下载（"+fname+"）"); }
+}
 function openIO(){ document.getElementById("ioArea").value=""; document.getElementById("mIO").classList.add("show"); }
 function genExport(){
   document.getElementById("ioArea").value = JSON.stringify(DB);
