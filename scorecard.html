@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>设计师面谈评分卡</title>
+<style>
+:root{
+  --primary:#2563eb; --primary-dark:#1e40af; --primary-light:#dbeafe;
+  --bg:#eef2f7; --card:#ffffff; --line:#e2e8f0;
+  --text:#1e293b; --muted:#64748b;
+  --star:#f59e0b; --star-bg:#d5dbe3;
+  --good:#16a34a; --mid:#d97706; --bad:#dc2626;
+  --radius:14px; --shadow:0 1px 4px rgba(15,23,42,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{font-family:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.6;padding-bottom:92px}
+button{font-family:inherit;border:none;background:none;cursor:pointer;font-size:15px}
+textarea,input{font-family:inherit}
+
+/* 顶部 */
+.header{position:sticky;top:0;z-index:50;background:linear-gradient(135deg,#2563eb,#1e40af);color:#fff;padding:12px 14px calc(10px);box-shadow:0 2px 10px rgba(30,64,175,.3)}
+.h-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+.h-title{font-size:18px;font-weight:700;letter-spacing:.5px}
+.h-sub{font-size:11px;opacity:.85;margin-top:2px}
+.view-switch{display:flex;background:rgba(255,255,255,.18);border-radius:10px;padding:3px;flex-shrink:0}
+.view-switch button{color:#fff;padding:6px 13px;border-radius:8px;font-size:13px;font-weight:600;transition:all .15s}
+.view-switch button.active{background:#fff;color:var(--primary-dark)}
+
+/* 设计师标签 */
+.designer-bar{display:flex;align-items:center;gap:8px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+.designer-bar::-webkit-scrollbar{display:none}
+.d-tab{display:flex;align-items:center;gap:4px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.25);color:#fff;padding:6px 12px;border-radius:20px;font-size:13px;font-weight:600;white-space:nowrap;flex-shrink:0}
+.d-tab.active{background:#fff;color:var(--primary-dark);border-color:#fff}
+.d-tab .del{opacity:.55;font-size:15px;padding:0 2px;line-height:1}
+.d-tab .del:hover{opacity:1}
+.d-add{background:rgba(255,255,255,.16);border:1px dashed rgba(255,255,255,.5);color:#fff;padding:6px 13px;border-radius:20px;font-size:13px;font-weight:600;white-space:nowrap;flex-shrink:0}
+
+/* 主体 */
+main{max-width:860px;margin:0 auto;padding:14px 12px}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin-bottom:12px}
+.card-title-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.card-title{font-size:16px;font-weight:700;color:var(--primary-dark)}
+.part-sum{font-size:13px;font-weight:700;color:var(--primary);background:var(--primary-light);padding:3px 10px;border-radius:12px}
+
+/* 使用说明 */
+.hint-box{background:#f0f7ff;border:1px solid #bfdbfe;border-radius:10px;padding:12px 14px;font-size:13px;color:#1e40af;margin-bottom:12px}
+.hint-box b{display:block;margin-bottom:4px;font-size:13px}
+.hint-box ul{padding-left:18px}
+.hint-box li{margin:3px 0}
+.collapsed .hint-detail{display:none}
+.hint-toggle{color:var(--primary);font-size:12px;font-weight:700;cursor:pointer;user-select:none}
+
+/* 题目 */
+.q-item{border-bottom:1px solid var(--line);padding:13px 2px}
+.q-item:last-child{border-bottom:none}
+.q-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.q-left{flex:1;min-width:0}
+.q-num{display:inline-block;background:var(--primary);color:#fff;font-size:11px;font-weight:700;border-radius:6px;padding:1px 7px;margin-right:6px;vertical-align:2px}
+.q-title{font-weight:600;font-size:15px;color:var(--text)}
+.q-why{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.5}
+.veto-tag{display:inline-block;font-size:10px;font-weight:700;color:#fff;background:var(--bad);border-radius:5px;padding:1px 6px;margin-left:6px;vertical-align:2px}
+.stars{display:flex;gap:4px;flex-shrink:0;padding:4px 0}
+.star{width:34px;height:34px;font-size:22px;line-height:34px;text-align:center;color:var(--star-bg);transition:transform .1s}
+.star.on{color:var(--star)}
+.star:active{transform:scale(1.25)}
+.q-std-toggle{color:var(--primary);font-size:12px;font-weight:600;margin-top:6px;user-select:none;cursor:pointer}
+.std-box{display:none;background:#f8fafc;border-radius:10px;padding:10px 12px;margin-top:8px;font-size:12.5px;line-height:1.6}
+.q-item.open .std-box{display:block}
+.std-row{display:flex;gap:8px;margin:4px 0}
+.std-tag{flex-shrink:0;font-weight:700;border-radius:5px;padding:0 6px;font-size:11px}
+.t5{color:#fff;background:var(--good)}
+.t3{color:#fff;background:var(--mid)}
+.t1{color:#fff;background:var(--bad)}
+.std-txt{color:var(--text)}
+
+/* 开放记录 */
+.rec-item{margin-bottom:14px}
+.rec-item:last-child{margin-bottom:0}
+.rec-label{font-weight:600;font-size:14px;margin-bottom:6px;color:var(--primary-dark)}
+.rec-label .q-num{margin-right:6px}
+.rec-hint{font-size:12px;color:var(--muted);margin-bottom:6px}
+.rec-item textarea{width:100%;min-height:88px;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14px;resize:vertical;background:#fafcff;color:var(--text)}
+.rec-item textarea:focus{outline:none;border-color:var(--primary);background:#fff}
+
+/* 底部汇总栏 */
+.bottom-bar{position:fixed;left:0;right:0;bottom:0;z-index:60;background:rgba(255,255,255,.97);backdrop-filter:blur(8px);border-top:1px solid var(--line);padding:10px 14px calc(10px + env(safe-area-inset-bottom));box-shadow:0 -2px 12px rgba(15,23,42,.08)}
+.bb-inner{max-width:860px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.bb-left{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.bb-score{font-size:14px;font-weight:700;color:var(--text)}
+.bb-score b{font-size:21px;color:var(--primary)}
+.badge{font-size:12.5px;font-weight:700;padding:5px 13px;border-radius:16px}
+.b-rec{background:#dcfce7;color:#166534}
+.b-mid{background:#dbeafe;color:#1e40af}
+.b-low{background:#fef3c7;color:#92400e}
+.b-out{background:#fee2e2;color:#991b1b}
+.veto-strip{width:100%;background:#fee2e2;color:#991b1b;font-size:12.5px;font-weight:600;border-radius:8px;padding:6px 10px;margin-top:6px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.veto-strip button{color:#b91c1c;font-size:12px;font-weight:700;text-decoration:underline}
+.bb-right{display:flex;gap:8px}
+.btn{background:var(--primary);color:#fff;font-weight:600;padding:9px 16px;border-radius:10px;font-size:14px;transition:opacity .15s}
+.btn:active{opacity:.8}
+.btn.ghost{background:#fff;color:var(--primary);border:1.5px solid var(--primary)}
+.btn.gray{background:#fff;color:var(--muted);border:1.5px solid var(--line)}
+.btn.sm{padding:6px 12px;font-size:12.5px;border-radius:8px}
+.btn.danger{background:#fff;color:var(--bad);border:1.5px solid var(--bad)}
+
+/* 对比表 */
+.cmp-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:10px;border:1px solid var(--line)}
+.cmp-table{border-collapse:collapse;width:100%;min-width:640px;font-size:13px}
+.cmp-table th,.cmp-table td{border:1px solid var(--line);padding:8px 10px;text-align:center;white-space:nowrap}
+.cmp-table th{background:#f1f5f9;font-weight:700;color:var(--text);position:sticky;top:0}
+.cmp-table td:first-child,.cmp-table th:first-child{text-align:left;position:sticky;left:0;background:#f8fafc;min-width:150px;z-index:2;font-weight:600}
+.cmp-table tr.sumrow td{background:var(--primary-light);font-weight:700;font-size:14px}
+.cmp-table tr.sumrow td:first-child{background:#dbeafe;color:var(--primary-dark)}
+.sc-5{color:var(--good);font-weight:700}
+.sc-3{color:var(--mid);font-weight:700}
+.sc-1{color:var(--bad);font-weight:700}
+.sc-0{color:#cbd5e1}
+.veto-cell{color:var(--bad);font-weight:700}
+
+/* 弹窗 */
+.modal-mask{display:none;position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:100;align-items:center;justify-content:center;padding:18px}
+.modal-mask.show{display:flex}
+.modal{background:#fff;border-radius:16px;width:100%;max-width:420px;padding:20px;box-shadow:0 10px 40px rgba(15,23,42,.25)}
+.modal h3{font-size:16px;color:var(--primary-dark);margin-bottom:14px}
+.modal label{display:block;font-size:13px;font-weight:600;margin:10px 0 5px;color:var(--text)}
+.modal input[type=text],.modal textarea{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14px;background:#fafcff;color:var(--text)}
+.modal input:focus,.modal textarea:focus{outline:none;border-color:var(--primary)}
+.modal textarea{min-height:110px;font-size:12px;font-family:Consolas,monospace;resize:vertical}
+.modal-btns{display:flex;gap:10px;margin-top:16px;justify-content:flex-end}
+.modal-tip{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.5}
+.empty{text-align:center;padding:50px 20px;color:var(--muted)}
+.empty .big{font-size:44px;margin-bottom:10px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:110px;background:rgba(15,23,42,.85);color:#fff;font-size:13px;padding:9px 18px;border-radius:20px;z-index:200;opacity:0;transition:opacity .25s;pointer-events:none}
+.toast.show{opacity:1}
+
+@media (max-width:420px){
+  .q-head{flex-direction:column}
+  .stars{width:100%;justify-content:space-between;padding:6px 2px}
+  .star{width:44px;height:40px;font-size:26px;line-height:40px}
+  .h-title{font-size:16px}
+}
+@media (min-width:761px){
+  .star{width:30px;height:30px;font-size:20px;line-height:30px}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="h-top">
+    <div>
+      <div class="h-title">📐 设计师面谈评分卡</div>
+      <div class="h-sub">18题打分 · 4项手工记录 · 数据自动保存本机</div>
+    </div>
+    <div class="view-switch">
+      <button id="tab-score" class="active" onclick="switchView('score')">评分</button>
+      <button id="tab-compare" onclick="switchView('compare')">对比</button>
+    </div>
+  </div>
+  <div class="designer-bar" id="designerBar"></div>
+</div>
+
+<main id="main"></main>
+
+<div class="bottom-bar" id="bottomBar" style="display:none">
+  <div class="bb-inner" id="bbInner"></div>
+</div>
+
+<!-- 添加/编辑设计师 -->
+<div class="modal-mask" id="mAdd" onclick="if(event.target===this)closeModal('mAdd')">
+  <div class="modal">
+    <h3 id="mAddTitle">添加候选设计师</h3>
+    <label>名称 *</label>
+    <input type="text" id="iName" placeholder="如：栖斯设计 / 张三（独立设计师）" maxlength="24">
+    <label>联系方式（可选）</label>
+    <input type="text" id="iContact" placeholder="微信 / 电话 / 来源" maxlength="60">
+    <div class="modal-btns">
+      <button class="btn gray" onclick="closeModal('mAdd')">取消</button>
+      <button class="btn" onclick="saveDesigner()">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- 导出导入 -->
+<div class="modal-mask" id="mIO" onclick="if(event.target===this)closeModal('mIO')">
+  <div class="modal">
+    <h3>备份 / 恢复数据</h3>
+    <label>数据（复制到别处保存，或粘贴后点恢复）</label>
+    <textarea id="ioArea" placeholder="点「生成备份」后这里会出现数据文本"></textarea>
+    <div class="modal-btns" style="justify-content:flex-start;flex-wrap:wrap;gap:8px">
+      <button class="btn sm" onclick="genExport()">生成备份</button>
+      <button class="btn sm ghost" onclick="copyExport()">复制</button>
+      <button class="btn sm" onclick="doImport()">粘贴恢复</button>
+      <button class="btn sm danger" onclick="clearAll()">清空全部</button>
+    </div>
+    <div class="modal-tip">手机和电脑数据不互通：在一边点「生成备份+复制」，到另一边粘贴后「恢复」即可同步。</div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+var STORE_KEY = "designer_scorecard_v1";
+
+var PARTS = ["","第一部分：验真","第二部分：方案能力","第三部分：设备统筹","第四部分：落地保障","第五部分：费用与合同","第六部分：压轴测试"];
+var PART_MAX = [0,15,20,10,20,20,5];
+
+var QS = [
+ {id:"q1", p:1, t:"在建工地可看吗？", why:"只有真实项目且随时可看工地的设计师才是干活的。", s5:"有2个以上在建工地，当场给地址/联系方式，主动邀约参观", s3:"有工地，但推说“要预约安排”“不太方便”", s1:"含糊其辞，只有作品集没有可看工地", veto:0},
+ {id:"q2", p:1, t:"包豪斯/类似风格经验？", why:"包豪斯是细节风格，金属件、收口、比例做没做过差别很大。", s5:"有真实落地案例，能讲出业主反馈、施工难点、造价细节", s3:"有相关案例，但以效果图为主，讲不出落地细节", s1:"没做过，只会说“这个风格我们没问题”", veto:0},
+ {id:"q3", p:1, t:"同时接几个项目？", why:"接单太多的设计师，后期你的工地会被无限拖延。", s5:"3个以内，时间充裕，能保证跟你的进度", s3:"3-5个，会提前说明排期", s1:"5个以上或自己都说不清", veto:0},
+ {id:"q4", p:2, t:"当场画出改造思路？", why:"纸上谈兵的设计师当场就露馅，这题检验真本事。", s5:"能当场在户型图上画出清晰思路，讲透动线、采光、通透关系", s3:"有思路但比较概念化，“回去细化”挂在嘴边", s1:"说不出，或直接照你的需求复述一遍", veto:0},
+ {id:"q5", p:2, t:"通透大厅方案（卧室A/C能否开移门）", why:"核心诉求必须给出具体做法，而不是一句口号。", s5:"分别分析两面墙的承重逻辑，明确哪些能开移门/玻璃隔断，给出方案", s3:"能说个大概，但对承重逻辑不确定", s1:"乱承诺“都能敲”，或只会说“不能动”没有替代方案", veto:1},
+ {id:"q6", p:2, t:"“好住好改”理念", why:"直接决定未来5-10年住的灵活性，理念不合以后很难改。", s5:"主动支持家具化/轻改造/可逆设计，主动讲“几年后怎么换用途”", s3:"同意理念，但拿不出具体方法", s1:"倾向砌墙做死设计，或对“好改”没概念", veto:0},
+ {id:"q7", p:2, t:"结构限制处理（两堵墙不能敲+包管）", why:"专业设计师会把限制当设计条件而不是障碍。", s5:"主动提到这两处限制，并给出处理方案", s3:"你提醒后能应对", s1:"完全没注意到，或不当回事", veto:0},
+ {id:"q8", p:3, t:"设备与结构的协调（风管机+地暖+投影）", why:"设备统筹差的设计师，后期你到处返工。", s5:"主动讲吊顶、层高、走线怎么处理，三个设备同时上的协调方案", s3:"知道有影响，但说“后面再说”", s1:"没考虑过设备与设计的关系", veto:0},
+ {id:"q9", p:3, t:"隐藏投影的落地细节", why:"细节题，考验设计师对你的生活需求有没有真正上心。", s5:"主动设计幕布槽、升降位置、电源预留，讲得出细节", s3:"能提“可以做”，但讲不出怎么做", s1:"没概念，或不理解为什么投影要“藏”", veto:0},
+ {id:"q10", p:4, t:"施工图完整度", why:"施工图是落地的一切，缺一份图后期就是一笔增项。", s5:"明确列出全套：平面+水电+立面+节点大样+主材清单+软装清单", s3:"只说“有施工图”，列不出具体项", s1:"只有效果图，没有施工图概念", veto:0},
+ {id:"q11", p:4, t:"工地跟进频率", why:"设计好不好看图纸，落地好不好看跟工地，这是两码事。", s5:"主动说清“关键节点必到+每周至少1次”，列出具体节点", s3:"会说去，但频率模糊", s1:"出完图就“有事联系我”", veto:0},
+ {id:"q12", p:4, t:"是否绑定施工队", why:"独立设计师的价值就是立场中立；强绑的价格里可能有水分。", s5:"明确“用不用我推荐的施工队都行”，自选施工方他也能配合", s3:"推荐合作的，但可选", s1:"强烈绑定“必须用我们的队伍”", veto:1},
+ {id:"q13", p:4, t:"设计施工分歧怎么定", why:"不提前划好权责，后期出分歧你两头受气。", s5:"清晰权责：设计还原度设计师负责，工艺质量施工方负责", s3:"有概念但模糊", s1:"没想过，或“听施工的就行”", veto:0},
+ {id:"q14", p:5, t:"设计费包含什么", why:"防“设计费很便宜，一增项全出来”。", s5:"明确列出：方案X版、效果图X张、施工图全套、材料清单、软装清单", s3:"说“大部分都包含”，但具体项说不清", s1:"含糊其辞，只说“按面积收”", veto:0},
+ {id:"q15", p:5, t:"改稿次数", why:"口头的“都能改”没有约束力。", s5:"合同明确含几次修改，超了怎么算", s3:"口头说“都能改”", s1:"说“改了要加钱”但不提前说明", veto:0},
+ {id:"q16", p:5, t:"付款节点", why:"付款节奏是你的筹码，提前付清就失去了约束力。", s5:"合理分期：签约30%→平面定稿30%→施工图交付40%", s3:"能分期，但首付比例偏高（>50%）", s1:"要求一次付清或首付过高", veto:0},
+ {id:"q17", p:5, t:"知识产权", why:"确保你后面换施工队不被人拿捏。", s5:"明确设计成果归你，之后换施工队也能用", s3:"提供承诺，愿意写进合同", s1:"含糊，或说“图纸只能我们施工用”", veto:0},
+ {id:"q18", p:6, t:"压轴：35万花在哪三件事上？", why:"测他是不是真的站在你的立场想事，还是只想着签单。", s5:"答到点子上：舒服的（风管机地暖）、耐用的（柜子五金）、好看的（软装点缀）", s3:"部分合理，但偏“加预算”思维", s1:"含糊其辞，或只回“看你要什么”", veto:0}
+];
+
+var RECS = [
+ {id:"layout", t:"整体布局方案", hint:"设计师对整体布局的规划思路：哪些墙动/不动、空间怎么分配、“通透大厅”怎么实现"},
+ {id:"rooms", t:"各房间方案", hint:"主卧（含衣帽间）/ 多功能厅 / 备用客房 / 厨房 / 卫生间分别的设计思路"},
+ {id:"entry", t:"入户与玄关方案", hint:"进门第一眼的设计、鞋柜+换鞋凳怎么摆、视线遮挡与通透的平衡"},
+ {id:"flow", t:"动线设计", hint:"生活动线（客厅为中心）/ 家务动线（洗衣做饭清洁）/ 访客动线怎么走"},
+ {id:"notes", t:"其他备注", hint:"遗留问题、待确认事项、聊完的整体感受等自由记录"}
+];
+
+function loadData(){
+  try{
+    var d = JSON.parse(localStorage.getItem(STORE_KEY) || "null");
+    if(d && d.designers){ return d; }
+  }catch(e){}
+  return {designers:[], activeId:"", view:"score"};
+}
+var DB = loadData();
+
+function save(){
+  localStorage.setItem(STORE_KEY, JSON.stringify(DB));
+}
+
+function active(){
+  for(var i=0;i<DB.designers.length;i++){
+    if(DB.designers[i].id === DB.activeId){ return DB.designers[i]; }
+  }
+  return null;
+}
+function newDesigner(name, contact){
+  return {id:"d"+Date.now().toString(36)+Math.floor(Math.random()*1000), name:name, contact:contact||"", manualVeto:false, scores:{}, open:{}, createdAt:new Date().toISOString()};
+}
+function getScore(d,qid){ return d.scores[qid] || 0; }
+function getOpen(d,rid){ return d.open[rid] || ""; }
+function sumScore(d){
+  var s=0; for(var i=0;i<QS.length;i++){ s += getScore(d,QS[i].id); } return s;
+}
+function ratedCount(d){
+  var c=0; for(var i=0;i<QS.length;i++){ if(getScore(d,QS[i].id)>0){ c++; } } return c;
+}
+function partScore(d,p){
+  var s=0; for(var i=0;i<QS.length;i++){ if(QS[i].p===p){ s+=getScore(d,QS[i].id); } } return s;
+}
+function isVeto(d){
+  if(d.manualVeto){ return true; }
+  return getScore(d,"q5")===1 || getScore(d,"q12")===1;
+}
+function verdict(d){
+  if(isVeto(d)){ return {cls:"b-out", label:"淘汰（一票否决）"}; }
+  var total = sumScore(d), rated = ratedCount(d);
+  var pre = rated<18 ? "暂定：" : "";
+  if(total>=75){ return {cls:"b-rec", label:pre+"强烈推荐，进二面"}; }
+  if(total>=60){ return {cls:"b-mid", label:pre+"可考虑，横向对比"}; }
+  if(total>=40){ return {cls:"b-low", label:pre+"一般，谨慎"}; }
+  return {cls:"b-out", label:pre+"淘汰"};
+}
+
+/* ============ 渲染 ============ */
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+
+function switchView(v){
+  DB.view = v; save(); render();
+}
+
+function openAdd(){
+  document.getElementById("mAddTitle").textContent = "添加候选设计师";
+  document.getElementById("iName").value = "";
+  document.getElementById("iContact").value = "";
+  document.getElementById("iName").dataset.mode = "add";
+  document.getElementById("mAdd").classList.add("show");
+  setTimeout(function(){ document.getElementById("iName").focus(); },80);
+}
+function closeModal(id){ document.getElementById(id).classList.remove("show"); }
+function saveDesigner(){
+  var nameEl = document.getElementById("iName");
+  var name = nameEl.value.trim();
+  if(!name){ toast("请输入设计师名称"); return; }
+  var contact = document.getElementById("iContact").value.trim();
+  var d = newDesigner(name, contact);
+  DB.designers.push(d);
+  DB.activeId = d.id;
+  save(); closeModal("mAdd"); render();
+  toast("已添加「"+name+"」，开始打分吧");
+}
+function delDesigner(id, ev){
+  ev.stopPropagation();
+  var d=null; for(var i=0;i<DB.designers.length;i++){ if(DB.designers[i].id===id){ d=DB.designers[i]; } }
+  if(!d){ return; }
+  if(!confirm("删除「"+d.name+"」的全部评分和记录？不可恢复。")){ return; }
+  for(var j=DB.designers.length-1;j>=0;j--){ if(DB.designers[j].id===id){ DB.designers.splice(j,1); } }
+  if(DB.activeId===id){ DB.activeId = DB.designers.length ? DB.designers[0].id : ""; }
+  save(); render(); toast("已删除");
+}
+function selectDesigner(id){ DB.activeId = id; save(); render(); }
+
+function toast(msg){
+  var t = document.getElementById("toast");
+  t.textContent = msg; t.classList.add("show");
+  clearTimeout(t._tm); t._tm = setTimeout(function(){ t.classList.remove("show"); },2200);
+}
+
+function renderBar(){
+  var html = "";
+  for(var i=0;i<DB.designers.length;i++){
+    var d = DB.designers[i];
+    var v = verdict(d);
+    var sc = sumScore(d);
+    html += '<button class="d-tab'+(d.id===DB.activeId?" active":"")+'" onclick="selectDesigner(\''+d.id+'\')">'
+      + '<span>'+esc(d.name)+' '+sc+'分</span>'
+      + '<span class="del" onclick="delDesigner(\''+d.id+'\',event)">×</span>'
+      + '</button>';
+  }
+  html += '<button class="d-add" onclick="openAdd()">＋ 添加设计师</button>';
+  document.getElementById("designerBar").innerHTML = html;
+}
+
+function stdToggle(id){
+  var el = document.getElementById("std_"+id);
+  el.classList.toggle("open");
+  var tg = document.getElementById("tg_"+id);
+  tg.textContent = el.classList.contains("open") ? "收起标准 ▴" : "评分标准 ▾";
+}
+
+function setScore(qid,n){
+  var d = active(); if(!d){ return; }
+  if(getScore(d,qid)===n){ d.scores[qid]=0; } else { d.scores[qid]=n; }
+  save(); render();
+}
+
+function saveOpen(rid){
+  var d = active(); if(!d){ return; }
+  d.open[rid] = document.getElementById("rec_"+rid).value;
+  save();
+}
+
+function toggleManualVeto(){
+  var d = active(); if(!d){ return; }
+  d.manualVeto = !d.manualVeto; save(); render();
+}
+
+function renderScore(){
+  var d = active();
+  if(!d){
+    document.getElementById("main").innerHTML =
+      '<div class="card"><div class="empty"><div class="big">📐</div>'
+      +'<div style="font-weight:700;font-size:16px;margin-bottom:6px">还没有候选设计师</div>'
+      +'<div style="font-size:13px;margin-bottom:16px">点上方「＋ 添加设计师」，面谈时边聊边打分</div>'
+      +'<button class="btn" onclick="openAdd()">＋ 添加第一位设计师</button></div></div>';
+    document.getElementById("bottomBar").style.display = "none";
+    return;
+  }
+  var html = "";
+  html += '<div class="hint-box">'
+    + '<b>怎么用（点开/收起）</b><span class="hint-toggle" onclick="this.parentNode.classList.toggle(\'collapsed\');this.textContent=this.parentNode.classList.contains(\'collapsed\')?\'展开 ▾\':\'收起 ▴\'">收起 ▴</span>'
+    + '<div class="hint-detail"><ul>'
+    + '<li>每题1-5分：点星星打分，再点同一颗取消；<b>5分绿=好答复，1分红=差答复</b>，点「评分标准」对照</li>'
+    + '<li>第5题或第12题打成1分 → 自动触发一票否决，红条提示，可直接淘汰</li>'
+    + '<li>下方「面谈记录」4+1项：把设计师说的布局/房间/入户/动线要点打进去，事后对比用</li>'
+    + '<li>全部聊完去「对比」页签看总分排名，别现场拍板</li>'
+    + '</ul></div></div>';
+
+  for(var p=1;p<PARTS.length;p++){
+    var qs = [];
+    for(var i=0;i<QS.length;i++){ if(QS[i].p===p){ qs.push(QS[i]); } }
+    html += '<div class="card"><div class="card-title-row"><div class="card-title">'+PARTS[p]+'</div>'
+      + '<div class="part-sum">'+partScore(d,p)+' / '+PART_MAX[p]+'分</div></div>';
+    for(var j=0;j<qs.length;j++){
+      var q = qs[j];
+      var cur = getScore(d,q.id);
+      html += '<div class="q-item" id="std_'+q.id+'">'
+        + '<div class="q-head"><div class="q-left">'
+        + '<div><span class="q-num">'+q.id.replace("q","")+'</span><span class="q-title">'+q.t+'</span>'
+        + (q.veto ? '<span class="veto-tag">否决题</span>' : '') + '</div>'
+        + '<div class="q-why">'+q.why+'</div>'
+        + '<div class="q-std-toggle" id="tg_'+q.id+'" onclick="stdToggle(\''+q.id+'\')">评分标准 ▾</div></div>'
+        + '<div class="stars">';
+      for(var s=1;s<=5;s++){
+        html += '<button class="star'+(s<=cur?" on":"")+'" onclick="setScore(\''+q.id+'\','+s+')">★</button>';
+      }
+      html += '</div></div>'
+        + '<div class="std-box"><div class="std-row"><span class="std-tag t5">5分</span><span class="std-txt">'+q.s5+'</span></div>'
+        + '<div class="std-row"><span class="std-tag t3">3分</span><span class="std-txt">'+q.s3+'</span></div>'
+        + '<div class="std-row"><span class="std-tag t1">1分</span><span class="std-txt">'+q.s1+'</span></div></div>'
+        + '</div>';
+    }
+    html += '</div>';
+  }
+
+  html += '<div class="card"><div class="card-title-row"><div class="card-title">📝 面谈记录（手工填写）</div></div>';
+  for(var r=0;r<RECS.length;r++){
+    var rc = RECS[r];
+    html += '<div class="rec-item"><div class="rec-label"><span class="q-num">记'+(r+1)+'</span>'+rc.t+'</div>'
+      + '<div class="rec-hint">'+rc.hint+'</div>'
+      + '<textarea id="rec_'+rc.id+'" placeholder="把他说的要点记下来…" oninput="saveOpen(\''+rc.id+'\')">'+esc(getOpen(d,rc.id))+'</textarea></div>';
+  }
+  html += '</div>';
+  document.getElementById("main").innerHTML = html;
+
+  var total = sumScore(d), rated = ratedCount(d), v = verdict(d);
+  var bb = '<div class="bb-left"><div class="bb-score">总分 <b>'+total+'</b>/90 · 已评'+rated+'/18题</div>'
+    + '<div class="badge '+v.cls+'">'+v.label+'</div></div>'
+    + '<div class="bb-right"><button class="btn ghost sm" onclick="openIO()">备份</button>'
+    + '<button class="btn sm" onclick="switchView(\'compare\')">看对比 →</button></div>';
+  if(isVeto(d)){
+    bb += '<div class="veto-strip">⚠️ 一票否决已触发'+(d.manualVeto?'（手动标记）':'（第5题或第12题打了1分）')+'——安全/立场红线，建议淘汰'
+      + (d.manualVeto ? '<button onclick="toggleManualVeto()">取消手动标记</button>' : '') + '</div>';
+  } else {
+    bb += '<div class="veto-strip" style="background:#f8fafc;color:var(--muted);font-weight:500">手动标记一票否决 <button onclick="toggleManualVeto()" style="color:var(--bad)">标记</button></div>';
+  }
+  document.getElementById("bbInner").innerHTML = bb;
+  document.getElementById("bottomBar").style.display = "block";
+}
+
+function renderCompare(){
+  if(DB.designers.length===0){
+    document.getElementById("main").innerHTML = '<div class="card"><div class="empty"><div class="big">📊</div>先添加设计师并打分，这里才能横向对比</div></div>';
+    document.getElementById("bottomBar").style.display = "none";
+    return;
+  }
+  var html = '<div class="hint-box" style="margin-bottom:12px"><b>对比说明</b>列=每位设计师，行=每道题。75分以上强烈推荐；触发一票否决的无论总分多少都建议淘汰。</div>';
+  html += '<div class="card"><div class="cmp-wrap"><table class="cmp-table"><tr><th>题目</th>';
+  for(var i=0;i<DB.designers.length;i++){ html += '<th>'+esc(DB.designers[i].name)+'</th>'; }
+  html += '</tr>';
+  for(var qi=0;qi<QS.length;qi++){
+    var q = QS[qi];
+    html += '<tr><td>'+q.id.replace("q","")+'. '+esc(q.t)+(q.veto?' ⚠️':'')+'</td>';
+    for(var di=0;di<DB.designers.length;di++){
+      var sc = getScore(DB.designers[di],q.id);
+      var cls = sc>=5?"sc-5":(sc>=4?"sc-5":(sc>=3?"sc-3":(sc>=1?"sc-1":"sc-0")));
+      html += '<td class="'+cls+'">'+(sc>0?sc+"分":"—")+'</td>';
+    }
+    html += '</tr>';
+  }
+  html += '<tr class="sumrow"><td>总分（90满）</td>';
+  for(var a=0;a<DB.designers.length;a++){ html += '<td>'+sumScore(DB.designers[a])+'</td>'; }
+  html += '</tr><tr class="sumrow"><td>结论</td>';
+  for(var b=0;b<DB.designers.length;b++){
+    var dd = DB.designers[b], v = verdict(dd);
+    html += '<td class="'+(isVeto(dd)?"veto-cell":"")+'">'+v.label+'</td>';
+  }
+  html += '</tr><tr><td>面谈记录</td>';
+  for(var c=0;c<DB.designers.length;c++){
+    var dn = DB.designers[c];
+    var filled = 0;
+    for(var ri=0;ri<RECS.length;ri++){ if(getOpen(dn,RECS[ri].id)){ filled++; } }
+    html += '<td>'+(filled>0?("已记"+filled+"项"):"未记录")+'</td>';
+  }
+  html += '</tr></table></div>';
+  html += '<div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap"><button class="btn sm" onclick="switchView(\'score\')">← 返回评分</button>'
+    + '<button class="btn ghost sm" onclick="openIO()">备份/恢复</button></div>';
+  html += '</div>';
+  document.getElementById("main").innerHTML = html;
+  document.getElementById("bottomBar").style.display = "none";
+}
+
+function render(){
+  document.getElementById("tab-score").classList.toggle("active", DB.view==="score");
+  document.getElementById("tab-compare").classList.toggle("active", DB.view==="compare");
+  renderBar();
+  if(DB.view==="compare"){ renderCompare(); } else { renderScore(); }
+}
+
+/* ============ 导出导入 ============ */
+function openIO(){ document.getElementById("ioArea").value=""; document.getElementById("mIO").classList.add("show"); }
+function genExport(){
+  document.getElementById("ioArea").value = JSON.stringify(DB);
+  toast("已生成备份文本，点「复制」保存");
+}
+function copyExport(){
+  var ta = document.getElementById("ioArea");
+  if(!ta.value){ genExport(); }
+  ta.select();
+  try{
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(ta.value).then(function(){ toast("已复制到剪贴板"); },function(){ document.execCommand("copy"); toast("已复制"); });
+    }else{ document.execCommand("copy"); toast("已复制"); }
+  }catch(e){ toast("复制失败，请手动长按复制"); }
+}
+function doImport(){
+  var txt = document.getElementById("ioArea").value.trim();
+  if(!txt){ toast("请先粘贴备份数据"); return; }
+  try{
+    var d = JSON.parse(txt);
+    if(!d || !d.designers){ throw new Error("bad"); }
+    if(!confirm("将覆盖当前全部数据（当前"+DB.designers.length+"位设计师），确认恢复？")){ return; }
+    DB = d; save(); closeModal("mIO"); render();
+    toast("恢复成功");
+  }catch(e){ toast("数据格式不对，请检查粘贴内容"); }
+}
+function clearAll(){
+  if(!confirm("清空全部设计师的评分和记录？不可恢复！")){ return; }
+  DB = {designers:[],activeId:"",view:"score"};
+  save(); closeModal("mIO"); render(); toast("已清空");
+}
+
+render();
+</script>
+</body>
+</html>
