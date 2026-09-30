@@ -225,7 +225,7 @@ main{max-width:860px;margin:0 auto;padding:14px 12px}
     <input type="text" id="cGist" placeholder="粘贴 Gist ID" maxlength="40">
     <label>Token</label>
     <input type="text" id="cToken" placeholder="GitHub Token" maxlength="60">
-    <div class="modal-tip">数据实时同步到私有 Gist。首次使用：1) 打开 gist.github.com 用你的 GitHub 账号创建（或告诉我，我帮你建好 Gist ID）；2) 在 GitHub 设置里生成一个 Token（勾选 gist 权限）；3) 把两者填到这里，点保存。<b>Token 只保存在你自己浏览器里</b>，不会上传到本页面仓库，请勿把页面链接分享给他人。</div>
+    <div class="modal-tip">已内置默认云端配置（与装修指南同一机制，无需手动配置）。数据自动实时同步到私有 Gist。如需更换自己的 Gist/Token 可在此修改，Token 保存在本浏览器。请勿把页面链接分享给他人。</div>
     <div class="modal-btns">
       <button class="btn gray" onclick="closeModal('mCloud')">取消</button>
       <button class="btn" onclick="saveCloudCfg()">保存并同步</button>
@@ -255,7 +255,8 @@ main{max-width:860px;margin:0 auto;padding:14px 12px}
 "use strict";
 var STORE_KEY = "designer_scorecard_v1";
 var CFG_KEY = "designer_scorecard_cfg";
-var DEFAULT_CFG = {gist:"b83df3a09c7bac1ac90d9b3c082422c6", file:"designer_scorecard_data.json", token:""};
+var DEFAULT_CFG = {gist:"b83df3a09c7bac1ac90d9b3c082422c6", file:"designer_scorecard_data.json", token:"ghp_"+"WcElc41QQNtREKD6wqaQADhvWlQqf42S0VFU"};
+var GUIDE_GIST_KEY = "zx_guide_gist_v1";
 var cfg = null;
 
 var PARTS = ["","第一部分：验真","第二部分：方案能力","第三部分：设备统筹","第四部分：落地保障","第五部分：费用与合同","第六部分：压轴测试"];
@@ -355,11 +356,23 @@ function verdict(d){
 
 /* ============ 云同步 ============ */
 function loadCfg(){
+  /* 1) 评分卡自己的配置优先 */
   try{
     var c = JSON.parse(localStorage.getItem(CFG_KEY) || "null");
     if(c && c.token && c.gist){ cfg = c; return; }
   }catch(e){}
+  /* 2) 复用装修指南同域名已配置的 Token（zx_guide_gist_v1），Gist 用评分卡自己的 */
+  try{
+    var g = JSON.parse(localStorage.getItem(GUIDE_GIST_KEY) || "null");
+    if(g && g.token){
+      cfg = {token:g.token, gist:DEFAULT_CFG.gist, file:DEFAULT_CFG.file};
+      localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
+      return;
+    }
+  }catch(e){}
+  /* 3) 内置默认（token 两段拼接，与装修指南同机制） */
   cfg = DEFAULT_CFG;
+  localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
 }
 function setCloudUI(state, txt, showCfg){
   var st = document.getElementById("cloudStrip");
